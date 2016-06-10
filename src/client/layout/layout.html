@@ -1,0 +1,17 @@
+
+<template name="layout">
+
+    {{> leftSideMenu}}
+
+    <div class="pusher wrapper">
+        {{> header}}
+        <div style="height:40px"></div> <!--spacer for header-->
+
+        <div id="content-wrapper" class="ui main fluid container" style="overflow-y:auto">
+            {{>yield}}
+            {{>modalBackup}}
+            {{>modal}}
+        </div>
+    </div>
+
+</template>

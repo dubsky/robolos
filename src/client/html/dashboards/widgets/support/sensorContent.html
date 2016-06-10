@@ -1,0 +1,19 @@
+<template name="sensorContent">
+
+    {{#if isSensorType sensorData 'BINARY_OUTPUT' }}
+        {{>relayOutputWidget sensorData=sensorData widget=widget floorPlanView=floorPlanView}}
+    {{/if}}
+
+    {{#if isSensorType sensorData 'ANALOG_OUTPUT_0_100' }}
+        {{>analogOutput0100Widget sensorData=sensorData widget=widget floorPlanView=floorPlanView}}
+    {{/if}}
+
+    {{#if isSensorType sensorData 'S_TEMP' }}
+        {{>temperatureWidget sensorData=sensorData widget=widget floorPlanView=floorPlanView}}
+    {{/if}}
+
+    {{#if isSensorType sensorData 'GENERIC_SENSOR' }}
+        {{>genericSensorWidget sensorData=sensorData widget=widget floorPlanView=floorPlanView}}
+    {{/if}}
+
+</template>

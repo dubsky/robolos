@@ -1,0 +1,16 @@
+<template name="selectSensorForAction">
+
+    <div class="ui modal" id="selectSensorBlock">
+        <i class="close icon"></i>
+        <div class="header">
+            Select Sensor
+        </div>
+        <div class="content" style="padding-bottom:5px">
+            {{> sensorSelectionTable renderBox=false}}
+        </div>
+        <div class="actions">
+            <button type="button" class="ok btn btn-default selectSensor" data-dismiss="modal" disabled={{emptySelection}}>Ok</button>
+            <button type="button" class="cancel btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,14 @@
+.infoMessageLevel {
+    color: darkgreen;
+}
+
+.errorMessageLevel {
+    color: darkred;
+
+}.debugMessageLevel {
+     color: darkmagenta;
+ }
+
+.eventMessageLevel {
+     color: navy;
+ }

@@ -1,0 +1,24 @@
+<template name="leftSideMenu">
+
+    <div id="sidebarMenu" class="ui left vertical inverted sidebar labeled icon menu">
+
+        <a href="{{ pathFor 'homepage' }}" class="item {{isHomepage}}" onclick="$('#sidebarMenu').sidebar('hide');">
+            <i class="home icon"></i>
+            Home
+        </a>
+        {{#each dashboards}}
+            {{#if isActive}}
+                <a href="/dashboard/{{_id}}" class="active item" onclick="$('#sidebarMenu').sidebar('hide');">
+                    <i class="block layout icon"></i>
+                    {{title}}
+                </a>
+            {{else}}
+                <a href="/dashboard/{{_id}}" class="item" onclick="$('#sidebarMenu').sidebar('hide');">
+                    <i class="block layout icon"></i>
+                    {{title}}
+                </a>
+            {{/if}}
+        {{/each}}
+    </div>
+
+</template>

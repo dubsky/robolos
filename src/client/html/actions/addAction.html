@@ -1,0 +1,47 @@
+<template name="addAction">
+
+    <div class="ui container">
+{{!--
+        <div class="ui breadcrumb">
+            <a class="section">Home</a>
+            <div class="divider"> / </div>
+            <a class="section">Automatic Actions</a>
+            <div class="divider"> / </div>
+            <div class="active section">Create New Action</div>
+        </div>
+--}}
+
+        <section class="content-header narrow">
+        {{#if editContext}}
+            <div style="float:right;padding-top:20px" >
+                <button class="ui button goBack labeled icon"><i class="left arrow icon"></i>Back to {{editContext.label}}</button>
+            </div>
+        {{/if}}
+
+        <h1  class="ui dividing header">Create Automatic Action
+            <small>Orchestrate your sensors and actuators</small>
+        </h1>
+
+    </section>
+
+    <section class="content">
+
+        <div>
+            {{#autoForm id="addActionForm" type="method-update" meteormethod="createAction" collection=collection schema=schema}}
+
+                {{> afQuickField name="title" placeholder="Title"}}
+                {{> afQuickField name="description" placeholder="Description" rows=5}}
+                {{> afQuickField name="keywords" type="keywords"}}
+
+                {{> afQuickField name="calendarDroppable"}}
+                <br/>
+
+                <button type="submit" class="submit btn btn-primary">Save</button>
+                <button type="button" class="btn btn-default cancel">Cancel</button>
+
+            {{/autoForm}}
+        </div>
+    </section>
+    </div>
+
+</template>

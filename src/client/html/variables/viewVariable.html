@@ -1,0 +1,70 @@
+<template name="viewVariable">
+
+    <div class="ui container">
+
+    <section class="content-header narrow">
+        <h1 class="ui dividing header">Edit Variable
+            <small>Used to store system state, persisted between controller restarts</small>
+        </h1>
+        <br/>
+    </section>
+
+    <section class="content">
+
+        <div>
+                    {{#autoForm id="viewVariableForm" type="method-update" validation="keyup" meteormethod="updateVariable" collection=collection doc=variable schema=schema}}
+                        {{> afQuickField name="title"}}
+                        {{> afQuickField name="description" rows=3}}
+                        {{> afQuickField name="keywords" type="keywords"}}
+
+                        {{> afQuickField name="onChangeAction" type="action" icon="fa-clock-o"}}
+
+                        {{> afQuickField type="select" name="modifiedBy" options=modificationOptions}}
+
+                        {{!--
+                        {{> afQuickField disabled="true" name="type" type="select" options=typeOptions}}
+                        --}}
+                        <div class="field required">
+                            <label for="WxxWozkWyuw8TRtzo">
+                                Type
+                            </label>
+                            <div class="fluid field">
+                                <div class="ui fluid selection dropdown disabled" tabindex="0">
+                                    <input type="hidden" value="boolean" disabled="" name="type"  required="">
+                                    <div class="text">{{variable.type}}</div>
+                                    <i class="dropdown icon"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{#with variable}}
+                            {{#if selectedType 'string'}}
+                                {{> afQuickField label="Current Value" name="stringValue"}}
+                                {{> afQuickField name="stringAllowedValues"}}
+                            {{/if}}
+                            {{#if selectedType 'number'}}
+                                {{> afQuickField label="Current Value" name="numberValue"}}
+                                {{> afQuickField name="unit"}}
+                                {{> afQuickField name="minimum"}}
+                                {{> afQuickField name="maximum"}}
+                            {{/if}}
+                            {{#if selectedType 'boolean'}}
+                                {{> afQuickField label="Current Value" type="boolean-select" name="booleanValue"}}
+                                {{> afQuickField name="trueValueLabel"}}
+                                {{> afQuickField  name="falseValueLabel"}}
+                            {{/if}}
+                            {{#if selectedType 'date'}}
+                                {{> afQuickField label="Current Value" name="dateValue" type="date"}}
+                                {{> afQuickField name="dateBeforeLabel"}}
+                                {{> afQuickField name="dateAfterLabel"}}
+                            {{/if}}
+                        {{/with}}
+                        <br/>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-default cancel">Cancel</button>
+
+                    {{/autoForm}}
+        </div>
+    </section>
+    </div>
+</template>

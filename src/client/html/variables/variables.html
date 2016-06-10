@@ -1,0 +1,37 @@
+<template name="variables">
+
+        <section class="content-header tableContentHeader" id="content-header">
+            <h1 class="ui dividing header">Variables
+                <small>Used to store system state, persisted between controller restarts</small>
+                    <span style="float:right">
+                        <a href="{{ pathFor 'addVariable' }}"><img class="addVariable" style="" width=24 height=24; src="sensors/ui/plus_64.png"/></a>
+                    </span>
+            </h1>
+        </section>
+
+        <section class="content tableContent">
+
+            {{#unless variables}}
+                <div class="alert alert-warning text-center">
+                    <span style="color:black">No variables available. <a style="color:blue" href="{{ pathFor 'addVariable' }}">Create one...</a></span>
+                </div>
+            {{/unless}}
+
+            <div>
+                {{> tableTextSearch filterKey='variables'}}
+            </div>
+            <div>
+                {{> reactiveTable collection=variables showFilter=false showNavigation='never' rowsPerPage=10000 settings=settings }}
+            </div>
+
+            <div id="content-footer">
+                <form name="variablesForm" class="remove form-horizontal" novalidate>
+                    <div style="margin-left:0px" class="form-group">
+                        <input type="button" class="btn btn-default" value="Remove Selected" title="Remove Selected"  disabled={{emptySelection}}>
+                    </div>
+                </form>
+            </div>
+
+        </section>
+
+</template>

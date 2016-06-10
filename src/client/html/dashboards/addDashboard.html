@@ -1,0 +1,29 @@
+<template name="addDashboard">
+
+    <div class="ui container">
+
+    <section class="content-header narrow">
+        <h1 class="ui dividing header">Create New Dashboard
+            <small>Visualize your sensor and actor network</small>
+        </h1>
+        <br/>
+    </section>
+
+    <section class="content">
+
+        <div>
+                    {{#autoForm id="addDashboardForm" type="method-update" meteormethod="createDashboard" collection=collection schema=schema}}
+                        {{> afQuickField name="title"}}
+                        {{> afQuickField name="description" rows=3}}
+                        {{> afQuickField name="keywords" type="keywords"}}
+                        <p>Dashboards are listed in the ascending order of the following property:</p>
+                        {{> afQuickField name="menuPositionNumber"}}
+                        <br/>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-default cancel">Cancel</button>
+                    {{/autoForm}}
+        </div>
+    </section>
+    </div>
+
+</template>

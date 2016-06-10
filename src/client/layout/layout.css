@@ -1,0 +1,28 @@
+.content-header {
+    margin-bottom:8px;
+    margin-top:15px;
+}
+
+#content-footer {
+    padding-top: 15px;
+}
+
+section.narrow {
+    padding-top:20px;
+}
+
+.box-header {
+    padding-bottom:10px;
+}
+
+.tableContent {
+    min-width: 850px;
+}
+
+.tableContentHeader {
+    min-width: 850px;
+}
+
+body {
+    overflow-x: auto;
+}

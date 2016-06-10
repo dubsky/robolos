@@ -1,0 +1,106 @@
+<template name="homepage">
+
+    <div class="ui center aligned fluid container">
+        <br/>
+        <br/>
+        <h2 class="ui header">
+            <div class="content">
+                Welcome to Robolos !
+                <div>
+                    <!--<img src="/homepage/bishop.svg" style="height:60px;margin:10px">-->
+                </div>
+                <div class="sub header">Getting started</div>
+            </div>
+        </h2>
+
+        <br/>
+        <br/>
+
+        <div class="ui link centered cards">
+
+            <a class="card" href="{{pathFor 'driverInstances'}}">
+                <div class="image">
+                    <img src="/homepage/discovery.png">
+                </div>
+                <div class="content">
+                    <div class="header left floated">Configure &amp; Discover Hardware</div>
+                    <div class="meta">
+                        <span class="left floated">So that you can manage it</span>
+                    </div>
+                    <div class="left floated description">
+                        <a href="{{pathFor 'driverInstances'}}">Configure Hardware Connections</a>
+                    </div>
+                </div>
+                <div class="extra content">
+                  <span class="right floated">
+                    {{sensorCount}} Sensors Available
+                  </span>
+                </div>
+            </a>
+
+            <a class="card" href="{{pathFor 'dashboards'}}">
+                <div class="image">
+                    <img src="/homepage/dashboards.png">
+                </div>
+                <div class="content">
+                    <div class="header left floated">Build Interactive Dashboards</div>
+                    <div class="meta">
+                        <span class="left floated">To gain control from anywhere you go</span>
+                    </div>
+                    <div class="left floated description">
+                        <a href="{{pathFor 'dashboards'}}">Manage Dashboards</a>
+                    </div>
+                </div>
+                <div class="extra content">
+                  <span class="right floated">
+                    {{dashboardCount}} Dashboards Available
+                  </span>
+                </div>
+            </a>
+
+
+            <a class="card" href="{{pathFor 'actions'}}">
+                <div class="image">
+                    <img src="/homepage/automation.png">
+                </div>
+                <div class="content">
+                    <div class="header left floated">Create Automation Rules</div>
+                    <div class="meta">
+                        <span class="left floated">So that sensors control actors as you need</span>
+                    </div>
+                    <div class="left floated description">
+                        <a href="{{pathFor 'actions'}}">Manage Automation Actions</a>
+                    </div>
+                </div>
+                <div class="extra content">
+              <span class="right floated">
+                {{actionCount}} Actions Defined
+              </span>
+                </div>
+            </a>
+
+            <a class="card" href="{{pathFor 'schedules'}}">
+                <div class="image">
+                    <img src="/homepage/schedules.png">
+                </div>
+                <div class="content">
+                    <div class="header left floated">Define Schedules</div>
+                    <div class="meta">
+                        <span class="left floated">To start actions at defined time</span>
+                    </div>
+                    <div class="left floated description">
+                        <a href="{{pathFor 'schedules'}}">Manage Schedules</a>
+                    </div>
+                </div>
+                <div class="extra content">
+      <span class="right floated">
+        {{scheduleCount}} Schedules Available
+      </span>
+                </div>
+            </a>
+
+        </div>
+
+    </div>
+
+</template>

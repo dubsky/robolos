@@ -1,0 +1,15 @@
+<template name="booleanDashboardVariable">
+
+    <div class="popupEditor">
+
+
+    <div class="sensorLabel{{#if ../floorPlanView}}FP{{/if}} button">{{#with variable}}{{> variableValue}}{{/with}}</div>
+
+    {{#if variable.booleanValue}}
+        <img class="button dashboardIcon{{#if ../floorPlanView}}FP{{/if}}"  src="{{icon}}"/>
+    {{else}}
+        <img class="button switchedOff dashboardIcon{{#if ../floorPlanView}}FP{{/if}}" src="{{icon}}"/>
+    {{/if}}
+
+    </div>
+</template>

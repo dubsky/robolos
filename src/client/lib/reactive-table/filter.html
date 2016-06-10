@@ -1,0 +1,12 @@
+<template name="reactiveTableFilter">
+  <!-- START: reactiveTableFilter -->
+  <div id="{{id}}" class="{{class}}">
+    {{#if label}}
+    <input class="reactive-table-input form-control" type="text" value="{{filter}}" placeholder="{{label}}">
+    {{ else }}
+    <input class="reactive-table-input form-control" type="text" value="{{filter}}" placeholder="{{i18n 'reactiveTable.filter'}}">
+    {{/if}}
+    <i class="inverted circular search link icon"></i>
+  </div>
+  <!-- END: reactiveTableFilter -->
+</template>

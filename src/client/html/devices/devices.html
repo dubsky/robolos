@@ -1,0 +1,40 @@
+<template name="devices">
+
+    <section class="content-header tableContentHeader" id="content-header">
+        <h1 class="ui dividing header">Devices
+            <small>All devices/nodes available to the system</small>
+
+            <div style="float:right;position:relative;top:-4px">
+               <button type="button" class="btn btn-default configureHardware" title="Configure Hardware Connections">
+                   <img style="" width=18 height=18; src="/sensors/ui/wrench.png"/>
+               </button>
+            </div>
+        </h1>
+    </section>
+
+
+    <section class="content tableContent">
+
+        {{#unless devices}}
+            <div style="color:red" class="alert alert-warning text-center">
+                <span style="color:black">No devices discovered yet</span>
+            </div>
+        {{/unless}}
+
+        <div>
+            {{> tableTextSearch filterKey='devices'}}
+        </div>
+        <div>
+            {{> reactiveTable collection=devices showNavigation='never' rowsPerPage=10000 settings=settings }}
+        </div>
+
+        <div id="content-footer">
+            <form name="devicesForm" class="remove form-horizontal" novalidate>
+                <div style="margin-left:0px" class="form-group">
+                    <input type="button" class="btn btn-default" value="Remove Selected" title="Remove Selected"  disabled={{emptySelection}}>
+                </div>
+            </form>
+        </div>
+
+    </section>
+</template>

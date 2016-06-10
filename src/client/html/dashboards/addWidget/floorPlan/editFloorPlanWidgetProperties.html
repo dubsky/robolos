@@ -1,0 +1,20 @@
+<template name="editFloorPlanWidgetProperties">
+    <div class="ui modal" id="editWidgetProperties">
+        <i class="close icon"></i>
+        <div class="header">
+            Floor Plan Widget Properties
+        </div>
+        <div class="content">
+            <form name="editProperties" class="form-horizontal" novalidate>
+                <label class="control-label" for="title">Title</label>
+                <input name="title" type="text" id="title" class="form-control" placeholder="Title" required>
+                <label class="control-label" for="title">Background</label>
+                {{> widgetIconSelector selectedIcon=selectedIcon type='floorPlan'}}
+            </form>
+        </div>
+        <div class="actions">
+            <button type="button" class="approve updateProperties btn btn-primary" data-dismiss="modal">Ok</button>
+            <button type="button" class="cancel btn btn-default">Cancel</button>
+        </div>
+    </div>
+</template>

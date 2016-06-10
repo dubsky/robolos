@@ -1,0 +1,200 @@
+.reactive-table-options {
+    padding-right: 0px;
+    margin-right: 0px;
+}
+
+.reactiveSelectionColumn {
+    width: 20px;
+}
+
+.reactiveSelected {
+    background-color: #5bc0de;
+}
+
+.table>tbody>tr.active>td, .table>tbody>tr.active>th, .table>tbody>tr>td.active, .table>tbody>tr>th.active, .table>tfoot>tr.active>td, .table>tfoot>tr.active>th, .table>tfoot>tr>td.active, .table>tfoot>tr>th.active, .table>thead>tr.active>td, .table>thead>tr.active>th, .table>thead>tr>td.active, .table>thead>tr>th.active {
+    background-color:cornflowerblue;
+    color: white;
+}
+
+.scrolledTable>tbody {
+    max-height: 400px;
+}
+
+table.reactive-table {
+    display: table;
+    width: 100%;
+}
+table.reactive-table thead, table.reactive-table tbody {
+    float: left;
+    width: 100%;
+    display: block;
+}
+
+table.reactive-table thead {
+    overflow: hidden;
+}
+
+table.reactive-table tbody {
+    overflow: hidden;
+    display: block;
+}
+
+table.reactive-table tr {
+    width: 100%;
+    display: table;
+    text-align: left;
+}
+
+table.reactive-table th.half-size, table.reactive-table td.half-size {
+    width: 50px;
+    max-width: 50px;
+}
+
+table.reactive-table th.double-size, table.reactive-table td.double-size {
+    width: 200px;
+    max-width: 200px;
+}
+
+table.reactive-table th, table.reactive-table td {
+    text-overflow: ellipsis;
+    overflow:hidden;
+    white-space: nowrap;
+    width: 100px;
+    max-width: 100px;
+}
+
+
+/*
+
+.reactive-table-options {
+    padding-right: 0px;
+    margin-right: 0px;
+}
+
+.reactiveSelectionColumn {
+    width: 20px;
+}
+
+.reactiveSelected {
+    background-color: #5bc0de;
+}
+
+.table>tbody>tr.active>td, .table>tbody>tr.active>th, .table>tbody>tr>td.active, .table>tbody>tr>th.active, .table>tfoot>tr.active>td, .table>tfoot>tr.active>th, .table>tfoot>tr>td.active, .table>tfoot>tr>th.active, .table>thead>tr.active>td, .table>thead>tr.active>th, .table>thead>tr>td.active, .table>thead>tr>th.active {
+    background-color:cornflowerblue;
+    color: white;
+}
+
+.scrolledTable>tbody {
+    max-height: 400px;
+
+}
+
+
+
+
+table.reactive-table {
+    display: table;
+    width: 100%;
+}
+table.reactive-table thead, table.reactive-table tbody {
+    float: left;
+    width: 100%;
+    display: block;
+}
+
+
+table.reactive-table thead {
+    overflow: hidden;
+}
+
+table.reactive-table tbody {
+    overflow: hidden;
+    display: block;
+}
+
+table.reactive-table tr {
+    width: 100%;
+    display: table;
+text-align: left;
+}
+table.reactive-table th, table.reactive-table td {
+    text-overflow: ellipsis;
+    overflow:hidden;
+    white-space: nowrap;
+    width: 100px;
+    max-width: 100px;
+}
+table.reactive-table tr>td:last-child {
+    width: 100px;
+}
+table.reactive-table tr>td:first-child + td + td {
+    width : 100px;
+}
+
+*/
+
+/*
+.reactive-table-options {
+    padding-right: 0px;
+    margin-right: 0px;
+}
+
+.reactiveSelectionColumn {
+    width: 20px;
+}
+
+.reactiveSelected {
+    background-color: #5bc0de;
+}
+
+.table>tbody>tr.active>td, .table>tbody>tr.active>th, .table>tbody>tr>td.active, .table>tbody>tr>th.active, .table>tfoot>tr.active>td, .table>tfoot>tr.active>th, .table>tfoot>tr>td.active, .table>tfoot>tr>th.active, .table>thead>tr.active>td, .table>thead>tr.active>th, .table>thead>tr>td.active, .table>thead>tr>th.active {
+    background-color:cornflowerblue;
+    color: white;
+}
+
+.scrolledTable>tbody {
+    max-height: 400px;
+
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+}
+
+table.reactive-table {
+    display: table;
+    width: 100%;
+}
+
+table.reactive-table thead, table.reactive-table tbody {
+}
+
+
+table.reactive-table thead {
+}
+
+table.reactive-table tbody {
+    overflow: hidden;
+}
+
+table.reactive-table tr {
+    width: 100%;
+    display: table;
+    text-align: left;
+}
+table.reactive-table th, table.reactive-table td {
+    text-overflow: ellipsis;
+    overflow:hidden;
+    white-space: nowrap;
+    width: 100px;
+    max-width: 100px;
+}
+table.reactive-table tr>td:last-child {
+    width: 100px;
+}
+
+table.reactive-table tr>td:first-child + td + td {
+    width : 100px;
+}
+
+*/

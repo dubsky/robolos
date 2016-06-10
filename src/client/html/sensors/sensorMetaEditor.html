@@ -1,0 +1,89 @@
+<template name="sensorMetaEditor">
+
+    <div class="ui modal" id="sensorMetaEditor">
+        <i class="close icon sensorMetaEditor"></i>
+        <div class="header">
+            Sensor Properties
+        </div>
+        <div class="content">
+        {{#autoForm id="sensorMetaForm" type="method-update" validation="keyup" meteormethod="updateSensorMeta" schema=schema doc=document resetOnSuccess=true}}
+            {{> afQuickField name="name"}}
+            {{> afQuickField name="description"}}
+            {{> afQuickField name="keywords" type="keywords"}}
+            {{#if isBinaryInput}}
+                <table width="100%">
+                    <tr>
+                        <td>
+                            {{> afQuickField name="turnOnAction" type="action"}}
+                        </td>
+                        <td width="8"></td>
+                        <td>
+                            {{> afQuickField name="holdAction" type="action"}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{> afQuickField name="turnOffAction" type="action"}}
+                        </td>
+                        <td width="8"></td>
+                        <td>
+                            {{> afQuickField name="doubleClickAction" type="action"}}
+                        </td>
+                    </tr>
+                </table>
+                <div class="ui segment">
+                    {{> afQuickField name="delayTurnOnAction" checkboxType="toggle"}}
+                </div>
+            {{/if}}
+            {{#if isBinary}}
+                <div class="ui segment">
+                    {{> afQuickField name="reversedLogic" checkboxType="toggle"}}
+                </div>
+            {{/if}}
+            {{#if isAnalogInput}}
+                <span id="helpBlock" class="help-block" style="font-style: italic">Sensitivity specifies a range within the input -
+                                the difference between the value when last event has been triggered and the current one must be higher than sensitivity to raise a new event. Applies to all actions in this dialog.</span>
+
+                <div class="fields">
+                    <div class="six wide field">
+                        {{> afQuickField name="sensitivity"}}
+                    </div>
+                    <div class="ten wide field">
+                        {{> afQuickField name="onChangeAction" type="action"}}
+                    </div>
+                </div>
+                <div class="fields">
+                    <div class="six wide field">
+                        {{> afQuickField name="raisesAboveValueLimit"}}
+                    </div>
+                    <div class="ten wide field">
+                        {{> afQuickField name="raisesAboveAction" type="action"}}
+                    </div>
+                </div>
+                <div class="fields">
+                    <div class="six wide field">
+                        {{> afQuickField name="fallsBelowValueLimit"}}
+                    </div>
+                    <div class="ten wide field">
+                        {{> afQuickField name="fallsBelowAction" type="action"}}
+                    </div>
+                </div>
+
+                <br/>
+                <div class="fields">
+                    <div class="six wide field">
+                        {{> afQuickField name="unitOverride"}}
+                    </div>
+                    <div class="ten wide field">
+                        {{> afQuickField name="resolution"}}
+                    </div>
+                </div>
+            {{/if}}
+        {{/autoForm}}
+        </div>
+        <div class="actions">
+            <button type="submit" class="approve saveMeta btn btn-primary">Save</button>
+            <button type="button" class="cancel btn btn-default">Cancel</button>
+        </div>
+    </div>
+</template>

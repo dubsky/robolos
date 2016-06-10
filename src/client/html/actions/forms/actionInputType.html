@@ -1,0 +1,19 @@
+<template name="actionInputType">
+
+    <div data-schema-key="{{valueHolder}}" selectedActionUsageId="{{selectedActionUsageId}}">
+        <div class="ui right action left icon input">
+            <i class="actionSelector icon {{icon}}"></i>
+            <input class="actionSelector" type="text" placeholder="Select action to execute..." value="{{selectedActionName}}">
+                {{#if selectedActionName}}
+                    <button type="button" class="ui right grey icon button actionEditor">
+                        <i class="edit icon"></i>
+                    </button>
+                {{else}}
+                    <button type="button" class="ui right grey icon button createAction">
+                        <i class="wizard icon"></i>
+                    </button>
+                {{/if}}
+        </div>
+    </div>
+
+</template>

@@ -1,0 +1,11 @@
+<template name="modal">
+    {{#if activeModal}}
+        {{> Template.dynamic template=activeModal.template data=activeModal.data}}
+    {{/if}}
+</template>
+
+<template name="modalBackup">
+    {{#if activeModal}}
+        {{> Template.dynamic template=activeModal.template data=activeModal.data}}
+    {{/if}}
+</template>

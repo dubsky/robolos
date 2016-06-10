@@ -1,0 +1,64 @@
+<template name="renderDashboardRedirect">
+</template>
+
+<template name="renderDashboard">
+
+<div>
+    <section id="content-header" style="margin-top: 5px;margin-bottom: 5px;">
+        <h1>
+            <span>{{dashboard.title}}</span>
+            <small>Dashboard</small>
+            <div style="float:right;position:relative;top:-4px">
+            {{#if isInEditMode}}
+                    <div class="btn-group">
+                        <button type="button" title="Add Widget to the dashboard" data-content="Add Widget" class="btn btn-default addWidget"><img style="" width=18 height=18; src="/sensors/ui/plus_64.png"/></button>
+                        <button type="button" title="Edit Dashboard Properties" data-content="Edit Dashboard Properties" class="btn btn-default switchToProperties"><img style="" width=18 height=18; src="/sensors/ui/properties.png"/></button>
+                        <button type="button" title="Lock the dashboard for editing" data-content="Lock the dashboard for editing" class="btn btn-default switchOffEditMode"><img data-toggle="modal" width=18 height=18; src="/sensors/ui/lock.png"/></button>
+                    </div>
+            {{else}}
+                  <button type="button" class="btn btn-default switchToEditMode" title="Allow dashboard configuration/modification">
+                        <img data-toggle="modal" style="" width=18 height=18; src="/sensors/ui/wrench.png"/>
+                  </button>
+            {{/if}}
+            </div>
+        </h1>
+    </section>
+</div>
+    <section class="content" >
+
+        <div class="gridsterWrapper">
+            {{!-- <div class="mCustomScrollBox"> --}}
+            <div>
+                <div style="margin-top:-9px">
+
+                <div class="gridster">
+                <ul>
+                    {{#each widgets}}
+                        <li data-row="{{geometry.row}}" data-col="{{geometry.col}}" data-sizex="{{geometry.size_x}}" data-sizey="{{geometry.size_y}}" id="{{widget.id}}">
+                            {{#if widgetType 'variable'}}
+                                {{> variableWidget}}
+                            {{/if}}
+                            {{#if widgetType 'sensor'}}
+                                {{> sensorWidget}}
+                            {{/if}}
+                            {{#if widgetType 'action'}}
+                                {{> actionWidget}}
+                            {{/if}}
+                            {{#if widgetType 'floorPlan'}}
+                                {{> floorPlanWidget}}
+                            {{/if}}
+                        </li>
+                    {{/each}}
+
+                </ul>
+               </div>
+{{done}}
+
+                </div>
+            </div>
+        </div>
+
+
+    </section>
+
+</template>

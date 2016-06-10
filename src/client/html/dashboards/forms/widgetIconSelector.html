@@ -1,0 +1,37 @@
+<template name="widgetIconSelector">
+
+    <div>
+        <div class="ui inverted dimmer iconSelectorDimmer">
+            <div class="content">
+                <div class="upload" style="margin: 10px">
+                    {{> dropzone callbacks=uploadCallbacks formData=formData}}
+                    <br/>
+                    {{> upload_semanticUI callbacks=uploadCallbacks formData=formData}}
+                    <br/>
+                    <a type="button" class="mini ui button closeUploadDimmer" style="float:left">
+                        Close
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="imageSelectorContainer">
+            <select id="icon" name="icon" class="image-picker show-html">
+                {{#each images}}
+                    <option data-img-src="{{getImagePath}}" value="{{_id}}" selected={{isSelected ..}}>{{_id}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <br/>
+        <a type="button" class="mini ui button uploadDimmer">
+            Upload Your Own...
+        </a>
+        {{#if isDeleteable}}
+            <a type="button" class="mini ui button deleteFile">
+                Delete Selected Image...
+            </a>
+        {{/if}}
+    </div>
+
+
+
+</template>

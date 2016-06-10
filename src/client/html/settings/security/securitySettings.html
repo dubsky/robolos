@@ -1,0 +1,27 @@
+<template name="securitySettings">
+
+
+    <div class="ui padded segment">
+        <h2 class="ui header">Security</h2>
+        <p>
+            You may setup different security levels for accessing the system.
+        </p>
+
+        <div>
+            {{#autoForm id="securitySettingsForm" type="method-update" validation="keyup" meteormethod="updateSettings" collection=collection doc=settings schema=schema}}
+                <div class="two fields">
+                    {{> afQuickField name="selfRegistration"}}
+                    {{> afQuickField name="anonymousAccessToDashboards"}}
+                </div>
+                <button type="submit" class="ui primary button submit" disabled="{{saveDisabled}}">Save</button>
+                <a href="{{pathFor 'log'}}" class="ui secondary button manage Accounts">
+                    Manage Accounts
+                </a>
+                <a href="{{pathFor 'atChangePwd'}}" class="ui button">
+                    Change Password
+                </a>
+            {{/autoForm}}
+        </div>
+    </div>
+
+</template>

@@ -1,0 +1,22 @@
+<template name="selectAction">
+
+    <section class="content-header" id="content-header">
+        <h1 class="ui dividing header">Select Action
+            <small>to be added to your dashboard</small>
+        </h1>
+    </section>
+
+    <section class="content">
+        {{> actionSelectionTable allowSelection=true renderBox=true}}
+
+        <div id="content-footer" class="selector-content-footer">
+            <div class="selector-footer">
+                <button type="button" class="addAction btn btn-primary" disabled={{emptySelection}}>Add</button>
+                <button type="button" class="cancel btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+
+    </section>
+
+
+</template>

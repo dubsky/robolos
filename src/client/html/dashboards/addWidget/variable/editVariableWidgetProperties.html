@@ -1,0 +1,24 @@
+<template name="editVariableWidgetProperties">
+    <div class="ui modal" id="editVariableWidgetProperties">
+        <i class="close icon"></i>
+        <div class="header">
+            Widget Properties
+        </div>
+        <div class="content">
+            <form name="editProperties" class="form-horizontal" novalidate>
+                <label class="control-label" for="title">Title</label>
+                <input name="title" type="text" id="title" class="form-control" placeholder="Title" required>
+                {{#unless create}}
+                    <label class="control-label" for="title">Variable</label>
+                    <input name="variable" type="text" id="variable" class="form-control" readonly>
+                {{/unless}}
+                <label class="control-label" for="title">Icon</label>
+                {{> widgetIconSelector selectedIcon=selectedIcon type='icon'}}
+            </form>
+        </div>
+        <div class="actions">
+            <button type="button" class="approve updateProperties btn btn-primary" data-dismiss="modal">Ok</button>
+            <button type="button" class="cancel btn btn-default">Cancel</button>
+        </div>
+    </div>
+</template>

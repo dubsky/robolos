@@ -1,0 +1,6 @@
+<template name="analogOutput0100Widget">
+    <div class="widgetContent">
+        <div class="sensorLabel{{#if floorPlanView}}FP{{/if}}">{{>renderSensorValue sensorData}}</div> {{!-- displayZeroAsOff=true--}}
+        <img class="dashboardIcon{{#if floorPlanView}}FP{{/if}}" src="{{icon}}"/>
+    </div>
+</template>

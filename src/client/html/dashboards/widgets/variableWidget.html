@@ -1,0 +1,43 @@
+<template name="variableWidget">
+
+    {{#if floorPlanView}}
+            {{#with data}}
+                {{#if variableType 'date'}}
+                    {{> dateDashboardVariable}}
+                {{/if}}
+                {{#if variableType 'string'}}
+                    {{> stringDashboardVariable}}
+                {{/if}}
+                {{#if variableType 'boolean'}}
+                    {{> booleanDashboardVariable}}
+                {{/if}}
+                {{#if variableType 'number'}}
+                    {{> numberDashboardVariable}}
+                {{/if}}
+            {{/with}}
+    {{else}}
+        <div class="ui card" style="width:100%;height:100%">
+            {{> widgetHeader widget=widget}}
+            {{#with data}}
+                <div class="content">
+                    {{#if variableType 'date'}}
+                        {{> dateDashboardVariable}}
+                    {{/if}}
+                    {{#if variableType 'string'}}
+                        {{> stringDashboardVariable}}
+                    {{/if}}
+                    {{#if variableType 'boolean'}}
+                        {{> booleanDashboardVariable}}
+                    {{/if}}
+                    {{#if variableType 'number'}}
+                        {{> numberDashboardVariable}}
+                    {{/if}}
+                </div>
+
+                <div class="extra content" style="height:32px;padding-top:8px">
+                    <i>Control: {{mode}}</i>
+                </div>
+            {{/with}}
+        </div>
+    {{/if}}
+</template>

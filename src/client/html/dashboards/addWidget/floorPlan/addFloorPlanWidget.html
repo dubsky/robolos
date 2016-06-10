@@ -1,0 +1,25 @@
+<template name="addFloorPlanWidget">
+
+    <section class="content-header" id="content-header">
+        <h1 class="ui dividing header">New Floor Plan
+            <small>to be added to your dashboard</small>
+        </h1>
+    </section>
+
+    <section class="content">
+        <form name="editProperties" class="form-horizontal" novalidate>
+            <label class="control-label" for="title">Title</label>
+            <input name="title" type="text" id="title" class="form-control" placeholder="Title" required>
+            <label class="control-label" for="title">Background</label>
+            {{> widgetIconSelector selectedIcon=selectedIcon type='floorPlan'}}
+        </form>
+        <br/>
+        <div class="actions">
+            <button type="button" class="approve updateProperties btn btn-primary" data-dismiss="modal">Ok</button>
+            <button type="button" class="cancel btn btn-default">Cancel</button>
+        </div>
+
+    </section>
+
+
+</template>

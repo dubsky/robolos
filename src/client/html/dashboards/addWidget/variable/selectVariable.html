@@ -1,0 +1,21 @@
+<template name="selectVariable">
+
+    <section class="content-header" id="content-header">
+        <h1 class="ui dividing header">Select System State Variable
+            <small>to be added to your dashboard</small>
+        </h1>
+    </section>
+
+    <section class="content">
+        {{> variableSelectionTable allowSelection=true renderBox=true}}
+
+        <div id="content-footer" class="selector-content-footer">
+            <div class="selector-footer">
+                <button type="button" class="addVariable btn btn-primary" disabled={{emptySelection}}>Add</button>
+                <button type="button" class="cancel btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </section>
+
+
+</template>

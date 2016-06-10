@@ -1,0 +1,20 @@
+<template name="dateDashboardVariable">
+    <div class="popupEditor">
+
+    <div class="dateLabel{{#if ../floorPlanView}}FP{{/if}}">
+        {{#if isOutOfDate}}
+            <div class="sensorLabelSmall{{#if ../floorPlanView}}FP{{/if}}">{{variable.dateAfterLabel}}</div>
+        {{else}}
+            <div class="sensorLabelSmall{{#if ../floorPlanView}}FP{{/if}}">{{variable.dateBeforeLabel}}</div>
+        {{/if}}
+        {{#unless ../floorPlanView}}<br/>{{/unless}}
+        <span class="sensorLabelMedium{{#if ../floorPlanView}}FP{{/if}}">{{#with variable}}{{> variableValue}}{{/with}}</span>
+    </div>
+    {{#if isOutOfDate}}
+        <img class="button dashboardIcon{{#if ../floorPlanView}}FP{{/if}}" src="{{icon}}"/>
+    {{else}}
+        <img class="button dashboardIcon{{#if ../floorPlanView}}FP{{/if}} switchedOff" src="{{icon}}"/>
+    {{/if}}
+
+    </div>
+</template>

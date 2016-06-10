@@ -1,0 +1,13 @@
+<template name="tableTextSearch">
+
+    <div style="float:left;">
+        {{> UI.dynamic template=customContent}}
+    </div>
+    <div style="float:right;margin-bottom: 7px;">
+        <div class="ui icon input right aligned">
+            <i class="search icon"></i>
+            <input type="text" st-search name="table_search" class="table-text-search" placeholder="Search..." value="{{value}}">
+        </div>
+    </div>
+
+</template>

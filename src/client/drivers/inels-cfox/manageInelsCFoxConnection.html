@@ -1,0 +1,43 @@
+<template name="manageInelsCFoxConnection">
+
+    <div class="ui container">
+
+        <section class="content-header narrow">
+            <h1 class="ui dividing header">Connect to Tecomat CFox/INELS Central Unit
+                <small>Configure connection to new devices</small>
+            </h1>
+            <br/>
+        </section>
+
+        <section class="content">
+
+            <div>
+                {{#autoForm id="addCFoxDriverInstanceForm" type="method-update" meteormethod=getMethod doc=driverInstance collection=collection schema=schema}}
+                    {{> afQuickField name="title"}}
+                    {{> afQuickField name="description" rows=3}}
+
+                    {{> afQuickField name="properties.address"}}
+                    {{> afQuickField name="properties.port"}}
+
+                    <div class="field required">
+                        <label>Upload SCADA .pub data export (file with '.pub' extension) (check Common settings/Setup Export/...of SCADA where it is located)</label>
+                        {{> upload_semanticUI callbacks=pubCallbacks formData=pubFormData}}
+                        {{#if uploadError}}
+                            <div class="ui pointing red basic label">
+                                This file is required
+                            </div>
+                        {{/if}}
+                    </div>
+                    <div class="field required">
+                        <label>Upload SCADA .exp data export <span style="font-weight: normal">(file with '.exp' extension) (same location as the one above)</span></label>
+                        {{> upload_semanticUI callbacks=expCallbacks formData=expFormData}}
+                    </div>
+                    <br/>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default cancel">Cancel</button>
+                {{/autoForm}}
+            </div>
+        </section>
+    </div>
+
+</template>

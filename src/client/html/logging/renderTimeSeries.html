@@ -1,0 +1,20 @@
+<template name="renderTimeSeries">
+    <div id="timeSeriesModal" class="ui modal">
+        <div class="header">Sensor Data History
+            {{!-- avoid autofocus and auto open of the picker --}}
+            <input type="text" style="position: fixed; left: -10000000px;height:0px" disabled/>
+            <div style="float:right;font-size:0.8rem" class="ui labeled input">
+                <div style="font-size:0.8rem" class="ui teal label">
+                    Since
+                </div>
+                <input id="reportingRangePicker" type="text" name="sinceValue" value="{{since}}" readonly>
+            </div>
+        </div>
+        <div class="content">
+            <div id="timeSeries"></div>
+        </div>
+        <div class="actions">
+            <div class="ui approve button">Close</div>
+        </div>
+    </div>
+</template>

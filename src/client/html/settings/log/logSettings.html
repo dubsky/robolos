@@ -1,0 +1,24 @@
+<template name="logSettings">
+
+
+    <div class="ui padded segment">
+        <h2 class="ui header">System Logging</h2>
+        <p>
+            To understand and possibly debug what is happening in the system you can use the system log. The log events are stored in memory and are lost after system restart.
+        </p>
+
+        <div>
+            {{#autoForm id="logSettingsForm" type="method-update" validation="keyup" meteormethod="updateSettings" collection=collection doc=settings schema=schema}}
+                {{> afQuickField name="logCapacity"}}
+                <p>By default logging of sensor changes and action execution is disabled:</p>
+                {{> afQuickField name="enableEventLogging"}}
+                <button type="submit" class="ui primary button submit" disabled="{{saveDisabled}}">Save</button>
+                <a href="{{pathFor 'log'}}" class="ui secondary button resetKeywords">
+                    View Log Messages
+                </a>
+            {{/autoForm}}
+        </div>
+
+    </div>
+
+</template>

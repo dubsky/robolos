@@ -1,0 +1,20 @@
+<template name="widgetHeader">
+    <div class="content" style="max-width: 100%;max-height:32px;height:32px;padding-top:10px;padding-bottom:8px;padding-right:4px">
+        <table style="color:rgba(0, 0, 0, 0.4);width:100%;table-layout:fixed;" >
+            <tr>
+                <td style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;padding-right: 4px">
+                    {{title}}
+                </td>
+                <td style="white-space: nowrap;text-align: right;width:{{toolbarIconWidth}}px">
+                        {{#if sensorData}}<i class="openGraph area chart icon"></i>{{/if}}
+                        {{#if isInEditMode}}
+                            {{#with widget}}
+                                <i class="configureWidget write icon"></i>
+                                <i class="removeWidget remove icon"></i>
+                            {{/with}}
+                        {{/if}}
+                </td>
+            </tr>
+            </table>
+        </div>
+</template>

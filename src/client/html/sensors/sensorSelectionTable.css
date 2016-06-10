@@ -1,0 +1,12 @@
+/*tbody.sensorSelectionTable {
+    height: 600px;
+    overflow: auto;
+}*/
+
+.startEditor { cursor: pointer; }
+.selector-footer {
+    flex-grow: 3; position:absolute;top:-30px;
+}
+.selector-content-footer {
+    position:relative;
+}

@@ -1,0 +1,25 @@
+<template name="editEvent">
+
+    <div class="ui modal" id="eventEditor">
+        <div class="header">
+                Update Event Properties
+            <i class="close cancel icon"></i>
+        </div>
+        <div class="content">
+                {{#autoForm id="eventForm" type="method-update" meteormethod="updateSchedule" schema=schema doc=document}}
+                    {{> afQuickField name="title"}}
+                    {{> afQuickField name="description"}}
+                    {{> afQuickField name="executeOn" type="datetime-local"}}
+                {{!-- {{> afQuickField name="action" type="action" icon="fa-clock-o"}} approve --}}
+                {{/autoForm}}
+        </div>
+        <div class="actions">
+            <div class="ui container">
+                <button type="submit" class="cancel left floated changeAction ui button">Change Action...</button>
+                <button type="button" class="cancel ui button">Cancel</button>
+                <button type="submit" class="deleteEvent ui secondary button">Delete</button>
+                <button type="submit" class="saveEvent primary ui button">Save</button>
+            </div>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,52 @@
+.image_picker_image {
+  height:64px;
+  width:64px;
+}
+
+.imageSelectorContainer {
+  width:100%;
+  overflow-x:scroll;
+  background: white;
+  padding:5px;
+  border:1px solid lightgrey;
+}
+
+ul.thumbnails.image_picker_selector {
+  list-style-image: none;
+  list-style-position: outside;
+  list-style-type: none;
+  display: block;
+  white-space: nowrap;
+  padding: 0px;
+  margin: 0px; }
+
+ul.thumbnails.image_picker_selector ul {
+  overflow: scroll;
+  list-style-image: none;
+  list-style-position: outside;
+  list-style-type: none;
+  padding: 0px;
+  margin: 0px; }
+
+ul.thumbnails.image_picker_selector li.group_title {
+  float: none;
+}
+
+ul.thumbnails.image_picker_selector li {
+  display: inline-block;
+  white-space: nowrap;
+  margin: 0px 12px 0px 0px;
+  /*float: left;*/
+}
+ul.thumbnails.image_picker_selector li .thumbnail1 {
+  margin-bottom: 5px;
+  padding: 6px;
+  border: 1px solid #dddddd;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none; }
+ul.thumbnails.image_picker_selector li .thumbnail1 img {
+  -webkit-user-drag: none;
+}
+ul.thumbnails.image_picker_selector li .thumbnail1.selected {
+  background: #0088cc; }

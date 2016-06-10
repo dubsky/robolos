@@ -1,0 +1,35 @@
+<template name="log">
+
+    <section class="content-header" id="content-header">
+        <h1 class="ui dividing header" style="margin-bottom:15px">System Log
+            <small>List of past events</small>
+        </h1>
+    </section>
+
+
+    <section class="content">
+
+        <a href="{{pathFor 'settings'}}" class="ui primary button">Back</a>
+        {{#if subscribed}}
+            <a class="ui secondary button stopLogUpdate">Stop Live Update</a>
+        {{else}}
+            <a class="ui secondary button startLogUpdate">Enable Live Update</a>
+        {{/if}}
+
+
+        {{#if messages}}
+                <div class="box">
+                    <div>
+                        {{> tableTextSearch}}
+                    </div>
+                    <div>
+                        {{> reactiveTable collection=messages showNavigation='never' rowsPerPage=100 settings=settings }}
+                    </div>
+                </div>
+        {{else}}
+            <div style="color:red" class="alert alert-warning text-center">
+                <span style="color:black">No messages in the log</span>
+            </div>
+        {{/if}}
+    </section>
+</template>

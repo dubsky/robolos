@@ -1,0 +1,6 @@
+<template name="temperatureWidget">
+    <div class="widgetContent">
+        <div class="sensorLabel{{#if floorPlanView}}FP{{/if}}">{{>renderSensorValue sensorData}}</div>
+        <img class="dashboardIcon{{#if floorPlanView}}FP{{/if}}" src="{{icon}}"/>
+    </div>
+</template>

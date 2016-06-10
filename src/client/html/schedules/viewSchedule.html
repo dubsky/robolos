@@ -1,0 +1,35 @@
+<template name="viewSchedule">
+
+    <div class="ui container">
+
+    <section class="content-header  narrow">
+        <h1 class="ui dividing header">Edit Schedule
+            <small>Execute an action at specified times</small>
+        </h1>
+        <br/>
+    </section>
+
+    <section class="content">
+
+        <div>
+            {{#autoForm id="viewScheduleForm" type="method-update" meteormethod="updateSchedule" validation="keyup" collection=collection doc=schedule schema=schema}}
+                {{> afQuickField name="title"}}
+                {{> afQuickField name="description" rows=3}}
+                {{> afQuickField name="keywords" type="keywords"}}
+                {{> afQuickField name="action" type="action" icon="fa-clock-o"}}
+                <h4 class="ui dividing header">Schedule</h4>
+                {{#if schedule.cron}}
+                    {{> afQuickField label=false name="cron" type="cronEntry"}}
+                {{else}}
+                    {{> afQuickField name="executeOn" type="datetime-local"}}
+                {{/if}}
+
+                <br/>
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-default cancel">Cancel</button>
+            {{/autoForm}}
+        </div>
+    </section>
+    </div>
+
+</template>

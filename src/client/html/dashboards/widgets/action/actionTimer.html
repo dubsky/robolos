@@ -1,0 +1,12 @@
+<template name="actionTimer">
+    {{#with time}}
+    <div style="position: absolute; left: 50%;">
+        <div class="timerETA"><span>ETA&nbsp;{{eta}}</span></div>
+    </div>
+    <div class="progress">
+        <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
+             style="width: {{percent}}%">
+        </div>
+    </div>
+    {{/with}}
+</template>

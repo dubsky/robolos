@@ -1,0 +1,148 @@
+<template name="reactiveTable">
+  {{#with context}}
+  {{#if ready}}
+  {{!--
+    <!-- START: filter and columns -->
+    <div class="ui stackble right aligned fluid two column grid">
+
+      {{#if showColumnToggles}}
+      <div class="reactive-table-columns-dropdown column">
+        <div class="ui selection dropdown dropdown-toggle" id="reactive-table-add-column-{{id}}">
+          <i class="filter icon"></i>
+          <span class="text">{{i18n 'reactiveTable.columns'}}</span>
+          <i class="dropdown icon"></i>
+          <div class="menu dropdown-menu dropdown-menu-right" aria-labelledby="reactive-table-add-column-{{id}}">
+            {{#each fields}}
+            {{#unless hideToggle}}
+            <div class="item">
+
+              <a role="menuitem" tabindex="-1" data-target="#">
+                {{#if isVisible}}
+                  <input type="checkbox" checked data-fieldid="{{fieldId}}">
+                {{else}}
+                  <input type="checkbox" data-fieldid="{{fieldId}}">
+                {{/if}}
+                <label>
+                  {{#if labelIsTemplate}}{{#with labelData}}{{> ../label}}{{/with}}{{else}}{{getLabel}}{{/if}}
+                </label>
+              </a>
+
+            </div>
+            {{/unless}}
+            {{/each}}
+          </div>
+        </div>
+      </div>
+      {{/if}}
+
+      {{#if showFilter}}
+      <div class="reactive-table-filter column">
+        {{> reactiveTableFilter id=getFilterId}}
+      </div>
+      {{/if}}
+
+    </div>
+    <!-- END: filter and columns -->
+--}}
+    {{#unless noData}}
+      <table id="{{id}}" class="{{class}} unstackable reactive-table">
+          <thead>
+          <tr>
+              {{#each fields}}
+                  {{#if isVisible}}
+                      {{#if isPrimarySortField}}
+                          <th class="sortable {{getHeaderClass}}" fieldid="{{getFieldFieldId}}">
+                              {{#if labelIsTemplate}}{{#with labelData}}{{> ../label}}{{/with}}{{else}}{{getLabel}}{{/if}}&nbsp;&nbsp;
+                              {{#if isAscending}}
+                                  <i class="sort content ascending icon"></i>
+                              {{else}}
+                                  <i class="sort content descending icon"></i>
+                              {{/if}}
+                          </th>
+                      {{else}}
+                          {{#if isSortable}}
+                              <th class="{{getHeaderClass}} sortable" fieldid="{{getFieldFieldId}}">{{#if labelIsTemplate}}{{#with labelData}}{{> ../label}}{{/with}}{{else}}{{getLabel}}{{/if}}</th>
+                          {{else}}
+                              <th class="{{getHeaderClass}}" fieldid="{{getFieldFieldId}}">{{#if labelIsTemplate}}{{#with labelData}}{{> ../label}}{{/with}}{{else}}{{getLabel}}{{/if}}</th>
+                          {{/if}}
+                      {{/if}}
+                  {{/if}}
+              {{/each}}
+          </tr>
+          </thead>
+
+          <tbody data-mcs-theme="dark">
+
+
+          <div class="mCustomScrollBox">
+              <div>
+
+                  {{#each sortedRows}}
+                      <tr class="{{../rowClass this}}">
+                          {{#each ../fields}}
+                              {{#if isVisible}}
+                                  <td class="{{getCellClass ..}}">{{#if tmpl}}{{#with ..}}{{> ../tmpl}}{{/with}}{{else}}{{getField ..}}{{/if}}</td>
+                              {{/if}}
+                          {{/each}}
+                      </tr>
+                  {{/each}}
+
+              </div>
+          </div>
+
+          </tbody>
+
+      </table>
+
+      {{#if showNavigation}}
+      <div class="reactive-table-navigation">
+          {{!--
+        <div class="middle aligned left aligned column">
+            {{#if showNavigationRowsPerPage}}
+          <div class="ui form rows-per-page">
+            <div class="inline field">
+              <label>{{i18n 'reactiveTable.show'}}</label>
+              <input type="text" value="{{getRowsPerPage}}">
+              {{#if showRowCount}}
+                <span>{{i18n 'reactiveTable.of'}}</span>
+                <span class="rows-per-page-count">{{getRowCount}}</span>
+              {{/if}}
+              <span class="rows-per-page-label">{{i18n 'reactiveTable.rowsPerPage'}}</span>
+            </div>
+          </div>
+          {{/if}}
+        </div>
+        --}}
+
+        <div class="" style="width:100%;padding-bottom: 0px;margin-bottom: 8px;">
+          <div class="ui form page-number contentPagingControl" style="width:100%;text-align:center">
+              {{#if isntFirstPage}}
+                <i class="previous-page arrow circle left large icon"></i>
+              {{else}}
+                  <i class="arrow circle left large icon disabled"></i>
+              {{/if}}
+
+                {{!-- <label>{{i18n 'reactiveTable.page'}}</label> --}}
+                {{!-- <input type="text" value="{{getCurrentPage}}" /> --}}
+              {{getCurrentPage}}
+              <span>{{i18n 'reactiveTable.of'}}</span>
+              <span class="page-number-count">{{getPageCount}}</span>
+
+              {{#if isntLastPage}}
+              <i class="next-page arrow circle right large icon"></i>
+              {{else}}
+                  <i class="arrow circle right large icon disabled"></i>
+              {{/if}}
+          </div>
+        </div>
+
+      </div>
+      {{/if}}
+
+    {{else}}
+      {{> noDataTmpl}}
+    {{/unless}}
+  {{/if}}
+  {{/with}}
+
+</template>

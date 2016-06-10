@@ -1,0 +1,21 @@
+<template name="floorPlanWidgetWrapper">
+    {{#if widgetType 'variable'}}
+        {{> variableWidget floorPlanView=true widget=widget floorPlan=floorPlan}}
+    {{/if}}
+    {{#if widgetType 'sensor'}}
+        {{> sensorWidget floorPlanView=true widget=widget floorPlan=floorPlan}}
+    {{/if}}
+    {{#if widgetType 'action'}}
+        {{> actionWidget floorPlanView=true  widget=widget floorPlan=floorPlan}}
+    {{/if}}
+    {{triggerMode}} {{!-- Just to trigger event--}}
+    <div class="ui-resizable-handle ui-resizable-nw" id="nwgrip"></div>
+    <div class="ui-resizable-handle ui-resizable-ne" id="negrip"></div>
+    <div class="ui-resizable-handle ui-resizable-sw" id="swgrip"></div>
+    <div class="ui-resizable-handle ui-resizable-se" id="segrip"></div>
+    <div class="ui-resizable-handle ui-resizable-n" id="ngrip"></div>
+    <div class="ui-resizable-handle ui-resizable-s" id="sgrip"></div>
+    <div class="ui-resizable-handle ui-resizable-e" id="egrip"></div>
+    <div class="ui-resizable-handle ui-resizable-w" id="wgrip"></div>
+</template>
+

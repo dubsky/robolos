@@ -1,0 +1,14 @@
+<template name="actionSelectorModal">
+    <div class="ui large modal" id="selectAction">
+        <div class="header">
+            Select action
+        </div>
+        <div class="content">
+            {{> actionSelectionTable renderBox=false allowSelection=true}}
+        </div>
+        <div class="actions">
+            <button type="button" class="ok selectAction btn btn-primary" disabled={{emptySelection}}>Select</button>
+            <button type="button" class="deny btn btn-default">Cancel</button>
+        </div>
+    </div>
+</template>

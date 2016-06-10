@@ -1,0 +1,26 @@
+<template name="manageDemoConnection">
+
+    <div class="ui container">
+
+        <section class="content-header narrow">
+            <h1 class="ui dividing header">Connect new sensors and actuators provided by Demo Driver
+                <small>Configure connection to new devices</small>
+            </h1>
+            <br/>
+        </section>
+
+        <section class="content">
+
+            <div>
+                {{#autoForm id="addDemoDriverInstanceForm" type="method-update" meteormethod=getMethod doc=driverInstance collection=collection schema=schema}}
+                    {{> afQuickField name="title"}}
+                    {{> afQuickField name="description" rows=3}}
+                    <br/>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default cancel">Cancel</button>
+                {{/autoForm}}
+            </div>
+        </section>
+    </div>
+
+</template>

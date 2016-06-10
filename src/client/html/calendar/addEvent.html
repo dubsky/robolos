@@ -1,0 +1,37 @@
+<template name="addEvent">
+
+    <div class="ui modal" id="eventEditor">
+        <div class="header">
+            {{#if firstStep}}
+                Choose Action to Schedule
+            {{else}}
+                Fill-in Event Properties
+            {{/if}}
+            <i class="close cancel icon"></i>
+        </div>
+        <div class="content">
+            {{#if firstStep}}
+                {{> actionSelectionTable renderBox=false allowSelection=true}}
+            {{else}}
+                {{#autoForm id="eventForm" type="method-update" meteormethod="createSchedule" schema=schema doc=document}}
+                    {{> afQuickField name="title"}}
+                    {{> afQuickField name="description"}}
+                    {{> afQuickField name="executeOn" type="datetime-local"}}
+                    {{!-- {{> afQuickField name="action" type="action" icon="fa-clock-o"}} approve --}}
+                {{/autoForm}}
+            {{/if}}
+        </div>
+        <div class="actions">
+            {{#if firstStep}}
+                <button type="submit" class="cancel left floated recurringEvent ui button">Recurring Event...</button>
+                <button type="button" class="cancel ui button">Cancel</button>
+                <button type="submit" class="nextEvent ui button primary" disabled={{emptySelection}}>Next</button>
+            {{else}}
+                <button type="button" class="cancel ui button">Cancel</button>
+                <button type="submit" class="previousEvent ui button">Previous</button>
+                <button type="submit" class="finishEvent ui button primary">Finish</button>
+            {{/if}}
+        </div>
+    </div>
+</template>
+

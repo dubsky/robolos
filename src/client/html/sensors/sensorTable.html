@@ -1,0 +1,16 @@
+<template name="sensorTable">
+
+    {{#unless sensors}}
+        <div style="color:red" class="alert alert-warning text-center">
+            <span style="color:black">No devices discovered yet</span>
+        </div>
+    {{/unless}}
+
+    <div>
+        {{> tableTextSearch filterKey='sensors'}}
+    </div>
+    <div>
+        {{> reactiveTable collection=sensors showFilter=false rowsPerPage=100 settings=settings }}
+    </div>
+
+</template>

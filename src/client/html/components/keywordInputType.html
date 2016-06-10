@@ -1,0 +1,13 @@
+<template name="keywordInputType">
+
+    <div class="ui fluid multiple search selection dropdown keywordEditor">
+        <input value="{{this.value}}" {{this.atts}} name="tags" type="hidden">
+        <i class="dropdown icon"></i>
+        <div class="default text">Keywords</div>
+        <div class="menu">
+            {{#each keywords}}
+                <div class="item" data-value="{{.}}">{{.}}</div>
+            {{/each}}
+        </div>
+    </div>
+</template>

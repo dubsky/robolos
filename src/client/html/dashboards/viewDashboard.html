@@ -1,0 +1,32 @@
+<template name="viewDashboard">
+
+    <div class="ui container">
+
+    <section class="content-header narrow">
+        <div style="float:right;padding-top:20px" ><button type="button" class="btn btn-default viewContent">Edit Content</button></div>
+        <h1 class="ui dividing header">Edit Dashboard Properties
+            <small>Visualize your sensor and actor network</small>
+        </h1>
+        <br/>
+    </section>
+
+    <section class="content">
+
+        <div>
+                    {{#autoForm id="viewDashboardForm" type="method-update" meteormethod="updateDashboard" collection=collection doc=dashboard schema=schema}}
+                        {{> afQuickField name="title"}}
+                        {{> afQuickField name="description" rows=3}}
+                        {{> afQuickField name="keywords" type="keywords"}}
+                        <p>Dashboards are listed in the ascending order of the following property:</p>
+                        {{> afQuickField name="menuPositionNumber"}}
+                        <br/>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-default cancel">Cancel</button>
+
+                    {{/autoForm}}
+        </div>
+    </section>
+
+    </div>
+
+</template>

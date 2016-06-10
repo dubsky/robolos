@@ -1,0 +1,12 @@
+<template name="numberDashboardVariableEditor">
+
+    <form class="ui form" id="variableEditorForm{{id}}">
+        <h4 class="ui dividing header">Change Variable Value</h4>
+        <div class="field"><label>Value</label><div class="ui right labeled input"><input type="text" name="value" value="{{data.variable.numberValue}}"><div class="ui basic label">{{data.variable.unit}}</div></div></div>
+        {{#if autoControl}}
+        <div class="ui segment"><div class="field"><div class="ui toggle checkbox autoCheckbox"> <input type="checkbox" name="auto" checked="{{data.variable.allowAutomaticControl}}"><label>Allow automatic control</label></div></div></div>
+        {{/if}}
+        <button class="ui primary button" onclick="Template.numberDashboardVariableEditor.onSave('variableEditorForm{{id}}','{{data.variable._id}}');return false;">Save</button>
+        <button class="ui button" onclick="Template.numberDashboardVariableEditor.onCancel('variableEditorForm{{id}}','{{data.variable._id}}');return false;">Cancel</button>
+    </form>
+</template>

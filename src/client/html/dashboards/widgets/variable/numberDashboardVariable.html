@@ -1,0 +1,6 @@
+<template name="numberDashboardVariable">
+    <div class="popupEditor">
+        <div class="numberVariableEditor sensorLabel{{#if ../floorPlanView}}FP{{/if}} changeValue">{{#with variable}}{{> variableValue}}{{/with}}</div>
+        <img class="dashboardIcon{{#if ../floorPlanView}}FP{{/if}} changeValue" src="{{icon}}"/>
+    </div>
+</template>

@@ -1,0 +1,7 @@
+<template name="stringDashboardVariable">
+
+    <div class="popupEditor" style="width:100%;height:100%">
+        <div class="sensorLabel{{#if ../floorPlanView}}FP{{/if}}">{{#with variable}}{{> variableValue}}{{/with}}</div>
+        <img class="dashboardIcon{{#if ../floorPlanView}}FP{{/if}}" src="{{icon}}"/>
+    </div>
+</template>

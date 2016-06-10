@@ -1,0 +1,45 @@
+<template name="manageMySensorsConnection">
+
+    <div class="ui container">
+
+        <section class="content-header narrow">
+            <h1 class="ui dividing header">Connect to My Sensors Gateway
+                <small>Configure connection to new devices</small>
+            </h1>
+            <br/>
+        </section>
+
+        <section class="content">
+
+            <div>
+                {{#autoForm id="addMySensorsDriverInstanceForm" type="method-update" meteormethod=getMethod doc=driverInstance collection=collection schema=schema}}
+                    {{> afQuickField name="title"}}
+                    {{> afQuickField name="description" rows=3}}
+
+                    {{> afQuickField name="properties.gwType" type="select" options=typeOptions}}
+
+                    {{#if isSerial}}
+                        <div class="fields">
+                            <div class="twelve wide field">
+                                {{> afQuickField name="properties.serial.gwSerialPort" type="select" options=serialPortOptions}}
+                            </div>
+                            <div class="two wide field">
+                                <label>&nbsp;</label>
+                                <button type="button" class="ui button">Refresh...</button>
+                            </div>
+                        </div>
+                        {{> afQuickField name="properties.serial.gwBaud" type="select" options=baudRateOptions}}
+                    {{else}}
+                        {{> afQuickField name="properties.ethernet.gwAddress"}}
+                        {{> afQuickField name="properties.ethernet.gwPort"}}
+                    {{/if}}
+
+                    <br/>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default cancel">Cancel</button>
+                {{/autoForm}}
+            </div>
+        </section>
+    </div>
+
+</template>

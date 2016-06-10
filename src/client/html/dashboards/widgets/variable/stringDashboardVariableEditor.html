@@ -1,0 +1,24 @@
+<template name="stringDashboardVariableEditor">
+
+    <form class="ui form" id="variableEditorForm{{id}}">
+        <h4 class="ui dividing header">Change Variable Value</h4>
+        <div class="field"><label>Value</label>
+            <div class="ui selection dropdown stringVariableValueSelection">
+                <input type="hidden" name="gender">
+                <i class="dropdown icon"></i>
+                <div class="default text">Select Value</div>
+                <div class="menu">
+                    {{#each data.variable.stringAllowedValues}}
+                        <div class="item" data-value="{{this}}">{{this}}</div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+
+        {{#if autoControl}}
+            <div class="ui segment"><div class="field"><div class="ui toggle checkbox autoCheckbox"> <input type="checkbox" name="auto" checked="{{data.variable.allowAutomaticControl}}"><label>Allow automatic control</label></div></div></div>
+        {{/if}}
+        <button class="ui primary button" onclick="Template.stringDashboardVariableEditor.onSave('variableEditorForm{{id}}','{{data.variable._id}}');return false;">Save</button>
+        <button class="ui button" onclick="Template.stringDashboardVariableEditor.onCancel('variableEditorForm{{id}}','{{data.variable._id}}');return false;">Cancel</button>
+    </form>
+</template>

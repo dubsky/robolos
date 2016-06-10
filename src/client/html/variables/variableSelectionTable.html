@@ -1,0 +1,27 @@
+<template name="variableSelectionTable">
+
+
+    {{#unless variables}}
+        <div style="color:red" class="alert alert-warning text-center">
+            <span style="color:black">No variables available yet</span>
+        </div>
+    {{/unless}}
+
+
+    {{#if renderBox}}
+        <div>
+            {{> tableTextSearch filterKey='variables'}}
+        </div>
+        <div>
+            {{> reactiveTable collection=variables showFilter=false rowsPerPage=100 settings=settings }}
+        </div>
+    {{else}}
+        <div>
+            {{> tableTextSearch filterKey='variables'}}
+            <div class="box-body no-padding">
+                {{> reactiveTable collection=variables showFilter=false showNavigation='always' maxHeight=400 rowsPerPage=100 settings=settings }}
+            </div>
+        </div>
+    {{/if}}
+
+</template>

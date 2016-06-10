@@ -1,0 +1,26 @@
+<template name="addWidgetSelectWidgetType">
+    <div class="ui modal" id="selectWidgetType">
+        <i class="close icon"></i>
+        <div class="header">
+            Add Widget to Dashboard
+        </div>
+        <div class="content">
+            <button class="approve addSensor btn btn-default" style="width:100px">Sensor</button> &nbsp;&nbsp; Add individual sensor value to the dashboard
+            <br>
+            <br>
+            <button class="approve addAction btn btn-default" style="width:100px">Action</button> &nbsp;&nbsp;Add the possibility to launch an automatic action or schedule
+            <br>
+            <br>
+            <button class="approve addVariable btn btn-default" style="width:100px">Variable</button> &nbsp;&nbsp;Add the possibility to alter system state variables which may change behavior of actions
+            <br>
+            <br>
+            {{#unless floorPlanMode}}
+            <button class="approve addFloorPlan btn btn-default" style="width:100px">Floor Plan</button> &nbsp;&nbsp;Add an image showing your environment with sensors / actuators you can directly see and control
+            {{/unless}}
+        </div>
+        <div class="actions">
+            <button type="cancel button" class="cancel btn btn-default">Cancel</button>
+        </div>
+    </div>
+</template>
+

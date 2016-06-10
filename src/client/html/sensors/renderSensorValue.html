@@ -1,0 +1,32 @@
+<template name="renderSensorValue">
+    {{#if unknown}}
+        <span style="color:grey">N/A</span>
+    {{else}}
+        {{#if binary}}
+            {{#if value}}
+                {{#if binaryInput}}
+                    <span style="color:green">ON</span>
+                {{else}}
+                    <span class="binarySwitch" style="color:green">ON</span>
+                {{/if}}
+            {{else}}
+                {{#if binaryInput}}
+                    <span style="color:red">OFF</span>
+                {{else}}
+                    <span class="binarySwitch" style="color:red">OFF</span>
+                {{/if}}
+            {{/if}}
+        {{else}}
+            {{#if analogOutput0100}}
+                {{#if renderAsOff}}
+                    <span class="popupSlider">OFF</span>
+                {{else}}
+                    <span class="popupSlider">{{value}}%</span>
+                {{/if}}
+            {{else}}
+                {{value}}{{{unit}}}
+            {{/if}}
+        {{/if}}
+    {{/if}}
+
+</template>

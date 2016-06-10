@@ -1,0 +1,30 @@
+<template name="addDriverInstance">
+
+
+            <div class="ui middle aligned divided list">
+                {{#each driver in drivers}}
+                <div class="item">
+                    <div class="right floated content">
+                        {{#if driver.allowsMultipleInstances}}
+                            <div driver-id="{{driver.managementBaseRoute}}" style="width:85px" class="ui button primary addDriverInstance">Add</div>
+                        {{else}}
+                            {{#if isAlreadyInstantiated driver}}
+                                <div class="ui button disabled" style="width:85px">In Use</div>
+                            {{else}}
+                                <div driver-id="{{driver.managementBaseRoute}}" style="width:85px" class="ui button primary addDriverInstance">Add</div>
+                            {{/if}}
+                        {{/if}}
+                    </div>
+                   <div class="left floated content" style="width:64px">
+                        <span>
+                            <img class="ui image" style="height:32px;margin-left: auto;margin-right: auto;" src="{{driver.iconPath}}">
+                        </span>
+                    </div>
+                    <d class="content" style="display: table-cell; vertical-align: middle;height:32px">
+                            {{{driver.description}}}
+                    </d>
+                </div>
+                {{/each}}
+            </div>
+
+</template>

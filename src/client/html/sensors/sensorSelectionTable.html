@@ -1,0 +1,30 @@
+<template name="sensorSelectionTable">
+
+    {{#unless sensors}}
+        <div style="color:red" class="alert alert-warning text-center">
+            <span style="color:black">No sensors discovered yet</span>
+        </div>
+    {{/unless}}
+
+
+    {{#if renderBox}}
+        <div>
+            {{> tableTextSearch filterKey='sensors'}}
+        </div>
+        <div>
+            {{> reactiveTable collection=sensors showFilter=false rowsPerPage=100 settings=settings }}
+        </div>
+    {{else}}
+        <div>
+            <div class="box-header">
+               {{> tableTextSearch filterKey='sensors'}}
+            </div>
+            <div class="box-body no-padding">
+                {{> reactiveTable collection=sensors showNavigation='always' showFilter=false rowsPerPage=100 maxHeight=400 settings=settings }}
+            </div>
+        </div>
+
+    {{/if}}
+
+
+</template>

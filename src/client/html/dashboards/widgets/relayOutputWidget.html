@@ -1,0 +1,11 @@
+<template name="relayOutputWidget">
+
+    {{#if isOn sensorData}}
+        <div class="button sensorLabel{{#if floorPlanView}}FP{{/if}}">ON</div>
+        <img class="button dashboardIcon{{#if floorPlanView}}FP{{/if}}"  src="{{icon}}"/>
+    {{else}}
+        <div class="button sensorLabel{{#if floorPlanView}}FP{{/if}}">OFF</div>
+        <img class="button switchedOff dashboardIcon{{#if floorPlanView}}FP{{/if}}" src="{{icon}}"/>
+    {{/if}}
+
+</template>

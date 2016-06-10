@@ -1,0 +1,23 @@
+<template name="settings">
+
+    <div class="ui container">
+
+        <section class="content-header  narrow">
+            <h1 class="ui dividing header">Settings
+                <small>Customize general behavior of the system</small>
+            </h1>
+            <br/>
+        </section>
+
+        <section class="content">
+
+            {{>securitySettings}}
+            {{>logSettings}}
+            {{>dataLoggingSettings}}
+            {{>keywordSettings}}
+            <br/>
+            <br/>
+        </section>
+    </div>
+
+</template>

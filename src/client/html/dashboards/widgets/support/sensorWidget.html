@@ -1,0 +1,15 @@
+<template name="sensorWidget">
+
+    {{#if floorPlanView}}
+        {{>sensorContent sensorData=sensorData widget=widget floorPlanView=true}}
+    {{else}}
+        <div class="ui card" style="width:100%;height:100%">
+            {{> widgetHeader sensorData=sensorData widget=widget}}
+            <div class="content">
+                {{>sensorContent sensorData=sensorData widget=widget floorPlanView=false}}
+            </div>
+            {{>sensorWidgetFooter data=sensorData}}
+        </div>
+    {{/if}}
+
+</template>

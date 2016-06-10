@@ -1,0 +1,37 @@
+<template name="viewAction">
+
+    <div class="ui container">
+
+    <section class="content-header narrow">
+        <div style="float:right;padding-top:20px" >
+            <button type="button" class="ui button basic viewContent">Edit Flow</button>
+            {{#if editContext}}
+                <button class="ui button goBack labeled icon"><i class="left arrow icon"></i>Back to {{editContext.label}}</button>
+            {{/if}}
+        </div>
+        <h1 class="ui dividing header">Edit Action Properties
+            <small>Orchestrate your sensors and actuators</small>
+        </h1>
+        <br/>
+    </section>
+
+    <section class="content">
+
+        <div>
+            {{#autoForm id="viewActionForm" type="method-update" meteormethod="updateAction" collection=collection doc=action schema=schema}}
+                {{> afQuickField name="title"}}
+                {{> afQuickField name="description" rows=3}}
+                {{> afQuickField name="keywords" type="keywords"}}
+
+                {{> afQuickField name="calendarDroppable" }}
+
+                <br/>
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-default cancel">Cancel</button>
+
+            {{/autoForm}}
+        </div>
+    </section>
+    </div>
+
+</template>
