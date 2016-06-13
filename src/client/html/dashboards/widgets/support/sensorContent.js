@@ -7,7 +7,6 @@ Template.sensorContent.helpers({
         switch (sensorData.type) {
             case SensorTypes.S_ANALOG_OUTPUT_0_100.id:
                 calculated='ANALOG_OUTPUT_0_100';
-                console.log('AI Matched');
                 break;
             case SensorTypes.S_LIGHT.id:
             case SensorTypes.BINARY_OUTPUT.id:
