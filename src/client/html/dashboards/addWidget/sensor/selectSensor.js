@@ -25,7 +25,10 @@ Router.route('dashboard-selectSensor/:_id',
         this.render('selectSensor');
     },
     {
-        name: 'dashboard-selectSensor'
+        name: 'dashboard-selectSensor',
+        waitOn: function() {
+            return App.subscribe('sensors',false);
+        }
     }
 );
 

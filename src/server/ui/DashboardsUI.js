@@ -1,5 +1,5 @@
 
-Meteor.publish('allDashboards', function(){
+Meteor.publish('dashboards', function(filter,reactive){
     return Collections.Dashboards.find();
 });
 

@@ -6,6 +6,11 @@ class SensorsClass {
             listenerObjects: [],
             idGenerator: 0
         };
+        this.count=0;
+    }
+
+    getCount() {
+        return this.count;
     }
 
     /** enhance sensor from driver with extra fields */
@@ -38,6 +43,7 @@ class SensorsClass {
                 // fire update/add event first
                 if (notPreviouslyKnown) {
                     SensorsUI.fireCreateEvent(result);
+                    this.count++;
                 }
                 else {
                     SensorsUI.fireUpdateEvent(result);

@@ -40,7 +40,7 @@ class DevicesUIClass extends Observable {
 DevicesUI=new DevicesUIClass();
 
 
-Meteor.publish('allDevices', function(){
+Meteor.publish('devices', function(){
     // safe reference to this session
     var self = this;
     // insert a record for the first time

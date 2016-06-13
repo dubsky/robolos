@@ -21,15 +21,18 @@ Router.route('action-properties/:_id',
         var self=this;
         var params = self.params;
         var item = Collections.Actions.findOne({_id: params._id });
+        if(item==null) {
+            self.render('notFound');
+            return;
+        }
         Session.set(CURRENT_ACTION, item);
         self.render('viewAction',{data: { action: item }});
     },
     {
-        name: 'render.action.properties'/*,
+        name: 'render.action.properties',
         waitOn: function() {
-            // subscribe to just the current one!!!!
-            return Meteor.subscribe('allActions');
-        }*/
+            return App.subscribe('actions');
+        }
     }
 );
 

@@ -116,9 +116,16 @@ Router.route('manageInelsCFoxConnection/create',
 Router.route('manageInelsCFoxConnection/update/:_id',
     function () {
         var item = Collections.DriverInstances.findOne({_id: this.params._id });
+        if(item==null) {
+            this.render('notFound');
+            return;
+        }
         this.render('manageInelsCFoxConnection',{data: { driverInstance: item }});
     },
     {
-        name: 'manageInelsCFoxConnection/update'
+        name: 'manageInelsCFoxConnection/update',
+        waitOn: function() {
+            return [App.subscribe('driverInstances')];
+        }
     }
 );

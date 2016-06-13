@@ -1,11 +1,4 @@
 
-SensorsCollection = new Mongo.Collection("sensors");
-
-Tracker.autorun(function () {
-    Meteor.subscribe('allSensors');
-});
-
-
 Template.sensorTable.helpers({
 
     sensors: function () {

@@ -189,16 +189,17 @@ Router.route('dashboards/:_id',
         var id = this.params._id;
         Session.set(CURRENT_DASHBOARD_ID, id);
         var item = Collections.Dashboards.findOne({_id: id });
+        if(item==null) {
+            this.render('notFound');
+            return;
+        }
         Session.set(CURRENT_DASHBOARD, item);
         this.render('renderDashboard',{data: { dashboard: item }});
     },
     {
         name: 'render.dashboard',
         waitOn: function() {
-            // subscribe to just the current one!!!!
-            //var dashboardId=Session.get(CURRENT_DASHBOARD_ID);
-            //return [Meteor.subscribe('allDashboards'),Meteor.subscribe('sensorStatusCollection',{id: dashboardId })];
-            return Meteor.subscribe('allDashboards');
+            return App.subscribe('dashboards');
         }
     }
 );

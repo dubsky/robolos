@@ -8,7 +8,7 @@ class ActionsUIClass extends Observable {
 ActionsUI=new ActionsUIClass();
 
 
-Meteor.publish('allActions', function(){
+Meteor.publish('actions', function(filter,reactive){
     try {
         // safe reference to this session
         var self = this;

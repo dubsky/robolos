@@ -25,7 +25,7 @@ class SensorsUIClass extends Observable {
 
 SensorsUI=new SensorsUIClass();
 
-Meteor.publish('allSensors', function(){
+Meteor.publish('sensors', function(reactive){
     var self = this;
 
     Sensors.forEachSensor(function(sensor) {
@@ -61,47 +61,50 @@ Meteor.publish('allSensors', function(){
         }
     });
 
-    // listen for sensor metadata changes
-    var metaListenerId=SensorMetadata.addEventListener(function (meta) {
-        var id=meta._id;
-        var mergeTarget = {};
-        for (var attrname in meta) { mergeTarget[attrname] = meta[attrname]; }
-        self.changed("sensors",id, mergeTarget);
-    });
+    self.ready();
 
-    // list for sensor creation / removal
-    var sensorListenerId=SensorsUI.addEventListener(    {
-            onCreate : function(sensor) {
-                self.added("sensors",sensor._id,sensor);
-            },
-            onRemove : function(sensorId) {
-                try {
-                    self.removed("sensors",sensorId);
-                }
-                catch(e)
-                {
-                    log.error('Error removing sensor from sensor list',e);
-                }
-            },
-            onUpdate : function(sensor) {
-                try {
-                    self.changed("sensors",sensor._id,sensor);
-                }
-                catch(e)
-                {
-                    log.error('Error updating sensor information',e);
+    if(reactive!==false)
+    {
+        // listen for sensor metadata changes
+        var metaListenerId=SensorMetadata.addEventListener(function (meta) {
+            var id=meta._id;
+            var mergeTarget = {};
+            for (var attrname in meta) { mergeTarget[attrname] = meta[attrname]; }
+            self.changed("sensors",id, mergeTarget);
+        });
+
+        // list for sensor creation / removal
+        var sensorListenerId=SensorsUI.addEventListener(    {
+                onCreate : function(sensor) {
+                    self.added("sensors",sensor._id,sensor);
+                },
+                onRemove : function(sensorId) {
+                    try {
+                        self.removed("sensors",sensorId);
+                    }
+                    catch(e)
+                    {
+                        log.error('Error removing sensor from sensor list',e);
+                    }
+                },
+                onUpdate : function(sensor) {
+                    try {
+                        self.changed("sensors",sensor._id,sensor);
+                    }
+                    catch(e)
+                    {
+                        log.error('Error updating sensor information',e);
+                    }
                 }
             }
-        }
-    );
+        );
 
-    self.onStop(function(){
-        SensorsUI.removeEventListener(sensorListenerId);
-        Sensors.removeSensorValueEventListener(listenerId);
-        SensorMetadata.removeEventListener(metaListenerId);
-    });
-
-    self.ready();
+        self.onStop(function(){
+            SensorsUI.removeEventListener(sensorListenerId);
+            Sensors.removeSensorValueEventListener(listenerId);
+            SensorMetadata.removeEventListener(metaListenerId);
+        });
+    }
 
 });
 

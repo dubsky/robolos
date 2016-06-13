@@ -9,22 +9,18 @@
 
 
     {{#if renderBox}}
-            <div class="col-xs-12">
-                <div class="box">
-                    <div class="box-header">
-                        {{> tableTextSearch filterKey='actions' customContent='newActionButton'}}
-                    </div>
-                    <div class="box-body no-padding">
-                        {{> reactiveTable collection=actions showFilter=false rowsPerPage=100 settings=settings }}
-                    </div>
-                </div>
-            </div>
+        <div>
+            {{> tableTextSearch filterKey='actions' customContent='newActionButton'}}
+        </div>
+        <div>
+            {{> reactiveTable collection=actions showFilter=false rowsPerPage=100 settings=settings }}
+        </div>
     {{else}}
         <div>
-            <div class="box-header">
+            <div>
                 {{> tableTextSearch filterKey='actions' customContent='newActionButton'}}
             </div>
-            <div class="box-body no-padding">
+            <div>
                 {{> reactiveTable collection=actions showFilter=false showNavigation='always' maxHeight=400 rowsPerPage=100 settings=settings }}
             </div>
         </div>

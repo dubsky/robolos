@@ -1,4 +1,6 @@
 
+SensorsCollection = new Mongo.Collection("sensors");
+
 Router.route('sensors',
     function () {
         var context=EditContext.getContext();
@@ -16,8 +18,7 @@ Router.route('sensors',
     {
         name: 'sensors',
         waitOn: function() {
-            // subscribe to just the current one!!!!
-            return [Meteor.subscribe("allSensorMetadata"),Meteor.subscribe("allSensors")];
+            return [App.subscribe("allSensorMetadata"),App.subscribe("sensors")];
         }
     }
 );

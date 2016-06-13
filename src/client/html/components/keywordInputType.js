@@ -1,6 +1,4 @@
-Tracker.autorun(function () {
-    Meteor.subscribe('keywords');
-});
+Meteor.subscribe('keywords');
 
 Template.keywordInputType.helpers({
     keywords: function() {

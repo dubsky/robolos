@@ -6,39 +6,51 @@ class SchedulesUIClass extends Observable {
 SchedulesUI=new SchedulesUIClass();
 
 
-Meteor.publish('schedules', function(){
+Meteor.publish('schedules', function(filter,reactive){
+    console.log('schedules queried');
     // safe reference to this session
     var self = this;
     // insert a record for the first time
 
-    Collections.Schedules.find().forEach(
+    var cursor;
+    if(filter==undefined) {
+        cursor=Collections.Schedules.find();
+    }
+    else {
+        cursor=Collections.Schedules.find(filter);
+    }
+
+    cursor.forEach(
         function(schedule) {
             schedule.nextExecutionTime=SchedulesInstance.nextExecution(schedule._id);
             self.added("schedules", schedule._id, schedule);
-        });
-
+        }
+    );
 
     self.ready();
 
-    var id=SchedulesUI.addEventListener({
-        onRemove : function(scheduleId) {
-            self.removed("schedules",scheduleId);
-        },
+    if(reactive!==false)
+    {
+        var id=SchedulesUI.addEventListener({
+            onRemove : function(scheduleId) {
+                self.removed("schedules",scheduleId);
+            },
 
-        onUpdate : function(schedule) {
-            schedule.nextExecutionTime=SchedulesInstance.nextExecution(schedule._id);
-            self.changed("schedules",schedule._id, schedule);
-        },
+            onUpdate : function(schedule) {
+                schedule.nextExecutionTime=SchedulesInstance.nextExecution(schedule._id);
+                self.changed("schedules",schedule._id, schedule);
+            },
 
-        onCreate : function(schedule) {
-            //schedule.nextExecutionTime=SchedulesInstance.nextExecution(schedule._id);
-            self.added("schedules",schedule._id, schedule);
-        }
-    });
+            onCreate : function(schedule) {
+                //schedule.nextExecutionTime=SchedulesInstance.nextExecution(schedule._id);
+                self.added("schedules",schedule._id, schedule);
+            }
+        });
 
-    self.onStop(function(){
-        SchedulesUI.removeEventListener(id);
-    });
+        self.onStop(function(){
+            SchedulesUI.removeEventListener(id);
+        });
+    }
 });
 
 

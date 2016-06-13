@@ -4,34 +4,29 @@ Template.homepage.renderCount=function(count) {
 
 Template.homepage.helpers({
 
-
-    actionCount: function() {
-        return Template.homepage.renderCount(Collections.Actions.find().count());
-    },
-
-    sensorCount: function() {
-        return Template.homepage.renderCount(SensorsCollection.find().count());
-    },
-
     dashboardCount: function() {
         return Template.homepage.renderCount(Collections.Dashboards.find().count());
-    },
-
-    scheduleCount: function() {
-        return Template.homepage.renderCount(Collections.Schedules.find().count());
     }
+
 });
 
-Router.route('/', function () {
-    this.render('homepage');
-}, {
+
+var loadStats=function () {
+    var item = Collections.SystemStatistics.findOne({_id: Collections.SystemStatistics.SYSTEM_STATISTICS_ID });
+    if(item==null) {
+        this.render('homepage');
+    }
+    else
+    {
+        this.render('homepage',{data: item });
+    }
+};
+
+var wait={
     waitOn: function() {
-        return Meteor.subscribe('settings');
+        return Meteor.subscribe('systemStatistics');
     }
-});
+};
 
-Router.route('homepage',{
-    waitOn: function() {
-        return Meteor.subscribe('settings');
-    }
-});
+Router.route('/', loadStats, wait);
+Router.route('homepage',loadStats,wait);

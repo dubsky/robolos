@@ -17,14 +17,17 @@ Router.route('dashboard-properties/:_id',
         var self=this;
         var params = self.params;
         var item = Collections.Dashboards.findOne({_id: params._id });
+        if(item==null) {
+            self.render('notFound');
+            return;
+        }
         Session.set(CURRENT_DASHBOARD, item);
         self.render('viewDashboard',{data: { dashboard: item }});
     },
     {
         name: 'render.dashboard.properties',
         waitOn: function() {
-            // subscribe to just the current one!!!!
-            return Meteor.subscribe('allDashboards');
+            return App.subscribe('dashboards');
         }
     }
 );

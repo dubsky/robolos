@@ -19,6 +19,10 @@ Router.route('schedules/:_id',
         var item;
         if(EditContext.getContext()===undefined) {
             item = Collections.Schedules.findOne({_id: params._id });
+            if(item==null) {
+                self.render('notFound');
+                return;
+            }
             EditContext.setContext(new EditContext('Edit Schedule',{routeName: 'render.schedule', _id:params._id },item));
             Session.set(CURRENT_SCHEDULE, item);
         }
@@ -32,8 +36,7 @@ Router.route('schedules/:_id',
     {
         name: 'render.schedule',
         waitOn: function() {
-            // subscribe to just the current one!!!!
-            return Meteor.subscribe('schedules');
+            return [App.subscribe('schedules',{_id : this.params._id},false),App.subscribe('actions')];
         }
     }
 );

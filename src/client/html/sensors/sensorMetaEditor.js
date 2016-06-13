@@ -1,6 +1,3 @@
-
-Meteor.subscribe("allSensorMetadata");
-
 Template.sensorMetaEditor.SENSOR_DOCUMENT='sensorMetaEditor.SENSOR_DOCUMENT';
 
 Template.sensorMetaEditor.onCreated(function() {

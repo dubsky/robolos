@@ -5,36 +5,43 @@ class DriverInstancesUIClass extends Observable {
 DriverInstancesUI=new DriverInstancesUIClass();
 
 
-Meteor.publish('driverInstances', function(){
-    // safe reference to this session
-    var self = this;
-    // insert a record for the first time
+Meteor.publish('driverInstances', function(filter,reactive){
 
-    Collections.DriverInstances.find().forEach(
+    var self = this;
+    var cursor;
+    if(filter==undefined) {
+        cursor=Collections.DriverInstances.find();
+    }
+    else {
+        cursor=Collections.DriverInstances.find(filter);
+    }
+
+    cursor.forEach(
         function(driverInstance) {
             self.added("driverInstances", driverInstance._id, driverInstance);
-        });
-
+        }
+    );
 
     self.ready();
+    if(reactive!==false) {
+        var id = DriverInstancesUI.addEventListener({
+            onRemove: function (driverInstanceId) {
+                self.removed("driverInstances", driverInstanceId);
+            },
 
-    var id=DriverInstancesUI.addEventListener({
-        onRemove : function(driverInstanceId) {
-            self.removed("driverInstances",driverInstanceId);
-        },
+            onUpdate: function (driverInstance) {
+                self.changed("driverInstances", driverInstance._id, driverInstance);
+            },
 
-        onUpdate : function(driverInstance) {
-            self.changed("driverInstances",driverInstance._id, driverInstance);
-        },
+            onCreate: function (driverInstance) {
+                self.added("driverInstances", driverInstance._id, driverInstance);
+            }
+        });
 
-        onCreate : function(driverInstance) {
-            self.added("driverInstances",driverInstance._id, driverInstance);
-        }
-    });
-
-    self.onStop(function(){
-        DriverInstancesUI.removeEventListener(id);
-    });
+        self.onStop(function () {
+            DriverInstancesUI.removeEventListener(id);
+        });
+    }
 });
 
 

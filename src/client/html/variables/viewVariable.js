@@ -29,6 +29,10 @@ Router.route('variables/:_id',
 
         if(EditContext.getContext()===undefined) {
             item = Collections.Variables.findOne({_id: params._id });
+            if(item==null) {
+                self.render('notFound');
+                return;
+            }
             EditContext.setContext(new EditContext('Edit Variable',{routeName: 'render.variable', _id:params._id },item));
             Session.set(CURRENT_VARIABLE, item);
         }
@@ -43,8 +47,7 @@ Router.route('variables/:_id',
     {
         name: 'render.variable',
         waitOn: function() {
-            // subscribe to just the current one!!!!
-            return Meteor.subscribe('variables');
+            return [App.subscribe('variables',{_id : this.params._id},false),App.subscribe('actions')];
         }
     }
 );
@@ -53,6 +56,7 @@ Template.viewVariable.events({
 
     'click .cancel' :function(event) {
         EditContext.setContext(undefined);
+        Router.go('variables');
         return false;
     }
 

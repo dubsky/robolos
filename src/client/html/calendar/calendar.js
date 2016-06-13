@@ -58,5 +58,14 @@ Template.calendar.onRendered(function() {
     }*/
 });
 
-
-Router.route('calendar');
+Router.route('calendar',
+    function () {
+        this.render('calendar');
+    },
+    {
+        name: 'calendar',
+        waitOn: function() {
+            return [App.subscribe('schedules'),App.subscribe('actions') ];
+        }
+    }
+);

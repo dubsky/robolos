@@ -1,4 +1,3 @@
-Meteor.subscribe('drivers');
 DriversCollection = new Mongo.Collection("drivers");
 
 Template.addDriverInstance.helpers({

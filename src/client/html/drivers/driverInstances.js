@@ -1,7 +1,3 @@
-Tracker.autorun(function () {
-    Meteor.subscribe('driverInstances');
-});
-
 Template.driverInstances.helpers({
     driverInstances: function () {
         return Collections.DriverInstances.find();
@@ -38,7 +34,6 @@ Template.driverInstances.events({
                 //Collections.DriverInstances.remove(selection[i]);
             }
             Session.set('selectedDriverInstances',[]);
-
         }
     }
 });
@@ -53,5 +48,4 @@ Template.driverInstances.onDestroyed(function() {
     HeightController.onAreaDestroyed();
 });
 
-
-Router.route('driverInstances');
+App.routeCollection('driverInstances',[App.subscribe('drivers')]);

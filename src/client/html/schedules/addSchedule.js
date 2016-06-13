@@ -29,7 +29,12 @@ Router.route('schedule-create', function () {
         }
         this.render('addSchedule',{data: { schedule: item }});
     },
-    { name: 'addSchedule'}
+    {
+        name: 'addSchedule',
+        waitOn: function() {
+            return [App.subscribe('actions')];
+        }
+    }
 );
 
 

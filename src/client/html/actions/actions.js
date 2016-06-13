@@ -1,8 +1,3 @@
-
-Tracker.autorun(function () {
-    Meteor.subscribe('allActions');
-});
-
 Template.actions.helpers({
     actions: function () {
         return Collections.Actions.find();
@@ -54,4 +49,4 @@ Template.actions.onDestroyed(function() {
     HeightController.onAreaDestroyed();
 });
 
-Router.route('actions');
+App.routeCollection('actions');

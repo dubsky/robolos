@@ -1,6 +1,3 @@
-Tracker.autorun(function () {
-    Meteor.subscribe('variables');
-});
 
 Template.variables.helpers({
     variables: function () {
@@ -54,5 +51,6 @@ Template.variables.onDestroyed(function() {
     HeightController.onAreaDestroyed();
 });
 
+App.routeCollection('variables');
 
-Router.route('variables');
+

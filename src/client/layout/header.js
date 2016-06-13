@@ -10,6 +10,6 @@ Template.header.events({
 Template.header.helpers({
     renderHeader:function() {
         let settings=Collections.Settings.findOne(Collections.Settings.SETTINGS_DOCUMENT_ID);
-        return Meteor.user()!=null || settings.anonymousAccessToDashboards;
+        return Meteor.user()!=null || (settings!=undefined && settings.anonymousAccessToDashboards);
     }
 });

@@ -1,7 +1,3 @@
-Tracker.autorun(function () {
-    Meteor.subscribe('schedules');
-});
-
 Template.schedules.helpers({
     schedules: function () {
         return Collections.Schedules.find();
@@ -55,5 +51,6 @@ Template.schedules.onDestroyed(function() {
     HeightController.onAreaDestroyed();
 });
 
+App.routeCollection('schedules');
 
-Router.route('schedules');
+

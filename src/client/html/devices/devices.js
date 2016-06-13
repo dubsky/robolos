@@ -1,9 +1,4 @@
-
 DevicesCollection = new Mongo.Collection("devices");
-
-Tracker.autorun(function () {
-    Meteor.subscribe('allDevices');
-});
 
 Template.devices.helpers({
     devices: function () {
@@ -61,15 +56,5 @@ Template.devices.onDestroyed(function() {
 });
 
 
-Router.route('devices',
-    function () {
-        this.render('devices');
-    },
-    {
-        name: 'devices',
-        waitOn: function() {
-            return Meteor.subscribe('settings');
-        }
-    }
-);
+App.routeCollection('devices');
 

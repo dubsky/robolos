@@ -129,6 +129,10 @@ Router.route('actions/:_id',
         var id = params._id;
         Session.set(CURRENT_ACTION_ID, id);
         var item = Collections.Actions.findOne({_id: params._id});
+        if(item==null) {
+            self.render('notFound');
+            return;
+        }
         Session.set(CURRENT_ACTION, item);
         this.render('renderAction');
     },
@@ -159,7 +163,7 @@ Router.route('actions/:_id',
          */,
         waitOn: function() {
             // wait on just one
-            return Meteor.subscribe('allActions');
+            return [App.subscribe('actions'),App.subscribe('variables'),App.subscribe('sensors',false)];
             //       return [IRLibLoader.load('/blockly/blockly.js',{
             //            success: function(){ console.log('3 SUCCESS CALLBACK'); },
             //            error: function(e){ console.log(e); }})];*/

@@ -34,6 +34,9 @@ Router.route('dashboard-selectVariable/:_id',
         this.render('selectVariable');
     },
     {
-        name: 'dashboard-selectVariable'
+        name: 'dashboard-selectVariable',
+        waitOn: function() {
+            return App.subscribe('variables');
+        }
     }
 );

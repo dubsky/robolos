@@ -1,9 +1,3 @@
-
-
-Tracker.autorun(function () {
-    Meteor.subscribe('allDashboards');
-});
-
 Template.dashboards.helpers({
     dashboards: function () {
         return Collections.Dashboards.find();
@@ -54,4 +48,9 @@ Template.dashboards.onDestroyed(function() {
     HeightController.onAreaDestroyed();
 });
 
-Router.route('dashboards');
+App.routeCollection('dashboards');
+
+// we want them to be loaded all the time
+App.subscribe('dashboards');
+
+

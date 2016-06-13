@@ -34,17 +34,24 @@ Template.addVariable.events({
 });
 
 Router.route('variable-create', function () {
-    var item;
-    if(EditContext.getContext()===undefined) {
-        item={};
-        EditContext.setContext(new EditContext('Create Variable',{routeName: 'addVariable' },item));
+        var item;
+        if(EditContext.getContext()===undefined) {
+            item={};
+            EditContext.setContext(new EditContext('Create Variable',{routeName: 'addVariable' },item));
+        }
+        else {
+            item=EditContext.getContext().getDocument();
+            AutoForm.resetForm('viewScheduleForm');
+        }
+        this.render('addVariable',{data: { variable: item }});
+    },
+    {
+        name: 'addVariable',
+        waitOn: function() {
+            return [App.subscribe('actions')];
+        }
     }
-    else {
-        item=EditContext.getContext().getDocument();
-        AutoForm.resetForm('viewScheduleForm');
-    }
-    this.render('addVariable',{data: { variable: item }});
-}, { name: 'addVariable'});
+);
 
 
 AutoForm.hooks({

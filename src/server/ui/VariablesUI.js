@@ -6,35 +6,46 @@ class VariablesUIClass {
 VariablesUI=new VariablesUIClass();
 
 
-Meteor.publish('variables', function(){
+Meteor.publish('variables', function(filter,reactive){
     // safe reference to this session
     var self = this;
     // insert a record for the first time
 
-    Collections.Variables.find().forEach(
+    var cursor;
+    if(filter==undefined) {
+        cursor=Collections.Variables.find();
+    }
+    else {
+        cursor=Collections.Variables.find(filter);
+    }
+
+    cursor.forEach(
         function(variable) {
             self.added("variables", variable._id, variable);
-        });
+        }
+    );
 
     self.ready();
 
-    var id=VariablesInstance.addEventListener({
-        onRemove : function(variableId) {
-            self.removed("variables",variableId);
-        },
+    if(reactive!==false) {
+        var id=VariablesInstance.addEventListener({
+            onRemove : function(variableId) {
+                self.removed("variables",variableId);
+            },
 
-        onUpdate : function(variable) {
-            self.changed("variables",variable._id, variable);
-        },
+            onUpdate : function(variable) {
+                self.changed("variables",variable._id, variable);
+            },
 
-        onCreate : function(variable) {
-            self.added("variables",variable._id, variable);
-        }
-    });
+            onCreate : function(variable) {
+                self.added("variables",variable._id, variable);
+            }
+        });
 
-    self.onStop(function(){
-        VariablesInstance.removeEventListener(id);
-    });
+        self.onStop(function(){
+            VariablesInstance.removeEventListener(id);
+        });
+    }
 });
 
 

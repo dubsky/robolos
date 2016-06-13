@@ -45,10 +45,17 @@ Router.route('manageDemoConnection/create',
 Router.route('manageDemoConnection/update/:_id',
     function () {
         var item = Collections.DriverInstances.findOne({_id: this.params._id });
+        if(item==null) {
+            this.render('notFound');
+            return;
+        }
         this.render('manageDemoConnection',{data: { driverInstance: item }});
     },
     {
-        name: 'manageDemoConnection/update'
+        name: 'manageDemoConnection/update',
+        waitOn: function() {
+            return [App.subscribe('driverInstances')];
+        }
     }
 );
 

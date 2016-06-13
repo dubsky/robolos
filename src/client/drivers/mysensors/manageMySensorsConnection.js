@@ -129,9 +129,16 @@ Router.route('manageMySensorsConnection/create',
 Router.route('manageMySensorsConnection/update/:_id',
     function () {
         var item = Collections.DriverInstances.findOne({_id: this.params._id });
+        if(item==null) {
+            this.render('notFound');
+            return;
+        }
         this.render('manageMySensorsConnection',{data: { driverInstance: item }});
     },
     {
-        name: 'manageMySensorsConnection/update'
+        name: 'manageMySensorsConnection/update',
+        waitOn: function() {
+            return [App.subscribe('driverInstances')];
+        }
     }
 );

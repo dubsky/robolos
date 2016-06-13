@@ -33,6 +33,9 @@ Router.route('dashboard-selectAction/:_id',
         this.render('selectAction');
     },
     {
-        name: 'dashboard-selectAction'
+        name: 'dashboard-selectAction',
+        waitOn: function() {
+            return App.subscribe('actions');
+        }
     }
 );
