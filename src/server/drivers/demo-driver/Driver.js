@@ -39,7 +39,7 @@ class DemoDriver extends AbstractDriver {
 
 
     /** Build list of sensors, called on driver instance start */
-    getSensors(resultListener) {
+    getSensors() {
         var result=[
             {
                 deviceId:77,
