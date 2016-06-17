@@ -7,7 +7,8 @@ var run = require("./../jobs/run.js");
 var src = config.src;
 
 /* Main source files */
-gulp.task("ts-server", ts([src + "server/**/*.ts"], src, {"out": "server/server.js", "noImplicitAny": true, module: "amd","target": "ES5"}));
+gulp.task("ts-server", ts([src + "server/**/*.ts"], src, { rootDir:src+'server', outDir:src +'server',"noImplicitAny": true, module: "amd","target": "ES5"}));
+
 gulp.task("ts-shared", ts([src + "shared/**/*.ts"], src, {"outFile": "lib/shared.js", "noImplicitAny": true, module: "amd", "target": "ES5"}));
 gulp.task("ts-client", ts([src + "client/**/*.ts"], src, {"outFile": "client/client.js", "noImplicitAny": true, module: "amd", "target": "ES5"}));
 gulp.task("ts-main", run(["ts-server", "ts-shared", "ts-client"]));

@@ -8,9 +8,16 @@ DateUtils={
 
         if(t.getDate()===now.getDate() && t.getMonth()===now.getMonth() && t.getFullYear()=== now.getFullYear())
         {
+            // whose idea it was that t.toLocaleTimeString returns timezone ? v@#$$^%@@^#$
             var text=t.toLocaleTimeString();
+            console.log(text);
             let c=text.indexOf(' ');
-            if(c>0) text=text.substring(0,c);
+            if(c>0) {
+                let rest=text.substring(c);
+                text=text.substring(0,c);
+                if(rest.indexOf('AM')>=0) text+=' AM';
+                if (rest.indexOf('PM')>=0) text+=' PM';
+            }
             return (preposition ? "at " : "" )+text;
         }
         return (preposition ? "on " : "" )+t.toLocaleDateString();

@@ -51,13 +51,11 @@ Schemas.Settings=new SimpleSchema({
     /* security */
     anonymousAccessToDashboards: {
         label:'Allow Anonymous Access to Dashboards',
-        optional:true,
         defaultValue:true,
         type: Boolean
     },
     selfRegistration: {
         label:'Allow Self-Registration (users may create an account on their own)',
-        optional:true,
         defaultValue:true,
         type: Boolean
     }

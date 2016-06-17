@@ -27,11 +27,17 @@ var settingsReady=function() {
     Router.plugin('ensureSignedIn', {
         except: _.pluck(AccountsTemplates.routes, 'name').concat(softPages)
     });
+
 };
 
 let ApplicationController = RouteController.extend({
     layoutTemplate: 'layout',
-    waitOn: function () { return Meteor.subscribe('settings', { onReady: settingsReady } ); }
+    waitOn: function () { return Meteor.subscribe('settings', { onReady: settingsReady } ); },
+    onBeforeAction : function () {
+        var context=EditContext.getContext();
+        if(context!==undefined) context.contextHook(this);
+        this.next();
+    }
 });
 
 Router.configure({
@@ -46,3 +52,10 @@ Meteor.startup(function() {
     Uploader.uploadUrl = Meteor.absoluteUrl("upload"); // Cordova needs absolute URL
 });
 
+/*
+Router.onBeforeAction(function () {
+ var context=EditContext.getContext();
+ if(context!==undefined) context.contextHook(this);
+ this.next();
+});
+*/

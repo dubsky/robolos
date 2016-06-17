@@ -80,14 +80,5 @@ class EditContextClass {
 
 EditContext=EditContextClass;
 
-Router.onBeforeAction(function () {
-    var context=EditContext.getContext();
-    if(context!==undefined) context.contextHook(this);
-    this.next();
-});
-
-
-
-
 
 

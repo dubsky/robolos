@@ -3,8 +3,15 @@ var path = require("path");
 var del = require("del");
 var config = require("../config.json");
 
+/*
 gulp.task("clean", function(cb) {
   var files = [path.join(config.src, "**", "*.js"),
       "!" + path.join(config.src, "packages", "**", "*.js")];
+  del(files, cb);
+});
+*/
+
+gulp.task("clean", function(cb) {
+  var files = [path.join(config.src, "server", "server.js")];
   del(files, cb);
 });
