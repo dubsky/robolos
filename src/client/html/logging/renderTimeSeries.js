@@ -3,7 +3,7 @@ Template.renderTimeSeries.helpers({
 
         var t=Template.instance();
         if(t.since===undefined) t.since=moment().subtract(14,'days');
-        console.log('render since '+t.since.format('MM/DD/YYYY h:mm A'));
+        //.log('render since '+t.since.format('MM/DD/YYYY h:mm A'));
         return t.since.format('MM/DD/YYYY h:mm A');
     }
 });
@@ -11,12 +11,14 @@ Template.renderTimeSeries.helpers({
 
 function convertData(result) {
     var data=[];
+    var min=new Date();
     for(var i in result) {
         var d=new Date();
+        if(d<min) min=d;
         d.setTime(i);
         data[data.length]={ x: d,y:result[i]};
     }
-    return data;
+    return { data: data, since:min };
 }
 
 Template.renderTimeSeries.events({
@@ -43,12 +45,15 @@ Template.renderTimeSeries.events({
 Template.renderTimeSeries.onRendered(function() {
     var self=this;
     $('#timeSeries').get(0).style.height=Math.round(0.5*window.outerHeight)+'px';
-    var chart=null;
-    var data=null;
+    let chart=null;
+
+    let processedData={since: self.since, data:[]};
+
     SemanticUI.modal("#timeSeriesModal",function () {
+
         $('#reportingRangePicker').daterangepicker();
 
-        var picker=$('#reportingRangePicker');
+        let picker=$('#reportingRangePicker');
         picker.blur();
         picker.daterangepicker({
                 singleDatePicker: true,
@@ -73,18 +78,18 @@ Template.renderTimeSeries.onRendered(function() {
         picker.blur();
 
         picker.on('apply.daterangepicker', function(ev, picker) {
-            console.log('apply.daterangepicker '+picker.startDate.format('MM/DD/YYYY h:mm A'));
+            //console.log('apply.daterangepicker '+picker.startDate.format('MM/DD/YYYY h:mm A'));
             self.since=picker.startDate;
             Meteor.call('DataLoggingUI_getSensorData',self.data.sensor,picker.startDate.valueOf(),function (error, result) {
-                data=convertData(result);
-                var conf = {
+                processedData=convertData(result);
+                let conf = {
                     "xScale": "time",
                     "yScale": "linear",
                     "type": "line",
                     "main": [
                         {
                             "className": ".general",
-                            "data": data
+                            "data": processedData.data
                         }
                     ]
                 };
@@ -92,12 +97,12 @@ Template.renderTimeSeries.onRendered(function() {
             });
         });
 
-        var opts = {
+        let opts = {
             "tickFormatX": function (x) {
-                if(self.since.valueOf() > moment().subtract(1,'days')) {
+                if(processedData.since.valueOf() > moment().subtract(1,'days')) {
                     return d3.time.format('%H:%M')(x);
                 }
-                if(self.since.valueOf() > moment().subtract(7,'days')) {
+                if(processedData.since.valueOf() > moment().subtract(7,'days')) {
                     return d3.time.format('%A %H:%M')(x);
                 }
                 else
@@ -109,14 +114,14 @@ Template.renderTimeSeries.onRendered(function() {
             interpolation: 'linear'
        };
 
-       var conf = {
+       let conf = {
             "xScale": "time",
             "yScale": "linear",
             "type": "line",
             "main": [
                 {
                     "className": ".general",
-                    "data": data!=null ? data : []
+                    "data": processedData.data
                 }
             ]
         };
@@ -125,11 +130,11 @@ Template.renderTimeSeries.onRendered(function() {
         self.chart=chart;
     });
 
-    var since=this.since.valueOf();
+    let since=this.since.valueOf();
     Meteor.call('DataLoggingUI_getSensorData',this.data.sensor,since,function (error, result) {
-        data=convertData(result);
+        processedData=convertData(result);
         if(chart!=null) {
-            chart.setData(data);
+            chart.setData(processedData.data);
         }
     });
 

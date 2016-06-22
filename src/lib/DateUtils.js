@@ -10,7 +10,6 @@ DateUtils={
         {
             // whose idea it was that t.toLocaleTimeString returns timezone ? v@#$$^%@@^#$
             var text=t.toLocaleTimeString();
-            console.log(text);
             let c=text.indexOf(' ');
             if(c>0) {
                 let rest=text.substring(c);

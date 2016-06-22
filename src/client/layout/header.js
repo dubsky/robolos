@@ -3,7 +3,15 @@ Template.header.events({
         AccountsTemplates.logout();
         Router.go('homepage');
     }
-
+    /*
+    ,
+    "click .item": function() {
+        "use strict";
+        console.log($('.managementMenu'));
+        $('.managementMenu').dropdown('hide');
+        //$('.managementMenu').dropdown('set visible');
+        return true;
+    }*/
 });
 
 

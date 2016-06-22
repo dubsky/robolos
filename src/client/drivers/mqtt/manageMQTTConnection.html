@@ -3,8 +3,8 @@
     <div class="ui container">
 
         <section class="content-header narrow">
-            <h1 class="ui dividing header">Connect new sensors and actuators using MQTT
-                <small>MQTT is a machine-to-machine (M2M)/"Internet of Things" connectivity protocol</small>
+            <h1 class="ui dividing header">MQTT Protocol Connector
+                <small>Configure connection to new devices</small>
             </h1>
             <br/>
         </section>
@@ -15,6 +15,7 @@
                 {{#autoForm id="addMQTTDriverInstanceForm" type="method-update" meteormethod=getMethod doc=driverInstance collection=collection schema=schema}}
                     {{> afQuickField name="title"}}
                     {{> afQuickField name="description" rows=3}}
+                    {{> afQuickField name="properties.port"}}
                     <br/>
                     <button type="submit" class="btn btn-primary">Save</button>
                     <button type="button" class="btn btn-default cancel">Cancel</button>
