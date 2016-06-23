@@ -22,6 +22,7 @@ class MQTTDriver extends AbstractDriver {
             log.error('Invalid topic format, last two topic words must be device and sensor id');
             return;
         }
+
         let sensor=components[components.length-2];
         let device=components[components.length-3];
         let keywords=splice(components.length-3,3);
@@ -181,16 +182,10 @@ class MQTTDriver extends AbstractDriver {
 
     /** Build list of devices, called on driver instance start  */
     getDevices() {
-        var result=[
-            {
-                id:0,
-                keywords: ['Demo'],
-                revision: '1.5',
-                protocol: '1.2.1',
-                type:'Thermometer',
-                comment: 'Demo device'
-            }
-        ];
+        let result=[];
+        MQTTDeviceCollection.find().forEach(function(s) {
+            result.result.length=s;
+        });
         return result;
     }
 
@@ -200,7 +195,16 @@ class MQTTDriver extends AbstractDriver {
      *
      * @param id device id
      */
-    removeDevice (id) {
+    removeDevice(id) {
+        MQTTSensorCollection.delete({deviceId: id});
+        MQTTDeviceCollection.delete({_id: id});
+        let newSensors=[];
+        for(let i in this.sensors) {
+            if(this.sensors[i].deviceId!=id) {
+                newSensors[newSensors.length]=this.sensors[i];
+            }
+        }
+        this.sensors=newSensors;
     }
 
     performSetValueAction(deviceId ,sensorId, value) {
