@@ -6,6 +6,9 @@ SensorClasses = {
     ANALOG_INPUT_0_100 : 'ANALOG_INPUT_0_100',
     ANALOG_INPUT : 'ANALOG_INPUT',
     ANALOG_OUTPUT : 'ANALOG_OUTPUT',
+    STRING : 'STRING',
+    RGB : 'RGB',
+    RGBW : 'RGBW',
     UNKNOWN : 'UNKNOWN',
 
     isAnalog:function(clazz) {

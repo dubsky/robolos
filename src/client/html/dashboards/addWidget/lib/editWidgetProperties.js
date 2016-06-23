@@ -46,12 +46,13 @@ EditWidgetProperties={
         }
         else {
             widgets=dashboard.widgets;
-            if((typeof widgets)==='undefined') widgets=[];
+            if((typeof widgets)==='undefined') dashboard.widgets=widgets=[];
             return widgets;
         }
     },
 
     updateDashboard: function(dashboard) {
+        console.log(dashboard);
         Meteor.call('updateDashboard',{$set : { widgets : dashboard.widgets}},dashboard._id);
         Router.go('render.dashboard',{_id: dashboard._id});
         Session.set(Template.floorPlanWidget.ADD_TO,undefined);

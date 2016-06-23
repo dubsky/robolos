@@ -32,5 +32,27 @@ SHARED={
             return stack;
         }
     }
+};
 
-}
+App = {
+
+    subscribe:function(topic) {
+        return Meteor.subscribe.apply(undefined,arguments);
+    },
+
+    routeCollection: function(collection,additionalWaitList) {
+        Router.route(collection,
+            function () {
+                this.render(collection);
+            },
+            {
+                name: collection,
+                waitOn: function() {
+                    return [Meteor.subscribe(collection, {onReady: function() {console.log("ready:"+collection);},onStop: function(e) {console.log("stop:"+collection);} })].concat(additionalWaitList);
+                }
+            }
+        );
+    }
+
+};
+

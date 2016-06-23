@@ -18,19 +18,22 @@ class DataLogger {
     eventHandler(driver,device,sensor,value,timestamp) {
 
         let settings=Settings.get();
-        if(settings.dataLoggingEnabled) return;
+        if(!settings.dataLoggingEnabled) return;
 
-        var sensorId=SHARED.getSensorID(driver,device,sensor);
-        var sensorEntry=this.dataToPersist[sensorId];
+        let sensorId=SHARED.getSensorID(driver,device,sensor);
+        let sensorEntry=this.dataToPersist[sensorId];
+        if(timestamp==undefined) timestamp=new  Date().getTime();
+
+        let meta=Sensors.getSensorStatus(driver,device,sensor);//SensorMetadata.getSensorMetadata(sensorId);
+        // unknown sensor, driver problem...
+        if(meta===undefined) return;
+
         if(sensorEntry===undefined)
         {
             sensorEntry={ createdOn: timestamp};
             this.dataToPersist[sensorId]=sensorEntry;
         }
 
-        var meta=Sensors.getSensorStatus(driver,device,sensor);//SensorMetadata.getSensorMetadata(sensorId);
-        // unknown sensor, driver problem...
-        if(meta===undefined) return;
         if(SensorClasses.isAnalog(meta.class)) {
             var smallestUnit=meta.resolution;
             if(smallestUnit===undefined) smallestUnit=0.1;
@@ -46,17 +49,16 @@ class DataLogger {
         sensorEntry.lastValue=value;
         sensorEntry.lastTimestamp=timestamp;
 
-        var now=moment(timestamp);
-        var timestamp=new Date().getTime();
+        let now=moment(timestamp);
         now.set('hour', 0);
         now.set('minute', 0);
         now.set('second', 0);
         now.set('millisecond', 0);
-        var dayTimestamp=now.valueOf();
+        let dayTimestamp=now.valueOf();
         now.set('day',0);
-        var weekTimestamp=now.valueOf();
+        let weekTimestamp=now.valueOf();
 
-        var weekEntry=sensorEntry[weekTimestamp];
+        let weekEntry=sensorEntry[weekTimestamp];
         if(weekEntry===undefined)
         {
             weekEntry={ weekTimestamp: weekTimestamp };
@@ -174,8 +176,9 @@ class DataLogger {
             }
         }
         else {
-            //log.debug('no non-persistent data to process');
+            log.debug('no non-persistent data to process');
         }
+        console.log('fetched data:',data);
         return data;
     }
 
@@ -211,8 +214,19 @@ class DataLogger {
         });
 
         Sensors.addSensorValueEventListener(function(driver,device,sensor,value,timestamp) { self.eventHandler(driver,device,sensor,value,timestamp); });
+        SensorsUI.addEventListener(    {
+                onRemove : function(sensorId) {
+                    try {
+                        Collections.LoggedData.remove({sensor: sensorId});
+                    }
+                    catch(e)
+                    {
+                        log.error('Error removing sensor data',e);
+                    }
+                }
+            }
+        );
     }
-
 }
 
 DataLoggerInstance=new DataLogger();

@@ -24,7 +24,9 @@ Template.manageInelsCFoxConnection.helpers({
         'properties.port': {
             label: "Central Unit Port",
             defaultValue: '61682',
-            type: String
+            min:0,
+            max:65535,
+            type: Number
         }
     }),
 
@@ -57,7 +59,6 @@ Template.manageInelsCFoxConnection.helpers({
 });
 
 Template.manageInelsCFoxConnection.onCreated(function(){
-    console.log(this);
     let isEdit=this.data.driverInstance!==undefined;
     Template.manageInelsCFoxConnection.validation=new ReactiveVar({
         showError : false,

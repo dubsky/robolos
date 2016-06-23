@@ -1,6 +1,29 @@
 
 Template.manageMQTTConnection.helpers({
-    schema: Schemas.DriverInstance,
+    schema: new SimpleSchema({
+        title: {
+            type: String,
+            label: "Name",
+            max: 64
+        },
+        description: {
+            type: String,
+            label: "Description",
+            optional: true
+        },
+        driver: {
+            type: String,
+            defaultValue: 'MQTT Driver',
+        },
+
+        'properties.port': {
+            label: "MQTT Listener Port",
+            defaultValue: '1883',
+            min:0,
+            max:65535,
+            type: Number
+        }
+    }),
     getMethod: function() {
         if(this.driverInstance._id===undefined) return 'createDriverInstance'; else return 'updateDriverInstance';
     }

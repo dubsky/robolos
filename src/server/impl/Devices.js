@@ -47,7 +47,7 @@ class DevicesClass {
         driverInstance.getDriver().registerEventListener(
             {
                 onEvent: function (device, sensor, value) {
-                    Sensors.processIncomingSensorValue(driverInstance,device, sensor, value)
+                    Sensors.processIncomingSensorValue(driverInstance,device, sensor, value);
                 },
                 onSensorDiscovery: function(sensors) {
                     Sensors.sensorsDiscovered(driverInstance,sensors);
