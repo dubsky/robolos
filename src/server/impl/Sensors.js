@@ -49,7 +49,7 @@ class SensorsClass {
                     SensorsUI.fireUpdateEvent(result);
                 }
                 // pre-process the initial value (according to meta)
-                result.value = this.processIncomingSensorValueForSensorObject(driverInstance, result, result.value);
+                if(result.value!=undefined) result.value = this.processIncomingSensorValueForSensorObject(driverInstance, result, result.value);
 
                 // ask for system state after boot
                 if ((result.class === SensorClasses.ANALOG_OUTPUT || result.class === SensorClasses.BINARY_OUTPUT || result.class === SensorClasses.ANALOG_OUTPUT_0_100) && (typeof result.value) === 'undefined') {
@@ -74,27 +74,31 @@ class SensorsClass {
         }
     }
 
+
+    scanForUnknownSensorStatusesOneIteration() {
+        if(this.scanningStatus===undefined || this.scanningStatus.keys.length==this.scanningStatus.i) this.scanningStatus={ i:0, keys: Object.keys(this.knownSensors) };
+        let repeat=true;
+        let beginning=new Date().getTime();
+        do {
+            var s = this.knownSensors[this.scanningStatus.keys[this.scanningStatus.i++]];
+            if ((s !== undefined) && (s.class === SensorClasses.ANALOG_OUTPUT || s.class === SensorClasses.BINARY_OUTPUT || s.class === SensorClasses.ANALOG_OUTPUT_0_100) && (typeof s.value) === 'undefined') {
+                Devices.getDriverByInstanceID(s.driver).performAction(s.deviceId, s.sensorId, SENSOR_ACTIONS.GET_VALUE);
+                // don't spend more than 50ms here
+                if(new Date().getTime()-beginning>50) repeat=false;
+            }
+            if(this.scanningStatus.keys.length==this.scanningStatus.i) break;
+        }
+        while(repeat);
+    }
+
     /**
      * Ask for sensors where we don't have values for - perhaps there are not connected during discovery, etc.
      */
     scanForUnknownSensorStatuses() {
-        var self = this;
-        var fn = function () {
-            var keys = Object.keys(self.knownSensors);
-            var i = 0;
-            var handle = setInterval(function () {
-                var s = self.knownSensors[keys[i++]];
-                if ((s !== undefined) && (s.class === SensorClasses.ANALOG_OUTPUT || s.class === SensorClasses.BINARY_OUTPUT || s.class === SensorClasses.ANALOG_OUTPUT_0_100) && (typeof s.value) === 'undefined') {
-                    self.getDriverByInstanceID(s.driver).performAction(s.deviceId, s.sensorId, SENSOR_ACTIONS.GET_VALUE);
-                }
-                if (i == keys.length) {
-                    clearInterval(handle);
-                    //log.debug('done - rescan in 10s');
-                    setTimeout(fn, 20000);
-                }
-            }, 300);
-        };
-        setTimeout(fn, 10000);
+        var self=this;
+        var handle = setInterval(function () {
+            self.scanForUnknownSensorStatusesOneIteration();
+        }, 500);
     }
 
     getSensorStatus(driverInstance, device, sensor) {

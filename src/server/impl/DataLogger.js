@@ -178,7 +178,6 @@ class DataLogger {
         else {
             log.debug('no non-persistent data to process');
         }
-        console.log('fetched data:',data);
         return data;
     }
 

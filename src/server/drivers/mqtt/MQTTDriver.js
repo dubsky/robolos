@@ -18,77 +18,89 @@ class MQTTDriver extends AbstractDriver {
     }
 
     sensorPresented(components,packet) {
-        if(components.length<3) {
-            log.error('Invalid topic format, last two topic words must be device and sensor id');
-            return;
-        }
+            if(components.length<3) {
+                log.error('Invalid topic format, last two topic words must be device and sensor id');
+                return;
+            }
 
-        let sensor=components[components.length-2];
-        let device=components[components.length-3];
-        let keywords=splice(components.length-3,3);
-        let payload=JSON.parse(packet.payload);
-        let type=SensorTypes[payload.type];
-        if(type==undefined) {
-            log.error('unknown type presented:'+payload.type);
-            return;
-        }
+            let sensor=components[components.length-2];
+            let device=components[components.length-3];
+            let keywords=components.slice(0,components.length-3);
+            let payload=JSON.parse(packet.payload);
+            let type=SensorTypes[payload.type];
+            if(type==undefined) {
+                log.error('unknown type presented:'+payload.type);
+                return;
+            }
 
-        let deviceDocument=MQTTDeviceCollection.findOne({_id:device});
-        if(deviceDocument==undefined) {
-            let deviceData={_id:device, id:device, comments: 'Automatically detected device based on topic structure'};
-            MQTTDeviceCollection.insert(deviceData);
-            this.onEventListener.onDeviceDiscovery(deviceData);
-        }
+            let deviceDocument=MQTTDeviceCollection.findOne({_id:device});
+            if(deviceDocument==undefined) {
+                let deviceData={_id:device, id:device, comments: 'Automatically detected device based on topic structure'};
+                MQTTDeviceCollection.insert(deviceData);
+                this.onEventListener.onDeviceDiscovery(deviceData);
+            }
 
-        let sensorData={
-            _id: device+'/'+sensor,
-            topic: components.splice(components.length-1,1).join('/') ,
-            deviceId:device,
-            sensorId:sensor,
-            keywords: keywords,
-            type: type,
-            comment: payload.comment
-        };
+            let sensorData={
+                _id: device+'/'+sensor,
+                topic: components.slice(0,components.length-1).join('/') ,
+                deviceId:device,
+                sensorId:sensor,
+                keywords: keywords,
+                type: type.id,
+                comment: payload.comment
+            };
 
-        MQTTSensorCollection.upsert({$set : sensorData });
-        this.sensors[device+'/'+sensor]=sensorData;
-        this.onEventListener.onSensorDiscovery([sensorData]);
+            MQTTSensorCollection.upsert({_id: device+'/'+sensor},{$set : sensorData });
+            this.sensors[device+'/'+sensor]=sensorData;
+            this.onEventListener.onSensorDiscovery([sensorData]);
     }
 
     onMessage(packet,client) {
         try {
             if(packet.topic.startsWith('$')) return;
 
+            let result='';
+            let p=packet.payload;
+            for(let i=0;i<p.length;i++) {
+                result+=String.fromCharCode(p[i]);
+            }
+            //log.debug('MQTT: Message received', result);
+
             let components=packet.topic.split('/');
-            switch(components[components.length]) {
+            switch(components[components.length-1]) {
                 case 'get':
-                    log.error('Not supported');
-                    break;
                 case 'set':
-                    if(components.length<3) {
+                    break;
+                case 'presentation':
+                    let self=this;
+                    Fiber(function () {
+                        self.sensorPresented(components,packet);
+                    }).run();
+                    break;
+                default:
+                    if(components.length<2) {
                         log.error('Invalid topic format, last two topic words must be device and sensor id');
                         break;
                     }
-                    let sensor=components[components.length-2];
-                    let device=components[components.length-3];
+                    let sensor=components[components.length-1];
+                    let device=components[components.length-2];
+
                     let payload=JSON.parse(packet.payload);
-                    if ((typeof (self.onEventListener)!=='undefined')) {
+                    if ((typeof (this.onEventListener)!=='undefined')) {
                         let sensorData=this.sensors[device+'/'+sensor];
-                        var clazz=SensorClasses[sensorData.type];
+                        if(sensorData==undefined) {
+                            log.error('Unknown sensor:'+device+'/'+sensor);
+                            break;
+                        }
+                        var clazz=SensorTypes[sensorData.type];
                         if(clazz==undefined) { log.error('Unknown sensor type '+sensorData.type); return; }
                         let variable=clazz.mainVariable;
                         if(variable==undefined) { log.error('Main variable for '+sensorData.type+' not defined'); return; }
-                        let variableValue=payload[variable];
+                        let variableValue=payload[variable.name];
                         if(variableValue==undefined) { log.error('Required sensor variable '+SensorClasses[sensorData.type].mainVariable+' missing'); return; }
-                        self.onEventListener.onEvent(device,sensor,variableValue);
+                        this.onEventListener.onEvent(device,sensor,variableValue);
                     }
-                    break;
-                case 'presentation':
-                    this.sensorPresented(components,packet);
-                default:
             }
-
-            log.debug('MQTT: Message received', packet);
         }
         catch(e)
         {
@@ -173,9 +185,10 @@ class MQTTDriver extends AbstractDriver {
     getSensors() {
         let result=[];
         this.sensors={};
+        let self=this;
         MQTTSensorCollection.find().forEach(function(s) {
-            result.result.length=s;
-            this.sensors[s.deviceId+'/'+s.sensorId]=s;
+            result[result.length]=s;
+            self.sensors[s.deviceId+'/'+s.sensorId]=s;
         });
         return result;
     }
@@ -184,7 +197,7 @@ class MQTTDriver extends AbstractDriver {
     getDevices() {
         let result=[];
         MQTTDeviceCollection.find().forEach(function(s) {
-            result.result.length=s;
+            result[result.length]=s;
         });
         return result;
     }
@@ -216,8 +229,7 @@ class MQTTDriver extends AbstractDriver {
 
         let message={};
         message[SensorTypes[sensorData.type].mainVariable.name]=value;
-        //this.server.ascolatore(topic, payload, options, done);
-        this.server.ascolatore.publish(sensorData.topic+'/set', JSON.stringify(message), {}, function() {});
+        this.server.ascoltatore.publish(sensorData.topic+'/set', JSON.stringify(message), {}, function() {});
     }
 
     /**
@@ -242,9 +254,9 @@ class MQTTDriver extends AbstractDriver {
         }
         if (action == SENSOR_ACTIONS.GET_VALUE) {
             let sensorData=this.sensors[deviceId+'/'+sensorId];
-            if(sensorData==undefined) {
+            if(sensorData!=undefined) {
                 log.error('Sensor '+deviceId+'/'+sensorId+' does not exist anymore');
-                this.server.ascolatore.publish(sensorData.topic+'/get', '', {}, function() {});
+                this.server.ascoltatore.publish(sensorData.topic+'/get', 'message', {}, function() {});
             }
         }
     }

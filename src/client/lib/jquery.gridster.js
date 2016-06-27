@@ -3616,10 +3616,9 @@
         if (typeof cols === 'undefined') {
             cols = this.get_highest_occupied_cell().col;
         }
-
+        var gm = this.gridmap;
         var max_cols = (this.options.autogrow_cols ? this.options.max_cols :
             this.cols);
-
         cols = Math.min(max_cols, Math.max(cols, this.options.min_cols));
         this.container_width = cols * this.min_widget_width;
         this.$el.css('width', this.container_width);
@@ -3917,7 +3916,9 @@
                    this.options.extra_cols;
 
         var actual_cols = this.$widgets.map(function() {
-            return $(this).attr('data-col');
+            var widget_width=$(this).attr('data-sizex');
+            if (widget_width==undefined) widget_width=1;
+            return $(this).attr('data-col')+widget_width-1;
         }).get();
 
         //needed to pass tests with phantomjs

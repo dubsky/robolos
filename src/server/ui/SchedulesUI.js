@@ -7,7 +7,6 @@ SchedulesUI=new SchedulesUIClass();
 
 
 Meteor.publish('schedules', function(filter,reactive){
-    console.log('schedules queried');
     // safe reference to this session
     var self = this;
     // insert a record for the first time

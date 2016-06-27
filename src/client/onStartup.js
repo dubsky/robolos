@@ -23,7 +23,6 @@ var settingsReady=function() {
     }
 
     let softPages=settings.anonymousAccessToDashboards ? ['homepage', 'render.dashboard.redirect', 'render.dashboard','calendar']: [];
-    console.log('anonymousAccessToDashboards',settings.anonymousAccessToDashboards);
     Router.plugin('ensureSignedIn', {
         except: _.pluck(AccountsTemplates.routes, 'name').concat(softPages)
     });

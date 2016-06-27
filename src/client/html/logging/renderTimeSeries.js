@@ -14,8 +14,8 @@ function convertData(result) {
     var min=new Date();
     for(var i in result) {
         var d=new Date();
-        if(d<min) min=d;
         d.setTime(i);
+        if(d<min) min=d;
         data[data.length]={ x: d,y:result[i]};
     }
     return { data: data, since:min };
@@ -99,10 +99,10 @@ Template.renderTimeSeries.onRendered(function() {
 
         let opts = {
             "tickFormatX": function (x) {
-                if(processedData.since.valueOf() > moment().subtract(1,'days')) {
+                if(processedData.since.valueOf() > moment().subtract(1,'days').toDate().valueOf()) {
                     return d3.time.format('%H:%M')(x);
                 }
-                if(processedData.since.valueOf() > moment().subtract(7,'days')) {
+                if(processedData.since.valueOf() > moment().subtract(7,'days').toDate().valueOf()) {
                     return d3.time.format('%A %H:%M')(x);
                 }
                 else
