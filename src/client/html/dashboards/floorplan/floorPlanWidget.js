@@ -71,12 +71,18 @@ Template.floorPlanWidget.events({
             if(currentSelection===undefined)
             {
                 Template.floorPlanWidget.setSelection(fpId,[this.id]);
+                Template.floorPlanWidgetControls.setControlsState(this.id,true);
             }
             else {
-                if(currentSelection[0]===this.id)
+                if(currentSelection[0]===this.id) {
                     Template.floorPlanWidget.setSelection(fpId,undefined);
-                else
+                    Template.floorPlanWidgetControls.setControlsState(this.id,false);
+                }
+                else {
                     Template.floorPlanWidget.setSelection(fpId,[this.id]);
+                    Template.floorPlanWidgetControls.setControlsState(currentSelection,false);
+                    Template.floorPlanWidgetControls.setControlsState(this.id,true);
+                }
             }
         }
     },

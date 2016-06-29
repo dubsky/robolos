@@ -21,7 +21,7 @@ Template.floorPlanWidgetWrapper.onRendered(function() {
         var id=this.data.widget.id;
         var selector=$('#'+id);
 
-        var disabled=!Session.get(DASHBOARD_EDIT_MODE);
+        var disabled=true;//!Session.get(DASHBOARD_EDIT_MODE);
         selector.draggable({
             containment: "parent",
             disabled:disabled,

@@ -14,7 +14,7 @@
                 </span>
                 {{/if}}
                 {{#each widget.widgets}}
-                    <div style="left:{{transformX ../.. geometry.x}}px;top:{{transformY ../.. geometry.y}}px;height:{{transformHeight ../.. geometry.height}}px;width:{{transformWidth ../.. geometry.width}}px;{{#if isSelected id}}border:3px solid;border-color:rgba(0,0,0,0.1);background-color:rgba(0,0,0,0.1);{{/if}}"
+                    <div style="left:{{transformX ../.. geometry.x}}px;top:{{transformY ../.. geometry.y}}px;height:{{transformHeight ../.. geometry.height}}px;width:{{transformWidth ../.. geometry.width}}px;{{#if isSelected id}}outline:3px solid;outline-color:rgba(0,0,0,0.1);background-color:rgba(0,0,0,0.1);{{/if}}"
                          class="fpWidget draggable" id="{{id}}" floorPlan="{{../widget.id}}">
 
                         {{> floorPlanWidgetWrapper widget=this floorPlan=../widget}}

@@ -4,6 +4,18 @@ Template.floorPlanWidgetControls.onDestroyed(function() {
 //    $(selector).resizable( "option", "disabled", true );
 });
 
+Template.floorPlanWidgetControls.setControlsState=function(widgetId,enabled) {
+    if (Session.get(DASHBOARD_EDIT_MODE))
+    {
+        var selector=$('#'+widgetId);
+        selector.draggable( "option", "disabled", !enabled );
+        selector.resizable( "option", "disabled", !enabled );
+        // this is due to a defect in jquery draggable - shows  handles when disabled
+        if(enabled) $('#'+widgetId+'> div.ui-resizable-handle').show(); else $('#'+widgetId+'> div.ui-resizable-handle').hide();
+    }
+};
+
+/*                                                                            
 Template.floorPlanWidgetControls.onRendered(function() {
     if (Session.get(DASHBOARD_EDIT_MODE))
     {
@@ -15,3 +27,4 @@ Template.floorPlanWidgetControls.onRendered(function() {
         $('div.ui-resizable-handle').show();
     }
 });
+  */
