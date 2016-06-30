@@ -28,13 +28,9 @@ Template.editSensorWidgetProperties.events({
         }
         else
         {
-            for(var i in widgets) {
-                if(widgets[i].id===this.widget.id)
-                {
-                    widgets[i].title=document.forms['editProperties'].elements['title'].value;
-                    widgets[i].icon=document.forms['editProperties'].elements['icon'].value;
-                }
-            }
+            let widget=EditWidgetProperties.getWidget(dashboard,this.widget.id);
+            widget.icon=document.forms['editProperties'].elements['icon'].value;
+            widget.title=document.forms['editProperties'].elements['title'].value;
         }
 
         EditWidgetProperties.updateDashboard(dashboard);
@@ -54,7 +50,7 @@ Template.editSensorWidgetProperties.onRendered(function() {
         document.forms['editProperties'].elements['icon'].value=this.data.widget.icon;
         let sensorId=SHARED.getSensorID(this.data.widget.driver,this.data.widget.device,this.data.widget.sensor);
         let sensor=SensorsCollection.findOne(sensorId);
-        console.log(sensor);
+        console.log(this);
         let name=sensorId;
         if(sensor!==undefined && sensor.name!==undefined) name=sensor.name;
         document.forms['editProperties'].elements['sensor'].value = name;

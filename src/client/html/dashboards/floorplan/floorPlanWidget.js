@@ -64,6 +64,16 @@ Template.floorPlanWidget.events({
         Template.modal.current.set({template : 'addWidgetSelectWidgetType'});
     },
 
+    "click .editFPWidget" : function () {
+        let floorPlan=Template.instance().data.widget;
+        let fpId=floorPlan.id;
+        var currentSelection=Template.floorPlanWidget.getSelection(fpId);
+        if(currentSelection!=undefined) {
+            var widgetToEdit=EditWidgetProperties.getWidget(floorPlan,currentSelection[0]);
+            Template.renderDashboard.editProperties(widgetToEdit);
+        }
+    },
+
     "click .fpWidget" : function (e) {
         if(Session.get(DASHBOARD_EDIT_MODE)) {
             let fpId=Template.instance().data.widget.id;

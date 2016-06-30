@@ -1,6 +1,6 @@
 .content-header {
     margin-bottom:8px;
-    margin-top:15px;
+    margin-top:20px;
 }
 
 #content-footer {
@@ -21,6 +21,11 @@ section.narrow {
 
 .tableContentHeader {
     min-width: 850px;
+}
+
+.header-buttons {
+    float:right;
+    margin-top:-6px;
 }
 
 body {

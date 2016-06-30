@@ -24,13 +24,9 @@ Template.editVariableWidgetProperties.events({
         }
         else
         {
-            for(var i in widgets) {
-                if(widgets[i].id===this.widget.id)
-                {
-                    widgets[i].title=document.forms['editProperties'].elements['title'].value;
-                    widgets[i].icon=document.forms['editProperties'].elements['icon'].value;
-                }
-            }
+            let widget=EditWidgetProperties.getWidget(dashboard,this.widget.id);
+            widget.icon=document.forms['editProperties'].elements['icon'].value;
+            widget.title=document.forms['editProperties'].elements['title'].value;
         }
         EditWidgetProperties.updateDashboard(dashboard);
     },

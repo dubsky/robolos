@@ -49,6 +49,25 @@ Template.renderDashboard.helpers({
 
 });
 
+
+Template.renderDashboard.editProperties=function(widget) {
+    switch(widget.type) {
+        case 'variable':
+            Template.modal.current.set({template : 'editVariableWidgetProperties', data : {widget: widget }});
+            break;
+        case 'action':
+            Template.modal.current.set({template : 'editActionWidgetProperties', data : {widget: widget }});
+            break;
+        case 'sensor':
+            Template.modal.current.set({template : 'editSensorWidgetProperties', data : {widget: widget }});
+            break;
+        case 'floorPlan':
+            Template.modal.current.set({template : 'editFloorPlanWidgetProperties', data : {widget: widget }});
+            break;
+    }
+};
+
+
 Template.renderDashboard.events({
     'click .switchToEditMode': function() {
         Session.set(DASHBOARD_EDIT_MODE,true);
@@ -74,25 +93,11 @@ Template.renderDashboard.events({
     },
 
     'click .configureWidget': function(event, instance) {
-        switch(this.type) {
-            case 'variable':
-                Template.modal.current.set({template : 'editVariableWidgetProperties', data : {widget: this }});
-                break;
-            case 'action':
-                Template.modal.current.set({template : 'editActionWidgetProperties', data : {widget: this }});
-                break;
-            case 'sensor':
-                Template.modal.current.set({template : 'editSensorWidgetProperties', data : {widget: this }});
-                break;
-            case 'floorPlan':
-                Template.modal.current.set({template : 'editFloorPlanWidgetProperties', data : {widget: this }});
-                break;
-        }
+        Template.renderDashboard.editProperties(this);
     },
 
     'click .removeWidget': function(event, instance) {
         var dashboard=Session.get(CURRENT_DASHBOARD);
-
 
         var result=dashboard.widgets.slice();
         for(var i=0;i<dashboard.widgets.length;i++)

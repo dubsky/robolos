@@ -2,9 +2,14 @@ EditWidgetProperties={
 
     getWidget: function(dashboard,id) {
         for(var i in dashboard.widgets) {
-            if(dashboard.widgets[i].id===id)
+            let widget=dashboard.widgets[i];
+            if(widget.id===id)
             {
-                return dashboard.widgets[i];
+                return widget;
+            }
+            if(widget.widgets!=undefined) {
+                let subWidget=this.getWidget(widget,id);
+                if(subWidget!=undefined) return subWidget;
             }
         }
         return undefined;
