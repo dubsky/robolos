@@ -18,7 +18,7 @@ Router.route('sensors',
     {
         name: 'sensors',
         waitOn: function() {
-            return [App.subscribe("allSensorMetadata"),App.subscribe("sensors")];
+            return [App.subscribe("allSensorMetadata"),App.subscribe("sensors"),App.subscribe("actions")];
         }
     }
 );
