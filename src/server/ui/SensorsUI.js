@@ -33,7 +33,7 @@ Meteor.publish('sensors', function(filter, reactive){
     Sensors.forEachSensor(function(sensor) {
         var sensorId=sensor._id;
         let add=true;
-        if(filter!==undefined && filter._id!==undefined) { add=sensorId===filter._id; }
+        if(filter!=undefined && filter._id!==undefined) { add=sensorId===filter._id; }
         if(add) {
             subscribedSensors[sensorId]=true;
             var meta=SensorMetadata.getSensorMetadata(sensorId);
