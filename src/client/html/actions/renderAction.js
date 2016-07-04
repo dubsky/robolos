@@ -163,7 +163,7 @@ Router.route('actions/:_id',
          */,
         waitOn: function() {
             // wait on just one
-            return [App.subscribe('actions'),App.subscribe('variables'),App.subscribe('sensors',false)];
+            return [App.subscribe('actions'),App.subscribe('variables'),App.subscribe('sensors',undefined,false)];
             //       return [IRLibLoader.load('/blockly/blockly.js',{
             //            success: function(){ console.log('3 SUCCESS CALLBACK'); },
             //            error: function(e){ console.log(e); }})];*/

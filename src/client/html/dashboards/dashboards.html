@@ -2,17 +2,21 @@
 
 <template name="dashboards">
 
-    <section class="content-header tableContentHeader" id="content-header">
+    <section class="content-header tableContentHeader">
+        <div class="header-buttons"><a href="{{ pathFor 'addDashboard' }}"><button type="button" class="ui labeled basic icon button viewContent"><i class="wizard icon"></i>Create new...</button></a></div>
         <h1 class="ui dividing header">Dashboards
-            <small>Manage dashboards</small><span style="float:right"><a href="{{ pathFor 'addDashboard' }}"><img class="addDashboard" style="" width=24 height=24; src="sensors/ui/plus_64.png"/></a></span>
+            <small>Manage dashboards</small>
         </h1>
     </section>
 
     <section class="content tableContent">
 
-        {{#unless dashboards}}
-            <div class="alert alert-warning text-center">
-                <span style="color:black">No dashboards available. <a style="color:blue" href="{{ pathFor 'addDashboard' }}">Create one...</a></span>
+        {{#unless dashboards.count}}
+            <div class="ui warning message">
+                <div class="header">
+                    No dashboards available.
+                </div>
+                <span>I think it is a good idea to <a style="color:blue" href="{{ pathFor 'addDashboard' }}">create one...</a></span>
             </div>
         {{/unless}}
 

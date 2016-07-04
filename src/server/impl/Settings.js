@@ -5,6 +5,7 @@ class SettingsClass extends Observable {
         if(this.settingsDocument===undefined) {
             this.settingsDocument={_id:Collections.Settings.SETTINGS_DOCUMENT_ID};
             Collections.Settings.insert(this.settingsDocument);
+            log.info('Creating default configuration document');
         }
         Schemas.Settings.clean(this.settingsDocument);
     }

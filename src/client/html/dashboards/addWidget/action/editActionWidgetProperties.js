@@ -42,10 +42,21 @@ Template.editActionWidgetProperties.onRendered(function() {
     if(!this.data.create) {
         document.forms['editProperties'].elements['title'].value = this.data.widget.title;
         document.forms['editProperties'].elements['icon'].value = this.data.widget.icon;
-        var action=Collections.Actions.findOne(this.data.widget.action);
-        var name='';
-        if(action!==undefined) name=action.title;
-        document.forms['editProperties'].elements['action'].value = name;
+        Template.editActionWidgetProperties.handle=Meteor.subscribe('actions',{_id:this.data.widget.action},() => {
+            let action=Collections.Actions.findOne(this.data.widget.action);
+            let name='';
+            if(action!==undefined) name=action.title;
+            document.forms['editProperties'].elements['action'].value = name;
+        });
     }
     SemanticUI.modal("#editWidgetProperties");
 });
+
+Template.editActionWidgetProperties.onDestroyed(function() {
+    if(!this.data.create) {
+        Template.editActionWidgetProperties.handle.stop();
+        Template.editActionWidgetProperties.handle = undefined;
+    }
+});
+
+

@@ -27,7 +27,7 @@ Router.route('dashboard-selectSensor/:_id',
     {
         name: 'dashboard-selectSensor',
         waitOn: function() {
-            return App.subscribe('sensors',false);
+            return App.subscribe('sensors',undefined,false);
         }
     }
 );

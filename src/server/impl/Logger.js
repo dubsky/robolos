@@ -150,9 +150,3 @@ class Logger extends Observable {
 
 log=new Logger();
 
-Meteor.startup(function() {
-    Settings.start();
-    log.start();
-    DataLoggerInstance.start();
-
-});

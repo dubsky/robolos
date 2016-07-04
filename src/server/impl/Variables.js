@@ -100,6 +100,3 @@ class Variables  extends Observable {
 
 VariablesInstance=new Variables();
 
-Meteor.startup(function() {
-    VariablesInstance.start();
-});

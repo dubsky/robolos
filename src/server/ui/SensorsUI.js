@@ -25,39 +25,31 @@ class SensorsUIClass extends Observable {
 
 SensorsUI=new SensorsUIClass();
 
-Meteor.publish('sensors', function(reactive){
+Meteor.publish('sensors', function(filter, reactive){
     var self = this;
-
+    console.log(' subscribing :'+(filter!=undefined ? (filter._id!=undefined ? filter._id : 'no filter id'): 'no filter'));
+//log.debug(' subscribing :'+filter!=undefined ? filter._id : 'no filter');
+    let subscribedSensors={};
     Sensors.forEachSensor(function(sensor) {
         var sensorId=sensor._id;
-        var meta=SensorMetadata.getSensorMetadata(sensorId);
-        //merge keywords
-        let keywords={};
-        if((typeof meta)!=='undefined')
-        {
-            var mergeTarget = sensor;
-            for (var attrname in meta) { if(attrname!=='_id' && attrname!=='sensorId'&& attrname!=='keywords') mergeTarget[attrname] = meta[attrname]; }
-            if(Array.isArray(meta.keywords)) for(let i=0;i<meta.keywords.length;i++) keywords[meta.keywords[i]]=null;
-        }
-        if(Array.isArray(sensor.keywords)) for(let i=0;i<sensor.keywords.length;i++) keywords[sensor.keywords[i]]=null;
-        sensor.keywords=Object.keys(keywords);
-        self.added("sensors", sensorId, sensor);
-    });
+        let add=true;
+        if(filter!==undefined && filter._id!==undefined) { add=sensorId===filter._id; }
+        if(add) {
+            subscribedSensors[sensorId]=true;
+            var meta=SensorMetadata.getSensorMetadata(sensorId);
+            //merge keywords
+            let keywords={};
+            if((typeof meta)!=='undefined')
+            {
+                var mergeTarget = sensor;
+                for (var attrname in meta) { if(attrname!=='_id' && attrname!=='sensorId'&& attrname!=='keywords') mergeTarget[attrname] = meta[attrname]; }
+                if(Array.isArray(meta.keywords)) for(let i=0;i<meta.keywords.length;i++) keywords[meta.keywords[i]]=null;
+            }
+            if(Array.isArray(sensor.keywords)) for(let i=0;i<sensor.keywords.length;i++) keywords[sensor.keywords[i]]=null;
+            sensor.keywords=Object.keys(keywords);
+            self.added("sensors", sensorId, sensor);
+            log.debug('add!:'+sensorId);
 
-
-    // listen for value changes
-    var listenerId=Sensors.addSensorValueEventListener(function(driver,device,sensor,value,timestamp) {
-        var sensorID=SHARED.getSensorID(driver,device,sensor);
-        try {
-            self.changed("sensors", sensorID,
-                {
-                    value: value,
-                    timestamp: timestamp
-                });
-        }
-        catch(e)
-        {
-            log.error('Error updating sensor value',e);
         }
     });
 
@@ -65,6 +57,23 @@ Meteor.publish('sensors', function(reactive){
 
     if(reactive!==false)
     {
+        // listen for value changes
+        var listenerId = Sensors.addSensorValueEventListener(function (driver, device, sensor, value, timestamp) {
+            var sensorID = SHARED.getSensorID(driver, device, sensor);
+            try {
+                if (subscribedSensors[sensorID]) {
+                    self.changed("sensors", sensorID,
+                        {
+                            value: value,
+                            timestamp: timestamp
+                        });
+                }
+            }
+            catch (e) {
+                log.error('Error updating sensor value', e);
+            }
+        });
+
         // listen for sensor metadata changes
         var metaListenerId=SensorMetadata.addEventListener(function (meta) {
             var id=meta._id;
@@ -77,10 +86,12 @@ Meteor.publish('sensors', function(reactive){
         var sensorListenerId=SensorsUI.addEventListener(    {
                 onCreate : function(sensor) {
                     self.added("sensors",sensor._id,sensor);
+                    subscribedSensors[sensor._id]=false;
                 },
                 onRemove : function(sensorId) {
                     try {
                         self.removed("sensors",sensorId);
+                        delete subscribedSensors[sensorId];
                     }
                     catch(e)
                     {

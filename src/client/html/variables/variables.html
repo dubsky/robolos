@@ -1,19 +1,21 @@
 <template name="variables">
 
-        <section class="content-header tableContentHeader" id="content-header">
-            <h1 class="ui dividing header">Variables
-                <small>Used to store system state, persisted between controller restarts</small>
-                    <span style="float:right">
-                        <a href="{{ pathFor 'addVariable' }}"><img class="addVariable" style="" width=24 height=24; src="sensors/ui/plus_64.png"/></a>
-                    </span>
-            </h1>
-        </section>
+    <section class="content-header tableContentHeader">
+        <div class="header-buttons"><a href="{{ pathFor 'addVariable' }}"><button type="button" class="ui labeled basic icon button viewContent"><i class="wizard icon"></i>Create new...</button></a></div>
+        <h1 class="ui dividing header">Variables
+            <small>Used to store system state, persisted between system restarts</small>
+        </h1>
+    </section>
+
 
         <section class="content tableContent">
 
-            {{#unless variables}}
-                <div class="alert alert-warning text-center">
-                    <span style="color:black">No variables available. <a style="color:blue" href="{{ pathFor 'addVariable' }}">Create one...</a></span>
+            {{#unless variables.count}}
+                <div class="ui warning message">
+                    <div class="header">
+                        No variables available.
+                    </div>
+                     <span>I think it is a good idea to <a style="color:blue" href="{{ pathFor 'addVariable' }}">create one...</a></span>
                 </div>
             {{/unless}}
 
@@ -26,7 +28,7 @@
 
             <div id="content-footer">
                 <form name="variablesForm" class="remove form-horizontal" novalidate>
-                    <div style="margin-left:0px" class="form-group">
+                    <div style="margin-left:0" class="form-group">
                         <input type="button" class="btn btn-default" value="Remove Selected" title="Remove Selected"  disabled={{emptySelection}}>
                     </div>
                 </form>

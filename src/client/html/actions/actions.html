@@ -1,16 +1,20 @@
 <template name="actions">
 
-    <section class="content-header tableContentHeader" id="content-header">
+    <section class="content-header tableContentHeader">
+        <div class="header-buttons"><a href="{{ pathFor 'addAction' }}"><button type="button" class="ui labeled basic icon button viewContent"><i class="wizard icon"></i>Create new...</button></a></div>
         <h1 class="ui dividing header">Automation Actions
-            <small>Orchestrate your sensors and actuators</small><span style="float:right"><a href="{{ pathFor 'addAction' }}"><img class="addAction" style="" width=24 height=24; src="sensors/ui/plus_64.png"/></a></span>
+            <small>Orchestrate your sensors and actuators</small>
         </h1>
     </section>
 
     <section class="content tableContent">
 
-        {{#unless actions}}
-            <div class="alert alert-warning text-center">
-                <span style="color:black">No actions available. <a style="color:blue" href="{{ pathFor 'addAction' }}">Create one...</a></span>
+        {{#unless actions.count}}
+            <div class="ui warning message">
+                <div class="header">
+                    No actions available.
+                </div>
+                <span>I think it is a good idea to <a style="color:blue" href="{{ pathFor 'addAction' }}">create one...</a></span>
             </div>
         {{/unless}}
 

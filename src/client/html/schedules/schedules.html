@@ -6,32 +6,34 @@
             <h1 class="ui dividing header">Schedules
                 <small>Execute Actions at specified time</small>
             </h1>
-            <br/>
         </section>
 
 
         <section class="content tableContent">
 
-            {{#unless schedules}}
-                <div class="alert alert-warning text-center">
-                    <span style="color:black">No schedules available. <a style="color:blue" href="{{ pathFor 'addSchedule' }}">Create one...</a></span>
+            {{#unless schedules.count}}
+                <div class="ui warning message">
+                    <div class="header">
+                        No schedules available.
+                    </div>
+                    <span>I think it is a good idea to <a style="color:blue" href="{{ pathFor 'addSchedule' }}">create one...</a></span>
                 </div>
             {{/unless}}
 
-                    <div>
-                        {{> tableTextSearch filterKey='schedules'}}
-                    </div>
-                    <div>
-                        {{> reactiveTable collection=schedules showFilter=false showNavigation='never' rowsPerPage=10000 settings=settings }}
-                    </div>
+            <div>
+                {{> tableTextSearch filterKey='schedules'}}
+            </div>
+            <div>
+                {{> reactiveTable collection=schedules showFilter=false showNavigation='never' rowsPerPage=10000 settings=settings }}
+            </div>
 
-                <div id="content-footer">
-                    <form name="schedulesForm" class="remove form-horizontal" novalidate>
-                        <div style="margin-left:0px" class="form-group">
-                            <input type="button" class="btn btn-default" value="Remove Selected" title="Remove Selected"  disabled={{emptySelection}}>
-                        </div>
-                    </form>
-                </div>
+            <div id="content-footer">
+                <form name="schedulesForm" class="remove form-horizontal" novalidate>
+                    <div style="margin-left:0px" class="form-group">
+                        <input type="button" class="btn btn-default" value="Remove Selected" title="Remove Selected"  disabled={{emptySelection}}>
+                    </div>
+                </form>
+            </div>
 
         </section>
 

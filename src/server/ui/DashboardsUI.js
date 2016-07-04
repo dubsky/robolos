@@ -4,29 +4,6 @@ Meteor.publish('dashboards', function(filter,reactive){
 });
 
 
-function cleanAction(action) {
-    var mergeTarget = {};
-    // some things should not be exposed to client
-    for (var attrname in action) { ``
-        switch(attrname) {
-            case 'onCancel':
-            case 'code':
-            case 'xml':
-                break;
-            case 'actionStatus':
-                var srcStatus=action[attrname];
-                var targetStatus=mergeTarget.actionStatus = { status: srcStatus.status,lastRun: srcStatus.lastRun } ;
-                if(srcStatus.wait!==undefined) {
-                   targetStatus.wait={ since : srcStatus.wait.since, duration : srcStatus.wait.duration }
-                }
-                break;
-            default:
-             mergeTarget[attrname] = action[attrname];
-        }
-    }
-    return mergeTarget;
-}
-
 
 function collectWidgetStatuses(subscription, widgets,dashboardCollection,dashboardSensors,dashboardActions,dashboardVariables) {
     if ((typeof widgets) !== 'undefined') {
@@ -52,7 +29,7 @@ function collectWidgetStatuses(subscription, widgets,dashboardCollection,dashboa
             if (widget.type === 'action') {
                 dashboardActions[widget.action] = true;
                 var action = ActionsInstance.getAction(widget.action);
-                subscription.added(dashboardCollection, widget.action, cleanAction(action));
+                subscription.added(dashboardCollection, widget.action, ActionsUI.cleanAction(action));
             }
 
             if (widget.type === 'variable') {
@@ -96,7 +73,7 @@ Meteor.publish('sensorStatusCollection', function(parameters){
         var actionListenerId = ActionsUI.addEventListener({
             onUpdate: function (action) {
                 if (dashboardActions[action._id]) {
-                    self.changed("sensorStatusCollection", action._id, cleanAction(action));
+                    self.changed("sensorStatusCollection", action._id, ActionsUI.cleanAction(action));
                 }
             }
         });

@@ -129,6 +129,3 @@ class Schedules {
 
 SchedulesInstance=new Schedules();
 
-Meteor.startup(function() {
-    SchedulesInstance.start();
-});

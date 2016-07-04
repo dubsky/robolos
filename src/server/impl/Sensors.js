@@ -76,17 +76,22 @@ class SensorsClass {
 
 
     scanForUnknownSensorStatusesOneIteration() {
-        if(this.scanningStatus===undefined || this.scanningStatus.keys.length==this.scanningStatus.i) this.scanningStatus={ i:0, keys: Object.keys(this.knownSensors) };
+        if(this.scanningStatus===undefined || this.scanningStatus.keys.length==this.scanningStatus.i) {
+            this.scanningStatus={ i:0, keys: Object.keys(this.knownSensors) };
+        }
         let repeat=true;
         let beginning=new Date().getTime();
         do {
-            var s = this.knownSensors[this.scanningStatus.keys[this.scanningStatus.i++]];
-            if ((s !== undefined) && (s.class === SensorClasses.ANALOG_OUTPUT || s.class === SensorClasses.BINARY_OUTPUT || s.class === SensorClasses.ANALOG_OUTPUT_0_100) && (typeof s.value) === 'undefined') {
-                Devices.getDriverByInstanceID(s.driver).performAction(s.deviceId, s.sensorId, SENSOR_ACTIONS.GET_VALUE);
-                // don't spend more than 50ms here
-                if(new Date().getTime()-beginning>50) repeat=false;
+            let currentKey=this.scanningStatus.keys[this.scanningStatus.i++];
+            if (this.knownSensors.hasOwnProperty(currentKey)) {
+                let s = this.knownSensors[currentKey];
+                if ((s !== undefined) && (s.class === SensorClasses.ANALOG_OUTPUT || s.class === SensorClasses.BINARY_OUTPUT || s.class === SensorClasses.ANALOG_OUTPUT_0_100) && (typeof s.value) === 'undefined') {
+                    Devices.getDriverByInstanceID(s.driver).performAction(s.deviceId, s.sensorId, SENSOR_ACTIONS.GET_VALUE);
+                }
+                if(this.scanningStatus.i>=this.scanningStatus.keys.length) break;
             }
-            if(this.scanningStatus.keys.length==this.scanningStatus.i) break;
+            // don't spend more than 50ms here
+            if(new Date().getTime()-beginning>50) repeat=false;
         }
         while(repeat);
     }

@@ -88,6 +88,3 @@ Meteor.methods({
 
 });
 
-Meteor.startup(function() {
-    KeywordsUI.start();
-});

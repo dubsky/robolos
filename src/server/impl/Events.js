@@ -57,7 +57,3 @@ class Events {
 }
 
 EventsInstance=new Events();
-
-Meteor.startup(function() {
-    EventsInstance.start();
-});

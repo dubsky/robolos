@@ -155,7 +155,7 @@ Router.map(function() {
 });
 
 
-Meteor.startup(function () {
+UploadsInitialization=function () {
     UploadServer.init({
         tmpDir: getApplicationRoot() + '/uploads/tmp',
         uploadDir: getUploadRoot(),
@@ -179,5 +179,5 @@ Meteor.startup(function () {
             UploadedIconsInstance.fireCreateEvent(fileInfo.path);
         }
     });
-});
+};
 

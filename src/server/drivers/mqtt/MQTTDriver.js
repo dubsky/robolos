@@ -255,8 +255,10 @@ class MQTTDriver extends AbstractDriver {
         if (action == SENSOR_ACTIONS.GET_VALUE) {
             let sensorData=this.sensors[deviceId+'/'+sensorId];
             if(sensorData!=undefined) {
-                log.error('Sensor '+deviceId+'/'+sensorId+' does not exist anymore');
                 this.server.ascoltatore.publish(sensorData.topic+'/get', 'message', {}, function() {});
+            }
+            else {
+                log.error('Sensor '+deviceId+'/'+sensorId+' does not exist anymore');
             }
         }
     }

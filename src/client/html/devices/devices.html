@@ -15,9 +15,12 @@
 
     <section class="content tableContent">
 
-        {{#unless devices}}
-            <div style="color:red" class="alert alert-warning text-center">
-                <span style="color:black">No devices discovered yet</span>
+        {{#unless devices.count}}
+            <div class="ui warning message">
+                <div class="header">
+                    No devices available.
+                </div>
+                <span>I think it is a good idea to <a style="color:blue" href="{{ pathFor 'driverInstances' }}">configure your hardware connections</a> first...</span>
             </div>
         {{/unless}}
 

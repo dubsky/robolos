@@ -26,6 +26,7 @@ section.narrow {
 .header-buttons {
     float:right;
     margin-top:-6px;
+    margin-right:-4px;
 }
 
 body {

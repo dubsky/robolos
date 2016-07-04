@@ -29,8 +29,6 @@ SensorMetadata={
     },
 
     updateSensorMeta: function(docId,meta) {
-        console.log('did:',docId);
-        console.log('up meta:',meta);
         var oldMetaFromDb=Collections.SensorsMetadata.findOne(docId);
         if(oldMetaFromDb===undefined) oldMetaFromDb={};
         Collections.SensorsMetadata.upsert(docId,meta);
