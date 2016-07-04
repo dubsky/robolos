@@ -13,12 +13,13 @@ AnalogInputActionController=class AnalogInputActionController extends Controller
 
 
     event(value,timestamp) {
-
+console.log('event:'+value);
         if((typeof this.previousValue)==='undefined') {
             this.previousValue=value;
             return;
         }
 
+        console.log('sens:'+value);
 
         if(Math.abs(value-this.previousValue)>this.sensitivity) {
             this.previousValue=value;

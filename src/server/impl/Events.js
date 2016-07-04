@@ -52,6 +52,10 @@ class Events {
     start() {
         var self=this;
         Sensors.addSensorValueEventListener(function(driver,device,sensor,value,timestamp) { self.eventHandler(driver,device,sensor,value,timestamp); });
+        SensorMetadata.addEventListener((meta) => {
+            //log.debug('resetting controller '+meta._id);
+            this.controllers[meta._id]=undefined;
+        });
     }
 
 }
