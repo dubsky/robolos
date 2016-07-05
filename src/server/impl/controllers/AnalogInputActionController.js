@@ -8,29 +8,32 @@ AnalogInputActionController=class AnalogInputActionController extends Controller
         this.sensitivity=meta.sensitivity;
         this.belowLimit=false;
         this.aboveLimit=false;
-        if((typeof this.sensitivity)==='undefined') this.sensitivity=1;
+        if(this.sensitivity===undefined) this.sensitivity=1;
     }
 
 
     event(value,timestamp) {
 
-        if((typeof this.previousValue)==='undefined') {
+        let meta=this.meta;
+        if(this.previousValue==='undefined') {
             this.previousValue=value;
+            if(meta.onChangeAction!==undefined) {
+                this.startAction(meta.onChangeAction);
+            }
             return;
         }
 
 
         if(Math.abs(value-this.previousValue)>this.sensitivity) {
             this.previousValue=value;
-            var meta=this.meta;
-            if((typeof meta.onChangeAction)!=='undefined') {
+            if(meta.onChangeAction!==undefined) {
                 this.startAction(meta.onChangeAction);
             }
 
-            if((typeof meta.fallsBelowValueLimit)!=='undefined') {
+            if(meta.fallsBelowValueLimit!==undefined) {
                 if(!this.belowLimit && value<meta.fallsBelowValueLimit)
                 {
-                    if((typeof meta.fallsBelowAction)!=='undefined') {
+                    if(meta.fallsBelowAction!==undefined) {
                         this.belowLimit=true;
                         this.startAction(meta.fallsBelowAction);
                     }
@@ -41,10 +44,10 @@ AnalogInputActionController=class AnalogInputActionController extends Controller
                 }
             }
 
-            if((typeof meta.raisesAboveValueLimit)!=='undefined') {
+            if(meta.raisesAboveValueLimit!==undefined) {
                 if(!this.aboveLimit && value>meta.raisesAboveValueLimit)
                 {
-                    if((typeof meta.raisesAboveAction)!=='undefined') {
+                    if(meta.raisesAboveAction!==undefined) {
                         this.aboveLimit=true;
                         this.startAction(meta.raisesAboveAction);
                     }
