@@ -41,7 +41,6 @@ class MQTTDriver extends AbstractDriver {
             }
 
             let sensorData={
-                _id: device+'/'+sensor,
                 topic: components.slice(0,components.length-1).join('/') ,
                 deviceId:device,
                 sensorId:sensor,
@@ -51,6 +50,8 @@ class MQTTDriver extends AbstractDriver {
             };
 
             MQTTSensorCollection.upsert({_id: device+'/'+sensor},{$set : sensorData });
+            sensorData._id=device+'/'+sensor;
+
             this.sensors[device+'/'+sensor]=sensorData;
             this.onEventListener.onSensorDiscovery([sensorData]);
     }
