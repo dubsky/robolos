@@ -599,8 +599,8 @@ class CFoxInelsDriver extends AbstractDriver {
                                 case SensorTypes.BINARY_INPUT.id :
                                     //log.debug('fire');
                                     var val = (value & bit) ? 1 : 0;
-                                    /*if(sensor[j].sensorId=='SA2_04M_Sn_Podvojna_Rozvodnice_Obyvak_Obyvak_Klimatizace_1np_bin')
-                                     log.debug('val sa:'+value+' i:'+i+' index:'+index);*/
+                                    //if(sensor[j].sensorId=='WSB2_20_Pracovna_2NP_Pracovna_Svetlo_2np_tl_DOWN_wsb2_20_')
+                                    // log.debug('value:'+value+' bit:'+bit+' index:'+index);
                                     bitSensor.value = val;
                                     self.onEventListener.onEvent(bitSensor.deviceId, bitSensor.sensorId, val);
                                     break;

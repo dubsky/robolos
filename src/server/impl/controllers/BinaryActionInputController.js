@@ -12,23 +12,25 @@ BinaryInputActionController=class BinaryInputActionController extends Controller
     event(value,timestamp) {
         var preprocessedValue=value;
         if(this.previousValue===preprocessedValue) return;
+        let firstSensorInitialization=this.previousValue===undefined;
         this.previousValue=preprocessedValue;
+        if(firstSensorInitialization) return;
 
         if(this.meta.holdAction!==undefined)
         {
             if(preprocessedValue) {
                 this.inHold=true;
-                this.holdTimeoutHandle=setTimeout(function() {
+                this.holdTimeoutHandle=Meteor.setTimeout(() => {
                     this.startAction(this.meta.holdAction);
                     this.inHold=false;
-                },3000);
+                }, 3000);
             }
             else
             {
                 if(this.inHold) {
-                    clearTimeout(this.holdTimeoutHandle);
+                    Meteor.clearTimeout(this.holdTimeoutHandle);
                     this.inHold=false;
-                    if(this.meta.delayTurnOnAction) {
+                    if(this.meta.delayTurnOnAction && this.meta.doubleClickAction===undefined) {
                         if(this.meta.turnOnAction!==undefined) this.startAction(this.meta.turnOnAction);
                     }
                 }
@@ -42,7 +44,7 @@ BinaryInputActionController=class BinaryInputActionController extends Controller
             }
             else
             {
-                if(this.meta.turnOffAction!==undefined) this.startAction(this.meta.turnOffAction);
+                if (this.meta.turnOffAction!==undefined) this.startAction(this.meta.turnOffAction);
             }
         }
         else
@@ -51,14 +53,16 @@ BinaryInputActionController=class BinaryInputActionController extends Controller
                 if(this.inDoubleClick)
                 {
                     this.startAction(this.meta.doubleClickAction);
-                    clearTimeout(this.doubleClickHandle);
+                    Meteor.clearTimeout(this.doubleClickHandle);
                     this.inDoubleClick=false;
                 }
                 else
                 {
-                    this.doubleClickHandle=setTimeout(function() {
-                        if (this.meta.turnOnAction!==undefined) this.startAction(this.meta.turnOnAction);
+                    this.inDoubleClick=true;
+                    this.doubleClickHandle=Meteor.setTimeout(() => {
                         this.inDoubleClick=false;
+                        if (this.meta.turnOnAction!==undefined) this.startAction(this.meta.turnOnAction);
+                        if (this.meta.turnOffAction!==undefined) this.startAction(this.meta.turnOffAction);
                     },500);
                 }
             }
@@ -67,7 +71,4 @@ BinaryInputActionController=class BinaryInputActionController extends Controller
             }
         }
     }
-
-
-
 }

@@ -15,12 +15,9 @@ class DemoDriver extends AbstractDriver {
         var self=this;
 
         this.handle=setInterval(function() {
-            Fiber(function () {
                 // for demo purposes generate a temperature change event every 10 seconds
                 if ((typeof (self.onEventListener)!=='undefined'))
                     self.onEventListener.onEvent(77,1,Math.random()+23);
-
-            }).run();
         } ,10000);
 
         log.info('Demo Driver: Driver Started');

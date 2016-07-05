@@ -1,7 +1,7 @@
 Template.renderSensorValue.helpers({
 
     value: function() {
-        if(this.class===SensorClasses.BINARY_OUTPUT) {
+        if(this.class===SensorClasses.BINARY_OUTPUT||this.class===SensorClasses.BINARY_INPUT) {
             return this.value===1;
         }
         if((typeof this.value)==='number') {

@@ -47,13 +47,34 @@ class DevicesClass {
         driverInstance.getDriver().registerEventListener(
             {
                 onEvent: function (device, sensor, value) {
-                    Sensors.processIncomingSensorValue(driverInstance,device, sensor, value);
+                    if(Fiber.current!==undefined) {
+                        Sensors.processIncomingSensorValue(driverInstance,device, sensor, value);
+                    }
+                    else {
+                        Fiber(function () {
+                            Sensors.processIncomingSensorValue(driverInstance,device, sensor, value);
+                        }).run();
+                    }
                 },
                 onSensorDiscovery: function(sensors) {
-                    Sensors.sensorsDiscovered(driverInstance,sensors);
+                    if(Fiber.current!==undefined) {
+                        Sensors.sensorsDiscovered(driverInstance,sensors);
+                    }
+                    else {
+                        Fiber(function () {
+                            Sensors.sensorsDiscovered(driverInstance,sensors);
+                        }).run();
+                    }
                 },
                 onDeviceDiscovery: function(devices) {
-                    self.devicesDiscovered(driverInstance,devices);
+                    if(Fiber.current!==undefined) {
+                        self.devicesDiscovered(driverInstance,devices);
+                    }
+                    else {
+                        Fiber(function () {
+                            self.devicesDiscovered(driverInstance,devices);
+                        }).run();
+                    }
                 }
             });
     }
