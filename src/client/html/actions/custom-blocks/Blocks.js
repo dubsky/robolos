@@ -373,7 +373,7 @@ MyBlocks=function() {
                 this.appendStatementInput("NAME");
                 this.setColour(230);
                 this.setTooltip('Execute the contained statements when the action is launched');
-                this.setHelpUrl('http://www.example.com/');
+//                this.setHelpUrl('http://www.example.com/');
                 this.setDeletable(false);
             }
     };

@@ -27,8 +27,6 @@ SensorsUI=new SensorsUIClass();
 
 Meteor.publish('sensors', function(filter, reactive){
     var self = this;
-//    console.log(' subscribing :'+(filter!=undefined ? (filter._id!=undefined ? filter._id : 'no filter id'): 'no filter'));
-//log.debug(' subscribing :'+filter!=undefined ? filter._id : 'no filter');
     let subscribedSensors={};
     Sensors.forEachSensor(function(sensor) {
         var sensorId=sensor._id;
@@ -48,8 +46,6 @@ Meteor.publish('sensors', function(filter, reactive){
             if(Array.isArray(sensor.keywords)) for(let i=0;i<sensor.keywords.length;i++) keywords[sensor.keywords[i]]=null;
             sensor.keywords=Object.keys(keywords);
             self.added("sensors", sensorId, sensor);
-  //          log.debug('add!:'+sensorId);
-
         }
     });
 

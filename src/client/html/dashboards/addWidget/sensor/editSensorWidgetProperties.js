@@ -45,31 +45,30 @@ Template.editSensorWidgetProperties.events({
 
 Template.editSensorWidgetProperties.onRendered(function() {
     SemanticUI.modal("#editWidgetProperties");
-    console.log('edit sensor !!!');
     if(!this.data.create) {
         document.forms['editProperties'].elements['title'].value=this.data.widget.title;
         document.forms['editProperties'].elements['icon'].value=this.data.widget.icon;
         let sensorId=SHARED.getSensorID(this.data.widget.driver,this.data.widget.device,this.data.widget.sensor);
-
-        console.log('subscribe to:',sensorId);
         let sensor=SensorsCollection.findOne(sensorId);
-        console.log('s5s '+sensor);
-        Template.editSensorWidgetProperties.handle=Meteor.subscribe('sensors',{_id:sensorId },{onStop: function(e) {console.log(e)}, onReady: () => {
-            console.log('On ready !!!');
-            let sensor=SensorsCollection.findOne(sensorId);
-            console.log('s2s '+sensor);
-            let name=sensorId;
-            if(sensor!==undefined && sensor.name!==undefined) name=sensor.name;
-            document.forms['editProperties'].elements['sensor'].value = name;
-        }},true);
-        console.log('asdf:'+Template.editSensorWidgetProperties.handle.ready());
-
+        Template.editSensorWidgetProperties.handle=Meteor.subscribe('sensors',
+               {_id:sensorId },
+               false,
+               {
+                   onStop: function(e) {console.log('Unexpected error',e)},
+                   onReady: () => {
+                        let sensor=SensorsCollection.findOne(sensorId);
+                        let name=sensorId;
+                        if(sensor!==undefined && sensor.name!==undefined) name=sensor.name;
+                        document.forms['editProperties'].elements['sensor'].value = name;
+                    }
+               }
+        );
     }
 });
 
 Template.editSensorWidgetProperties.onDestroyed(function() {
     if(!this.data.create) {
         Template.editSensorWidgetProperties.handle.stop();
-        Template.editSensorWidgetProperties.handle = undefined;
+        delete Template.editSensorWidgetProperties.handle;
     }
 });

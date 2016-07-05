@@ -70,7 +70,7 @@ Template.widgetIconSelector.helpers({
         return {
             formData: function() {  },
             finished: function(index, fileInfo, context) {
-                Template.widgetIconSelector.rebuildPicker(template);
+                setTimeout(function() { Template.widgetIconSelector.rebuildPicker(template) },750);
                 $('.iconSelectorDimmer').dimmer('hide');
             }
         }

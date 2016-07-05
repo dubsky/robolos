@@ -129,7 +129,7 @@ Router.map(function() {
                 };
 
                 //log.debug('fname:'+fs.realpathSync(basedir+pathParam + path));
-                var file = fs.realpathSync(basedir+pathParam + path);
+                var file = fs.realpathSync(basedir+'/'+pathParam + path);
                 var stat = null;
                 try {
                     stat = fs.statSync(file);
