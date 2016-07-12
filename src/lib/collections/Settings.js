@@ -58,7 +58,32 @@ Schemas.Settings=new SimpleSchema({
         label:'Allow Self-Registration (users may create an account on their own)',
         defaultValue:true,
         type: Boolean
+    },
+    /* email */
+    smtpServer: {
+        label:'SMTP Server Address',
+        defaultValue: 'smtp.gmail.com',
+        optional:true,
+        type: String
+    },
+    smtpUserName: {
+        label:'User Name',
+        defaultValue: 'yourgooglemailname@gmail.com',
+        optional:true,
+        type: String
+    },
+    smtpPassword: {
+        label:'Password',
+        optional:true,
+        type: String
+    },
+    smtpTLS: {
+        label:'Use TLS',
+        defaultValue:true,
+        optional:true,
+        type: Boolean
     }
+
 });
 
 Collections.Settings.attachSchema(Schemas.Settings);

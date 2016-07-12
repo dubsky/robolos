@@ -1,0 +1,27 @@
+<template name="addUser">
+
+    <div class="ui container">
+
+        <section class="content-header narrow">
+            <h1 class="ui dividing header">Add New User
+                <small>Create additional user with his own account to access the system</small>
+            </h1>
+            <br/>
+        </section>
+
+        <section class="content">
+
+            <div>
+                {{#autoForm id="addUserForm" type="method-update" validation="keyup" meteormethod="addUser" schema=schema}}
+                    {{> afQuickField name="email"}}
+                    {{> afQuickField name="password"}}
+
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default cancel">Cancel</button>
+
+                {{/autoForm}}
+            </div>
+        </section>
+    </div>
+
+</template>

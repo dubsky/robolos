@@ -2,6 +2,7 @@ class SettingsClass extends Observable {
 
     start() {
         this.settingsDocument=Collections.Settings.findOne(Collections.Settings.SETTINGS_DOCUMENT_ID);
+        Schemas.Settings.clean(this.settingsDocument);
         if(this.settingsDocument===undefined) {
             this.settingsDocument={_id:Collections.Settings.SETTINGS_DOCUMENT_ID};
             Collections.Settings.insert(this.settingsDocument);

@@ -2,6 +2,10 @@ Template.header.events({
     "click .signOut": function() {
         AccountsTemplates.logout();
         Router.go('homepage');
+    },
+
+    "click .signIn": function() {
+        Router.go('atSignIn');
     }
     /*
     ,

@@ -7,31 +7,30 @@
     </section>
 
 
-    <section class="content">
+    <section class="content tableContent">
 
 
-        {{#if users}}
-            <div class="box">
-                <div>
-                    {{> tableTextSearch}}
-                </div>
-                <div>
-                    {{> reactiveTable collection=users showNavigation='never' rowsPerPage=100 settings=settings }}
-                </div>
+        {{#if users.count}}
+            <div>
+                {{> tableTextSearch}}
+            </div>
+            <div>
+                {{> reactiveTable collection=users showNavigation='never' rowsPerPage=100 settings=settings }}
             </div>
         {{else}}
             <div style="color:red" class="alert alert-warning text-center">
                 <span style="color:black">It's so sad... You are the only person using this wonderful system now.</span>
             </div>
         {{/if}}
+
+
+        <div id="content-footer">
+            <button class="ui primary button addUser">
+                Add New User
+            </button>
+            <button href="#" class="ui secondary button removeUsers" disabled={{emptySelection}}>
+                Remove Selected
+            </button>
+        </div>
     </section>
-    {{!--
-                <div id="content-footer">
-                    <form name="devicesForm" class="remove form-horizontal" novalidate>
-                        <div style="margin-left:0px" class="form-group">
-                            <input type="button" class="btn btn-default" value="Remove Selected" title="Remove Selected"  disabled={{emptySelection}}>
-                        </div>
-                    </form>
-                </div>
---}}
 </template>

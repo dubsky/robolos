@@ -13,8 +13,8 @@ Meteor.publish('userAccounts', function(filter,reactive) {
 
     cursor.forEach(
         function (user) {
-            console.log('There is user:',user);
-            self.added("userAccounts", user._id, user);
+            if(user._id!=self.userId)
+                self.added("userAccounts", user._id, user);
         }
     );
 
@@ -23,6 +23,10 @@ Meteor.publish('userAccounts', function(filter,reactive) {
 
 
 Meteor.methods({
+    addUser : function(modifier) {
+        console.log('add user',modifier);
+    },
+
     deleteUsers : function(list) {
     }
 });

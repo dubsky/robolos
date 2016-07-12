@@ -8,6 +8,8 @@ Meteor.startup(function () {
     DataLoggerInstance.start();
     log.info("Scanning stored system variables");
     VariablesInstance.start();
+    log.info("Starting Notifications Processing");
+    NotificationsInstance.start();
     log.info('Starting drivers');
     Drivers.start();
     log.info('Sensor input processing started');

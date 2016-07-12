@@ -12,6 +12,7 @@ Template.leftSideMenu.helpers({
     },
 
     isHomepage: function() {
+        if (Router.current().route===undefined) return true;
         var routeName = Router.current().route.getName();
         return routeName==='homepage' ? 'active' : '';
     }
