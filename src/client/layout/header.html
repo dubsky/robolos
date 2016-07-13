@@ -9,7 +9,7 @@
                 </div>
                 <a href="{{ pathFor 'homepage' }}" class="item">Home</a>
                 <a href="{{ pathFor 'calendar' }}" class="item">Calendar</a>
-                {{#if currentUser}}
+                {{#if isAdministrator}}
                     <a href="#" class="ui simple dropdown item">
                         Manage <i class="dropdown icon"></i>
                         <div class="menu">

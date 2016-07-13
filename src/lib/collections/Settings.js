@@ -1,5 +1,6 @@
 Collections.Settings = new Mongo.Collection("settings");
 Collections.Settings.SETTINGS_DOCUMENT_ID='settings';
+Collections.Settings.USER_SETTINGS_DOCUMENT_ID='userSettings';
 
 Schemas.Settings=new SimpleSchema({
     /* event logging */
@@ -47,6 +48,12 @@ Schemas.Settings=new SimpleSchema({
         min:5,
         max:3600,
         type: Number
+    },
+    privateAddressPattern: {
+        label:'Trusted IP address space regular expression allowing anonymous access',
+        optional:true,
+        defaultValue:'^(127.0.0.1|192.168.*)',
+        type: String
     },
     /* security */
     anonymousAccessToDashboards: {

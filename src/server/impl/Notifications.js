@@ -16,7 +16,6 @@ class Notifications {
             let tls=settings.smtpTLS;
             if(tls) url+=':465';
         }
-        console.log(url);
         this.mailURL=process.env.MAIL_URL=url;
     }
 

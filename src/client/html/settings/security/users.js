@@ -1,5 +1,3 @@
-UserCollection = new Mongo.Collection("userAccounts");
-
 Template.users.helpers({
 
     users: function () {
@@ -11,6 +9,7 @@ Template.users.helpers({
         class: 'reactive-table ui celled table table-striped table-hover ',
         fields: [
             {key: 'username', label:'User Name',tmpl: Template.userNameField},
+            {key: 'role', label:'Role'},
             {key: 'createdAt', label:'Created At' },
             {key:'emails', label:'Email', tmpl: Template.emailField}
         ],
@@ -34,7 +33,7 @@ Template.users.events({
         Router.go('addUser');
     },
 
-    'click .remove': function(event, instance) {
+    'click .removeUsers': function(event, instance) {
         var selection=Session.get('selectedUsers');
         if((typeof selection)!=='undefined') {
             Meteor.call('deleteUsers',selection);
