@@ -8,12 +8,13 @@ let ViewUserSchema=new SimpleSchema({
     password: {
         type: String,
         label: "Password",
-        optional: false,
+        optional: true,
         min:6,
         max: 128
     },
     role: {
         label: "Role",
+        optional: true,
         type: String
     },
     receivesNotifications: {

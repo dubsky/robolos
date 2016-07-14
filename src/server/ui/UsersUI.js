@@ -18,6 +18,7 @@ Meteor.publish('userAccounts', function(filter,reactive) {
     cursor.forEach(
         function (user) {
             //if(user._id!=self.userId)
+            console.log(user);
             self.added("userAccounts", user._id, user);
         }
     );
@@ -67,15 +68,12 @@ Meteor.methods({
     },
 
     updateUser : function(doc) {
-        console.log(doc);
         let id=doc._id;
-        console.log(id);
         var modifier={$set : {}};
-        modifier.$set.role=doc.role;
+        if(doc.role!=undefined) modifier.$set.role=doc.role;
         modifier.$set['profile.receivesNotifications']=doc.receivesNotifications;
-        console.log(modifier);
         Meteor.users.update(id,modifier);
-        if(doc.password!='@@@@@@') Accounts.setPassword(id,doc.password);
+        if(doc.password!=undefined && doc.password!='@@@@@@') Accounts.setPassword(id,doc.password);
         let u=Meteor.users.findOne(id);
         UsersUI.fireUpdateEvent(u);
     },

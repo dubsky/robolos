@@ -7,7 +7,7 @@ Template.emailSettings.helpers({
     schema: Schemas.Settings,
 
     settings: function() {
-        let doc=Collections.Settings.findOne(Collections.Settings.SETTINGS_DOCUMENT_ID);
+        let doc=Collections.Settings.findOne(Collections.Settings.SETTINGS_DOCUMENT_ID,{reactive:false});
         Schemas.Settings.clean(doc);
         return doc;
     },
@@ -27,6 +27,19 @@ Template.emailSettings.onCreated(function() {
     Session.set(TEST_MESSAGE_STATUS,undefined);
 });
 
+Template.emailSettings.onRendered(function() {
+    let enable=function() {
+        Session.set(SESSION_KEY,false);
+    };
+    let selector=$("#emailSettingsForm :input");
+    selector.keyup(enable);
+    selector.change(enable);
+});
+
+Template.emailSettings.onDestroyed(function() {
+    delete Template.emailSettings.modifier;
+});
+
 Template.emailSettings.events({
     'click .sendTestMessage' : function() {
         Session.set(TEST_MESSAGE_STATUS,'Waiting...');
@@ -36,19 +49,21 @@ Template.emailSettings.events({
 
     'click .close' : function() {
         Session.set(TEST_MESSAGE_STATUS,undefined);
+    },
+
+    'click .customSubmit': function() {
+        if (AutoForm.validateForm('emailSettingsForm')) {
+            Meteor.call('updateSettings',Template.emailSettings.modifier,function() { Session.set(SESSION_KEY,true); });
+        }
+        return false;
     }
 });
 
 
 AutoForm.hooks({
     emailSettingsForm: {
-        after: {
-            'method-update': function() {
-                Session.set(SESSION_KEY,true);//setTimeout(function() {Session.set(SESSION_KEY,true);},100);
-            }
-        },
         formToModifier: function(modifier) {
-            Session.set(SESSION_KEY,false);
+            Template.emailSettings.modifier=modifier;
             return modifier;
         }
     }

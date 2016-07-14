@@ -9,7 +9,7 @@
         </p>
 
         <div>
-            {{#autoForm id="dataLoggingSettingsForm" type="method-update" validation="keyup" meteormethod="updateSettings" collection=collection doc=settings schema=schema}}
+            {{#autoForm id="dataLoggingSettingsForm" type="method-update" validation="keyup" meteormethod="updateSettings" doc=settings schema=schema}}
                 {{> afQuickField name="dataLoggingEnabled"}}
                 <p>History is updated in regular intervals and it is kept for limited time - everything older is deleted:</p>
                 <div class="two fields">
@@ -20,7 +20,7 @@
                 <div class="two fields">
                     {{> afQuickField name="minimumIntervalBetweenSensorUpdates"}}
                 </div>
-                <button type="submit" class="ui primary button submit" disabled="{{saveDisabled}}">Save</button>
+                <button class="ui primary button customSubmit" disabled="{{saveDisabled}}">Save</button>
                 <button href="#" class="ui secondary button clearLogData" disabled="{{logDataCleared}}">
                     Clear Log Data
                 </button>

@@ -50,7 +50,7 @@ Schemas.Settings=new SimpleSchema({
         type: Number
     },
     privateAddressPattern: {
-        label:'Trusted IP address space regular expression allowing anonymous access',
+        label:'Trusted IP address space allowing anonymous access (regular expression)',
         optional:true,
         defaultValue:'^(127.0.0.1|192.168.*)',
         type: String
@@ -74,13 +74,13 @@ Schemas.Settings=new SimpleSchema({
         type: String
     },
     smtpUserName: {
-        label:'User Name',
+        label:'SMTP Server User Name',
         defaultValue: 'yourgooglemailname@gmail.com',
         optional:true,
         type: String
     },
     smtpPassword: {
-        label:'Password',
+        label:'SMTP Server Password',
         optional:true,
         type: String
     },

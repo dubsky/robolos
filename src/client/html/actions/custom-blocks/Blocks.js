@@ -4,16 +4,26 @@ MyBlocks=function() {
     DefineVariableField();
 
     function getSensorValue(block) {
-        var v=block.getFieldValue('selectedSensor');
-        var value={id: null, name:null};
-        if((typeof v)!=='undefined' && v!==null && v!='') value = EJSON.parse(v);
+        let v=block.getFieldValue('selectedSensor');
+        let value={id: null, name:null};
+        if(v!=undefined && v!='') {
+            if(v==='...')
+                value=v;
+            else
+                value=EJSON.parse(v);
+        }
         return value;
     }
 
     function getVariableValue(block) {
         var v=block.getFieldValue('selectedVariable');
         var value={id: null, name:null};
-        if((typeof v)!=='undefined' && v!==null && v!='') value = EJSON.parse(v);
+        if(v!=undefined && v!='') {
+            if(v==='...')
+                value=v;
+            else
+                value=EJSON.parse(v);
+        }
         return value;
     }
 
@@ -381,8 +391,39 @@ MyBlocks=function() {
 
     Blockly.JavaScript['action'] = function(block) {
         var statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
-        // TODO: Assemble JavaScript into code variable.
         var code = 'function(context,whenDone) {\n  var callCompletion=true;\n'+statements_name+'\n  if (callCompletion) whenDone(context); \n}';
         return code;
     };
+
+    Blockly.Blocks['notify'] = {
+        init: function() {
+            this.appendValueInput("subject")
+                .setCheck("String")
+                .appendField("Send ")
+                .appendField(new Blockly.FieldDropdown([["info",Collections.Notifications.Severity.info], ["warning", Collections.Notifications.Severity.warning], ["emergency", Collections.Notifications.Severity.emergency]]), "severity")
+                .appendField("notification with subject");
+            this.appendValueInput("body")
+                .setCheck("String")
+                .appendField("         ")
+                .appendField(new Blockly.FieldDropdown([["immediately", Collections.Notifications.Urgency.immediately], ["in a daily summary", Collections.Notifications.Urgency.daily]]), "urgency")
+                .appendField("with body");
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(Blockly.Blocks.texts.HUE);
+            this.setTooltip('Send notification (email) so that you can put the system back on tracks');
+        }
+    };
+
+    Blockly.JavaScript['notify'] = function(block) {
+        var dropdown_severity = block.getFieldValue('severity');
+        var value_subject = Blockly.JavaScript.valueToCode(block, 'subject', Blockly.JavaScript.ORDER_ATOMIC);
+        var dropdown_urgency = block.getFieldValue('urgency');
+        var value_body = Blockly.JavaScript.valueToCode(block, 'body', Blockly.JavaScript.ORDER_ATOMIC);
+
+        var code = 'context.sendNotification('+EJSON.stringify(dropdown_severity)+','+EJSON.stringify(dropdown_urgency)+','+value_subject+','+value_body+');\n';
+        return code;
+    };
+
+
+
 }

@@ -6,7 +6,7 @@ Template.logSettings.helpers({
     schema: Schemas.Settings,
 
     settings: function() {
-        let doc=Collections.Settings.findOne(Collections.Settings.SETTINGS_DOCUMENT_ID);
+        let doc=Collections.Settings.findOne(Collections.Settings.SETTINGS_DOCUMENT_ID,{reactive:false});
         Schemas.Settings.clean(doc);
         return doc;
     },
@@ -20,23 +20,36 @@ Template.logSettings.onCreated(function() {
     Session.set(SESSION_KEY,true);
 });
 
-Template.logSettings.events({
+Template.logSettings.onRendered(function() {
+    let enable=function() {
+        Session.set(SESSION_KEY,false);
+    };
+    let selector=$("#logSettingsForm :input");
+    selector.keyup(enable);
+    selector.change(enable);
+});
 
+Template.logSettings.onDestroyed(function() {
+    delete Template.logSettings.modifier;
+});
+
+Template.logSettings.events({
+    'click .customSubmit': function() {
+        if (AutoForm.validateForm('logSettingsForm')) {
+            Meteor.call('updateSettings',Template.logSettings.modifier,function() { Session.set(SESSION_KEY,true); });
+        }
+        return false;
+    }
 
 });
 
-
 AutoForm.hooks({
     logSettingsForm: {
-        after: {
-            'method-update': function() {
-                setTimeout(function() {Session.set(SESSION_KEY,true);},100);
-            }
-        },
         formToModifier: function(modifier) {
-            Session.set(SESSION_KEY,false);
+            Template.logSettings.modifier=modifier;
             return modifier;
         }
     }
 });
+
 
