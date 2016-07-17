@@ -1,4 +1,4 @@
-ActionStatus = { RUNNING : 'RUN', READY:'READY', WAITING_FOR_CONDITION:'CONDITION', WAITING:'WAIT', SYNTAX_ERROR:'SYNTAX ERROR'};
+ActionStatus = { RUNNING : 'RUN', READY:'READY', WAITING_FOR_CONDITION:'CONDITION', PAUSED: 'PAUSED', WAITING:'WAIT', SYNTAX_ERROR:'SYNTAX ERROR'};
 DEPENDENCY_TYPE = { VARIABLE:'variable', SENSOR:'sensor'};
 
 class ActionContext {
@@ -8,12 +8,24 @@ class ActionContext {
         this.action=action;
     }
 
-    setTimeout(timeout, statements, onCancel, whenDone) {
+    fillPauseCancelAvailability(wait,onPause,onContinue,onCancel) {
+        wait.pauseAvailable=onPause!==undefined && onContinue!==undefined;
+        wait.cancelAvailable=onCancel!==undefined;
+    }
+
+    setTimeout(timeout, statements, onPause, onContinue, onCancel, whenDone) {
         this.actionStatus.status=ActionStatus.WAITING;
-        this.actionStatus.wait={ since: new Date().getTime(), duration: timeout, onCancel: onCancel };
+        this.actionStatus.wait={
+            trigerringStatusTransition:ActionStatus.WAITING,
+            since: new Date().getTime(),
+            elapsedTime:0,
+            duration: timeout,
+            onTimeout: statements, whenDone: whenDone, onCancel: onCancel, onPause: onPause, onContinue: onContinue
+        };
+        this.fillPauseCancelAvailability(this.actionStatus.wait,onPause,onContinue,onCancel);
         ActionsUI.fireUpdateEvent(this.action);
         var self=this;
-        this.actionStatus.wait.currentWaitHandle=setTimeout(function() {
+        this.actionStatus.wait.currentWaitHandle=Meteor.setTimeout(function() {
             self.actionStatus.status=ActionStatus.RUNNING;
             delete self.actionStatus.wait;
             statements(self,whenDone);
@@ -26,14 +38,23 @@ class ActionContext {
         this.actionStatus.status=ActionStatus.RUNNING;
         delete this.actionStatus.wait;
         var self=this;
-        onCancel(this,function() {
+        let whenDone=function() {
             self.actionStatus.status=ActionStatus.READY;
             delete self.actionStatus.message;
             ActionsUI.fireUpdateEvent(self.action);
-        });
+        };
+
+        if(onCancel!==undefined) {
+            onCancel(this,function() {
+                whenDone();
+            });
+        }
+        else {
+            whenDone();
+        }
     }
 
-    waitFor(timeout,condition,statements,onCancel,whenDone) {
+    waitFor(timeout,condition,statements,onPause,onContinue,onCancel,whenDone) {
         // calculate the list of depending sensors/variables
         this.trackDependencies=true;
         this.variableDependencies={};
@@ -56,16 +77,24 @@ class ActionContext {
             if(this.sensorDependencies.notEmpty || this.variableDependencies.notEmpty) {
                 var self=this;
                 self.actionStatus.status=ActionStatus.WAITING_FOR_CONDITION;
-                self.actionStatus.wait={ since: new Date().getTime(), duration: timeout, onCancel: onCancel };
+                self.actionStatus.wait={
+                    trigerringStatusTransition:ActionStatus.WAITING_FOR_CONDITION,
+                    since: new Date().getTime(),
+                    elapsedTime:0,
+                    duration: timeout,
+                    onCancel: onCancel, onPause: onPause, onContinue: onContinue
+                };
+                this.fillPauseCancelAvailability(self.actionStatus.wait,onPause,onContinue,onCancel);
                 ActionsUI.fireUpdateEvent(this.action);
 
-                this.actionStatus.wait.currentWaitHandle=setTimeout(function() {
+                this.actionStatus.wait.currentWaitHandle=Meteor.setTimeout(function() {
                    self.cancelWaitForAction(onCancel);
                 },timeout);
 
                 function onConditionFullfillment() {
                     if(self.actionStatus.wait!==undefined) {
-                        clearTimeout(self.actionStatus.wait.currentWaitHandle);
+                        Meteor.clearTimeout(self.actionStatus.wait.currentWaitHandle);
+                        delete self.actionStatus.wait.currentWaitHandle;
                         self.actionStatus.status = ActionStatus.RUNNING;
                         if (self.actionStatus.wait.currentSensorListenerHandle !== undefined) Sensors.removeSensorValueEventListener(self.actionStatus.wait.currentSensorListenerHandle);
                         if (self.actionStatus.wait.currentVariableListenerHandle !== undefined) VariablesInstance.removeEventListener(self.actionStatus.wait.currentVariableListenerHandle);
@@ -76,6 +105,7 @@ class ActionContext {
 
                 if(this.sensorDependencies.notEmpty) {
                     self.actionStatus.wait.currentSensorListenerHandle=Sensors.addSensorValueEventListener(function(driver,device,sensor,value,timestamp) {
+                        if(self.actionStatus.status===ActionStatus.PAUSED) return;
                         if(self.sensorDependencies[SHARED.getSensorID(driver,device,sensor)]!==undefined)
                         {
                             if(condition(self)) onConditionFullfillment();
@@ -87,6 +117,7 @@ class ActionContext {
                     this.actionStatus.wait.currentVariableListenerHandle=VariablesInstance.addEventListener(
                         {
                             onUpdate : function(variableId) {
+                                if(self.actionStatus.status===ActionStatus.PAUSED) return;
                                 if(self.variableDependencies[variableId])
                                 {
                                     if(condition(self)) onConditionFullfillment();
@@ -103,7 +134,7 @@ class ActionContext {
 
     stopProcessing() {
         if((typeof this.currentWaitHandle)!=='undefined' && this.currentWaitHandle!==null)
-            clearTimeout(this.currentWaitHandle);
+            Meteor.clearTimeout(this.currentWaitHandle);
         this.actionStatus=ActionStatus.READY;
     }
 
@@ -203,6 +234,18 @@ class Actions {
         delete this.cache[actionId];
     }
 
+    switchActionToSyntaxErrorState(action) {
+        if(action.actionStatus.wait!==undefined) {
+            if (action.actionStatus.wait.currentSensorListenerHandle !== undefined) Sensors.removeSensorValueEventListener(self.actionStatus.wait.currentSensorListenerHandle);
+            if (action.actionStatus.wait.currentVariableListenerHandle !== undefined) VariablesInstance.removeEventListener(self.actionStatus.wait.currentVariableListenerHandle);
+            if (action.actionStatus.wait.currentWaitHandle!== undefined) Meteor.clearTimeout(action.actionStatus.wait.currentWaitHandle);
+            delete action.actionStatus.wait;
+        }
+        action.actionStatus.status=ActionStatus.SYNTAX_ERROR;
+        delete action.actionStatus.message;
+        ActionsUI.fireUpdateEvent(action);
+    }
+
     startAction(action) {
 
         log.event(
@@ -213,7 +256,7 @@ class Actions {
         );
 
         var actionStatus=action.actionStatus;
-        if((typeof actionStatus)==='undefined') {
+        if(actionStatus===undefined) {
             try {
                 actionStatus={ code: eval('('+action.code+')') };
             }
@@ -253,39 +296,137 @@ class Actions {
         }
         catch(e)
         {
-            log.error("Unexpected error when processing action: "+action.title,e);
-            SHARED.printStackTrace(e);
-            actionStatus.status=ActionStatus.SYNTAX_ERROR;
-            delete actionStatus.message;
-            ActionsUI.fireUpdateEvent(action);
+            log.error("Unexpected error when starting action: "+action.title,e);
+            this.switchActionToSyntaxErrorState(action);
+        }
+    }
+
+    pauseAction(action) {
+        try {
+            let actionStatus = action.actionStatus;
+            if (actionStatus.status===ActionStatus.WAITING || actionStatus.status===ActionStatus.WAITING_FOR_CONDITION) {
+                if(actionStatus.wait.pauseAvailable) {
+                    var context=new ActionContext(action,actionStatus);
+                    Meteor.clearTimeout(actionStatus.wait.currentWaitHandle);
+                    delete actionStatus.wait.currentWaitHandle;
+                    actionStatus.wait.elapsedTime+=new Date().getTime()-actionStatus.wait.since;
+                    actionStatus.status=ActionStatus.RUNNING;
+                    actionStatus.wait.onPause(context,function() {
+                        actionStatus.status=ActionStatus.PAUSED;
+                        ActionsUI.fireUpdateEvent(action);
+                    });
+                }
+                else {
+                    log.error('This action cannot be paused.');
+                }
+            }
+        }
+        catch(e)
+        {
+            log.error("Unexpected error when pausing action: "+action.title,e);
+            this.switchActionToSyntaxErrorState(action);
+        }
+}
+
+    continueAction(action) {
+        try {
+            let actionStatus = action.actionStatus;
+            if (actionStatus !== ActionStatus.PAUSED) {
+                let context=new ActionContext(action,actionStatus);
+                let now=new Date().getTime();
+                if (actionStatus.wait.trigerringStatusTransition===ActionStatus.WAITING || actionStatus.wait.trigerringStatusTransition===ActionStatus.WAITING_FOR_CONDITION) {
+                    actionStatus.status=ActionStatus.RUNNING;
+                    actionStatus.wait.onContinue(context,function() {
+                        actionStatus.status=ActionStatus.PAUSED;
+                        if(actionStatus.wait.trigerringStatusTransition===ActionStatus.WAITING)
+                        {
+                            actionStatus.wait.since=now;
+                            actionStatus.wait.currentWaitHandle=Meteor.setTimeout(function() {
+                                actionStatus.status=ActionStatus.RUNNING;
+                                let onTimeout=actionStatus.wait.onTimeout;
+                                let whenDone=actionStatus.wait.whenDone;
+                                delete actionStatus.message;
+                                delete actionStatus.wait;
+                                onTimeout(context,whenDone);
+                            },actionStatus.wait.duration-actionStatus.wait.elapsedTime);
+                            actionStatus.status=ActionStatus.WAITING;
+                        }
+                        else if(actionStatus.wait.trigerringStatusTransition===ActionStatus.WAITING_FOR_CONDITION)
+                        {
+                            srcStatus.wait.since=now;
+                            actionStatus.wait.currentWaitHandle=Meteor.setTimeout(function() {
+                                context.cancelWaitForAction(actionStatus.wait.onCancel);
+                            },actionStatus.wait.duration-actionStatus.wait.elapsedTime);
+                            actionStatus.status=ActionStatus.WAITING_FOR_CONDITION;
+                        }
+                        ActionsUI.fireUpdateEvent(action);
+                    });
+                    ActionsUI.fireUpdateEvent(action);
+                }
+            }
+        }
+        catch(e)
+        {
+            log.error("Unexpected error when resuming action: "+action.title,e);
+            this.switchActionToSyntaxErrorState(action);
         }
     }
 
     stopAction(action) {
-        var actionStatus = action.actionStatus;
-        if ((typeof actionStatus) === 'undefined') {
-            return;
-        }
-        var context=new ActionContext(action,actionStatus);
+        try {
+            let actionStatus = action.actionStatus;
+            if (actionStatus === undefined) return;
+            var context = new ActionContext(action, actionStatus);
 
-        if (actionStatus.status===ActionStatus.WAITING) {
-            clearTimeout(actionStatus.wait.currentWaitHandle);
-            actionStatus.wait.onCancel(context,function() {
-                actionStatus.status=ActionStatus.READY;
-                delete actionStatus.message;
-                ActionsUI.fireUpdateEvent(action);
-            });
-            return;
+            if (!actionStatus.wait.cancelAvailable) {
+                log.error('This action does not support cancel operation');
+                return;
+            }
+
+            if (actionStatus.status === ActionStatus.PAUSED) {
+                if (actionStatus.wait.trigerringStatusTransition === ActionStatus.WAITING) {
+                    actionStatus.wait.onCancel(context, function () {
+                        actionStatus.status = ActionStatus.READY;
+                        delete actionStatus.message;
+                        ActionsUI.fireUpdateEvent(action);
+                    });
+                }
+                if (actionStatus.wait.trigerringStatusTransition === ActionStatus.WAITING_FOR_CONDITION) {
+                    context.cancelWaitForAction(actionStatus.wait.onCancel);
+                }
+            }
+
+            if (actionStatus.status === ActionStatus.WAITING) {
+                Meteor.clearTimeout(actionStatus.wait.currentWaitHandle);
+                delete actionStatus.wait.currentWaitHandle;
+                let whenDone = function () {
+                    actionStatus.status = ActionStatus.READY;
+                    delete actionStatus.message;
+                    ActionsUI.fireUpdateEvent(action);
+                };
+
+                if (actionStatus.wait.onCancel !== undefined) {
+                    actionStatus.wait.onCancel(context, function () {
+                        whenDone();
+                    });
+                }
+                else {
+                    whenDone();
+                }
+                return;
+            }
+            if (actionStatus.status === ActionStatus.WAITING_FOR_CONDITION) {
+                Meteor.clearTimeout(actionStatus.wait.currentWaitHandle);
+                delete actionStatus.wait.currentWaitHandle;
+                context.cancelWaitForAction(actionStatus.wait.onCancel);
+            }
         }
 
-        if (actionStatus.status===ActionStatus.WAITING_FOR_CONDITION) {
-            clearTimeout(actionStatus.wait.currentWaitHandle);
-            context.cancelWaitForAction(actionStatus.wait.onCancel);
+        catch (e) {
+            log.error("Unexpected error when stopping action: " + action.title, e);
+            this.switchActionToSyntaxErrorState(action);
         }
     }
 }
 
 ActionsInstance=new Actions();
-ActionsInstance.refresh();
-
-

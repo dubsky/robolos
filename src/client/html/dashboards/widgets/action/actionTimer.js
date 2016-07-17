@@ -5,7 +5,10 @@ Template.actionTimer.helpers({
         var reactive=Template.instance().wait;
         reactive.get();
 
-        var expired=(new Date().getTime()-this.wait.since);
+        var expired=this.wait.elapsedTime;
+
+        if(!this.paused) expired+=new Date().getTime()-this.wait.since;
+
         if(expired>this.wait.duration) expired=this.wait.duration;
 
         var percent=Math.floor(expired/this.wait.duration*100);
@@ -13,7 +16,7 @@ Template.actionTimer.helpers({
 
         var left=this.wait.duration-expired;
 
-        if(left>100) Meteor.setTimeout(function() {
+        if(!this.paused && left>100) Meteor.setTimeout(function() {
             reactive.set(left);
         },500);
 

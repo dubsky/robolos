@@ -151,10 +151,11 @@ MyBlocks=function() {
 
     Blockly.Blocks['waitFor'] = {
         init: function() {
-
             this.appendValueInput("condition")
                 .setCheck("Boolean")
                 .appendField("Wait for");
+            this.appendDummyInput()
+                .appendField("become true");
             this.setInputsInline(true);
             this.appendStatementInput("statements")
                 .appendField("then");
@@ -162,16 +163,24 @@ MyBlocks=function() {
             this.setNextStatement(false);
             this.setColour(65);
             this.setTooltip('Execute included blocks after a condition is met');
-            this.setMutator(new Blockly.Mutator(['onCancelMutator']));
+            this.setMutator(new Blockly.Mutator(['onCancelMutator','onPauseMutator','onContinueMutator']));
         },
 
         mutationToDom: function() {
             var container = document.createElement('mutation');
+            container.setAttribute('hasContinue', this.hasContinue==true);
+            container.setAttribute('hasPause', this.hasPause==true);
             container.setAttribute('hasCancel', this.hasCancel==true);
             return container;
         },
 
         domToMutation: function(xmlElement) {
+            this.hasPause = xmlElement.getAttribute('haspause')=='true';
+            if(this.hasPause) this.appendStatementInput("pause_statement")
+                .appendField("on pause");
+            this.hasContinue = xmlElement.getAttribute('hascontinue')=='true';
+            if(this.hasContinue) this.appendStatementInput("continue_statement")
+                .appendField("on continue");
             this.hasCancel = xmlElement.getAttribute('hascancel')=='true';
             if(this.hasCancel) this.appendStatementInput("cancel_statement")
                 .appendField("on cancel or timeout of").appendField(new Blockly.FieldTextInput("30"), "timeout").appendField("minutes");
@@ -181,6 +190,18 @@ MyBlocks=function() {
             var containerBlock = Blockly.Block.obtain(workspace, 'waitForMutator');
             containerBlock.initSvg();
             var connection = containerBlock.getInput('STACK').connection;
+            if (this.hasPause===true) {
+                var pauseBlock = Blockly.Block.obtain(workspace, 'onPauseMutator');
+                pauseBlock.initSvg();
+                connection.connect(pauseBlock.previousConnection);
+                connection=pauseBlock.nextConnection;
+            }
+            if (this.hasContinue===true) {
+                var continueBlock = Blockly.Block.obtain(workspace, 'onContinueMutator');
+                continueBlock.initSvg();
+                connection.connect(continueBlock.previousConnection);
+                connection=continueBlock.nextConnection;
+            }
             if (this.hasCancel===true) {
                 var cancelBlock = Blockly.Block.obtain(workspace, 'onCancelMutator');
                 cancelBlock.initSvg();
@@ -190,16 +211,35 @@ MyBlocks=function() {
         },
 
         compose: function(containerBlock) {
+
             // Disconnect the else input blocks and remove the inputs.
-            if (this.hasCancel) {
-                this.removeInput('cancel_statement');
-            }
+            if (this.hasCancel) this.removeInput('cancel_statement');
             this.hasCancel = false;
+            if (this.hasPause) this.removeInput('pause_statement');
+            this.hasPause = false;
+            if (this.hasContinue) this.removeInput('continue_statement');
+            this.hasContinue = false;
 
             // Rebuild the block's optional inputs.
             var clauseBlock = containerBlock.getInputTargetBlock('STACK');
             while (clauseBlock) {
                 switch (clauseBlock.type) {
+                    case 'onPauseMutator':
+                        this.hasPause=true;
+                        var elseInput = this.appendStatementInput('pause_statement');
+                        elseInput.appendField("on pause");
+                        if (clauseBlock.statementConnection_) {
+                            elseInput.connection.connect(clauseBlock.statementConnection_);
+                        }
+                        break;
+                    case 'onContinueMutator':
+                        this.hasContinue=true;
+                        var elseInput = this.appendStatementInput('continue_statement');
+                        elseInput.appendField("on continue");
+                        if (clauseBlock.statementConnection_) {
+                            elseInput.connection.connect(clauseBlock.statementConnection_);
+                        }
+                        break;
                     case 'onCancelMutator':
                         this.hasCancel=true;
                         var elseInput = this.appendStatementInput('cancel_statement');
@@ -223,7 +263,7 @@ MyBlocks=function() {
             this.setColour(Blockly.Blocks.logic.HUE);
             this.appendDummyInput()
                 .appendField('Wait for');
-            this.appendStatementInput('STACK');
+            this.appendStatementInput('STACK').setCheck(["cancel","init"]);
             this.contextMenu = false;
         }
     };
@@ -231,6 +271,8 @@ MyBlocks=function() {
     Blockly.JavaScript['waitFor'] = function(block) {
         var statements_statements = Blockly.JavaScript.statementToCode(block, 'statements');
         var cancel_statements = Blockly.JavaScript.statementToCode(block, 'cancel_statement');
+        var pause_statements = Blockly.JavaScript.statementToCode(block, 'pause_statement');
+        var continue_statements = Blockly.JavaScript.statementToCode(block, 'continue_statement');
         var timeout = parseInt(block.getFieldValue('timeout'));
         if(isNaN(timeout) || timeout<0) timeout=5;
         if(timeout===0) timeout=Infinity;
@@ -238,9 +280,22 @@ MyBlocks=function() {
         // TODO: Assemble JavaScript into code variable.
         var condition = 'function (context) { return '+Blockly.JavaScript.valueToCode(block, 'condition', Blockly.JavaScript.ORDER_ATOMIC)+'; }';
         if(condition.length===0) condition='false';
-        var code = 'callCompletion=false;\ncontext.waitFor( '+timeout+','+condition+',function(context, whenDone) {\n      var callCompletion=true;\n  '+statements_statements+'    if (callCompletion) whenDone(context);\n   },\n' +
-            '   function(context,whenDone) {\n      var callCompletion=true;\n'+cancel_statements+ '      if (callCompletion) whenDone(context);\n   },\n   whenDone);';
+
         return code;
+
+        let pause=pause_statements==='' ? 'undefined,\n' :
+            ('function(context, whenDone) {\n      var callCompletion=true;\n  '+pause_statements+      '    if (callCompletion) whenDone(context);\n   },\n');
+        let cont=continue_statements==='' ? 'undefined,\n' :
+            ('function(context, whenDone) {\n      var callCompletion=true;\n  '+continue_statements+      '    if (callCompletion) whenDone(context);\n   },\n');
+        let cancel=cancel_statements==='' ? 'undefined);\n' :
+            ('   function(context,whenDone) {\n      var callCompletion=true;\n'+cancel_statements+   '      if (callCompletion) whenDone(context);\n   },\n   whenDone);')
+        var code = 'callCompletion=false;\ncontext.waitFor( '+timeout+','+condition+
+            ',function(context, whenDone) {\n      var callCompletion=true;\n  '+statements_statements+'    if (callCompletion) whenDone(context);\n   },\n' +
+            pause +
+            cont +
+            cancel;
+        return code;
+
     };
 
     Blockly.Blocks['after'] = {
@@ -258,16 +313,24 @@ MyBlocks=function() {
             this.setNextStatement(false);
             this.setColour(65);
             this.setTooltip('Execute included blocks after a specified delay');
-            this.setMutator(new Blockly.Mutator(['onCancelMutator']));
+            this.setMutator(new Blockly.Mutator(['onCancelMutator','onPauseMutator','onContinueMutator']));
         },
 
         mutationToDom: function() {
             var container = document.createElement('mutation');
+            container.setAttribute('hasPause', this.hasPause==true);
+            container.setAttribute('hasContinue', this.hasContinue==true);
             container.setAttribute('hasCancel', this.hasCancel==true);
             return container;
         },
 
         domToMutation: function(xmlElement) {
+            this.hasPause = xmlElement.getAttribute('haspause')=='true';
+            if(this.hasPause) this.appendStatementInput("pause_statement")
+                .appendField("on pause");
+            this.hasContinue = xmlElement.getAttribute('hascontinue')=='true';
+            if(this.hasContinue) this.appendStatementInput("continue_statement")
+                .appendField("on continue");
             this.hasCancel = xmlElement.getAttribute('hascancel')=='true';
             if(this.hasCancel) this.appendStatementInput("cancel_statement")
                 .appendField("on cancel");
@@ -277,6 +340,18 @@ MyBlocks=function() {
             var containerBlock = Blockly.Block.obtain(workspace, 'afterMutator');
             containerBlock.initSvg();
             var connection = containerBlock.getInput('STACK').connection;
+            if (this.hasPause===true) {
+                var pauseBlock = Blockly.Block.obtain(workspace, 'onPauseMutator');
+                pauseBlock.initSvg();
+                connection.connect(pauseBlock.previousConnection);
+                connection=pauseBlock.nextConnection;
+            }
+            if (this.hasContinue===true) {
+                var continueBlock = Blockly.Block.obtain(workspace, 'onContinueMutator');
+                continueBlock.initSvg();
+                connection.connect(continueBlock.previousConnection);
+                connection=continueBlock.nextConnection;
+            }
             if (this.hasCancel===true) {
                 var cancelBlock = Blockly.Block.obtain(workspace, 'onCancelMutator');
                 cancelBlock.initSvg();
@@ -287,15 +362,33 @@ MyBlocks=function() {
 
         compose: function(containerBlock) {
             // Disconnect the else input blocks and remove the inputs.
-            if (this.hasCancel) {
-                this.removeInput('cancel_statement');
-            }
+            if (this.hasCancel) this.removeInput('cancel_statement');
             this.hasCancel = false;
+            if (this.hasPause) this.removeInput('pause_statement');
+            this.hasPause = false;
+            if (this.hasContinue) this.removeInput('continue_statement');
+            this.hasContinue = false;
 
             // Rebuild the block's optional inputs.
             var clauseBlock = containerBlock.getInputTargetBlock('STACK');
             while (clauseBlock) {
                 switch (clauseBlock.type) {
+                    case 'onPauseMutator':
+                        this.hasPause=true;
+                        var elseInput = this.appendStatementInput('pause_statement');
+                        elseInput.appendField("on pause");
+                        if (clauseBlock.statementConnection_) {
+                            elseInput.connection.connect(clauseBlock.statementConnection_);
+                        }
+                        break;
+                    case 'onContinueMutator':
+                        this.hasContinue=true;
+                        var elseInput = this.appendStatementInput('continue_statement');
+                        elseInput.appendField("on continue");
+                        if (clauseBlock.statementConnection_) {
+                            elseInput.connection.connect(clauseBlock.statementConnection_);
+                        }
+                        break;
                     case 'onCancelMutator':
                         this.hasCancel=true;
                         var elseInput = this.appendStatementInput('cancel_statement');
@@ -319,7 +412,7 @@ MyBlocks=function() {
             this.setColour(Blockly.Blocks.logic.HUE);
             this.appendDummyInput()
                 .appendField('After');
-            this.appendStatementInput('STACK');
+            this.appendStatementInput('STACK').setCheck(["cancel","init"]);
             this.contextMenu = false;
         }
     };
@@ -335,10 +428,35 @@ MyBlocks=function() {
         }
     };
 
+    Blockly.Blocks['onPauseMutator'] = {
+        init: function() {
+            this.setColour(Blockly.Blocks.logic.HUE);
+            this.appendDummyInput()
+                .appendField('On pause');
+            this.setPreviousStatement(true,'init');
+            this.setNextStatement(true,'pause');
+            this.setTooltip("Executed when the action processing is paused");
+            this.contextMenu = false;
+        }
+    };
+
+    Blockly.Blocks['onContinueMutator'] = {
+        init: function() {
+            this.setColour(Blockly.Blocks.logic.HUE);
+            this.appendDummyInput()
+                .appendField('On continue');
+            this.setPreviousStatement(true,'pause');
+            this.setNextStatement(true,'cancel');
+            this.setTooltip("Executed when the action is resumed before it has been paused previously");
+            this.contextMenu = false;
+        }
+    };
 
     Blockly.JavaScript['after'] = function(block) {
         var dropdown_unit = block.getFieldValue('unit');
         var statements_statements = Blockly.JavaScript.statementToCode(block, 'statements');
+        var pause_statements = Blockly.JavaScript.statementToCode(block, 'pause_statement');
+        var continue_statements = Blockly.JavaScript.statementToCode(block, 'continue_statement');
         var cancel_statements = Blockly.JavaScript.statementToCode(block, 'cancel_statement');
         // TODO: Assemble JavaScript into code variable.
         var value_delay = Blockly.JavaScript.valueToCode(block, 'delay', Blockly.JavaScript.ORDER_ATOMIC);
@@ -353,8 +471,20 @@ MyBlocks=function() {
             default:
                 multiplier=1;
         }
-        var code = 'callCompletion=false;\ncontext.setTimeout( ('+value_delay+')*'+multiplier+',function(context, whenDone) {\n      var callCompletion=true;\n  '+statements_statements+'    if (callCompletion) whenDone(context);\n   },\n' +
-            '   function(context,whenDone) {\n      var callCompletion=true;\n'+cancel_statements+ '      if (callCompletion) whenDone(context);\n   },\n   whenDone);';
+
+        let pause=pause_statements==='' ? 'undefined,\n' :
+            ('function(context, whenDone) {\n      var callCompletion=true;\n  '+pause_statements+      '    if (callCompletion) whenDone(context);\n   },\n');
+        console.log(pause);
+
+        let cont=continue_statements==='' ? 'undefined,\n' :
+            ('function(context, whenDone) {\n      var callCompletion=true;\n  '+continue_statements+      '    if (callCompletion) whenDone(context);\n   },\n');
+        let cancel=cancel_statements==='' ? 'undefined);\n' :
+            ('   function(context,whenDone) {\n      var callCompletion=true;\n'+cancel_statements+   '      if (callCompletion) whenDone(context);\n   },\n   whenDone);')
+        var code = 'callCompletion=false;\ncontext.setTimeout( ('+value_delay+')*'+multiplier+
+            ',function(context, whenDone) {\n      var callCompletion=true;\n  '+statements_statements+'    if (callCompletion) whenDone(context);\n   },\n' +
+               pause +
+               cont +
+               cancel;
         return code;
     };
 

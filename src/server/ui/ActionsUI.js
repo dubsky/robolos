@@ -1,6 +1,3 @@
-
-
-
 class ActionsUIClass extends Observable {
 
     /** Strip server side only information */
@@ -19,7 +16,7 @@ class ActionsUIClass extends Observable {
                     var srcStatus=action[attrname];
                     var targetStatus=mergeTarget.actionStatus = { status: srcStatus.status,lastRun: srcStatus.lastRun, message:srcStatus.message } ;
                     if(srcStatus.wait!==undefined) {
-                        targetStatus.wait={ since : srcStatus.wait.since, duration : srcStatus.wait.duration }
+                        targetStatus.wait={ since : srcStatus.wait.since, duration : srcStatus.wait.duration, elapsedTime: srcStatus.wait.elapsedTime}
                     }
                     break;
                 default:
@@ -28,7 +25,6 @@ class ActionsUIClass extends Observable {
         }
         return mergeTarget;
     }
-
 }
 
 ActionsUI=new ActionsUIClass();
@@ -72,25 +68,30 @@ Meteor.publish('actions', function(filter,reactive){
     }
 });
 
+
+
+function performOperationOnAction(actionId,f) {
+    var action=ActionsInstance.getAction(actionId);
+    if(action===undefined) {
+        log.error('unknown action:'+actionId);
+    }
+    else {
+        f(action);
+    }
+}
+
 Meteor.methods({
     startAction: function(actionId) {
-        var action=ActionsInstance.getAction(actionId);
-        if((typeof action)==='undefined') {
-            log.error('unknown action:'+actionId);
-        }
-        else {
-            ActionsInstance.startAction(action);
-        }
+        performOperationOnAction(actionId,(action)=> {ActionsInstance.startAction(action)});
     },
-
     stopAction: function(actionId) {
-        var action=ActionsInstance.getAction(actionId);
-        if((typeof action)==='undefined') {
-            log.error('unknown action:'+actionId);
-        }
-        else {
-            ActionsInstance.stopAction(action);
-        }
+        performOperationOnAction(actionId,(action)=> {ActionsInstance.stopAction(action)});
+    },
+    pauseAction: function(actionId) {
+        performOperationOnAction(actionId,(action)=> {ActionsInstance.pauseAction(action)});
+    },
+    continueAction: function(actionId) {
+        performOperationOnAction(actionId,(action)=> {ActionsInstance.continueAction(action)});
     },
 
     createAction: function(action) {

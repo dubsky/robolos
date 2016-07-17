@@ -80,6 +80,7 @@ meteor@1.1.14
 meteor-base@1.0.4
 meteorhacks:async@1.0.0
 meteorhacks:npm@1.5.0
+meteorhacks:ssr@2.2.0
 minifier-css@1.1.11
 minifier-js@1.1.11
 minimongo@1.0.16

@@ -52,3 +52,4 @@ tomi:upload-jquery
 standard-minifier-css
 standard-minifier-js
 email
+meteorhacks:ssr

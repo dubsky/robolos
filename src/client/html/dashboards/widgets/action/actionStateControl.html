@@ -1,0 +1,11 @@
+<template name="actionStateControl">
+        <div class="ui two column divided center aligned grid actionControl">
+            {{!--style="margin-right:-5px" --}}
+            <div class="column" style="margin-right:-3px;cursor: pointer;" onclick="Template.actionWidget.continue('{{data.widget.widget.action}}');">
+                <i class="play icon"></i>
+            </div>
+            <div class="column" style="margin-right:-3px;cursor: pointer;" onclick="Template.actionWidget.stop('{{data.widget.widget.action}}');">
+                <i class="stop icon"></i>
+            </div>
+        </div>
+</template>
