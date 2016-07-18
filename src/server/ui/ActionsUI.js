@@ -16,7 +16,13 @@ class ActionsUIClass extends Observable {
                     var srcStatus=action[attrname];
                     var targetStatus=mergeTarget.actionStatus = { status: srcStatus.status,lastRun: srcStatus.lastRun, message:srcStatus.message } ;
                     if(srcStatus.wait!==undefined) {
-                        targetStatus.wait={ since : srcStatus.wait.since, duration : srcStatus.wait.duration, elapsedTime: srcStatus.wait.elapsedTime}
+                        targetStatus.wait={
+                            since : srcStatus.wait.since,
+                            duration : srcStatus.wait.duration,
+                            elapsedTime: srcStatus.wait.elapsedTime,
+                            pauseAvailable: srcStatus.wait.pauseAvailable,
+                            cancelAvailable: srcStatus.wait.cancelAvailable
+                        }
                     }
                     break;
                 default:

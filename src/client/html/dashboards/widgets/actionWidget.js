@@ -41,17 +41,43 @@ Template.actionWidget.helpers({
 Template.actionWidget.idGenerator=0;
 
 
-Template.actionWidget.stop=function(action,id) {
-    $('.actionControl').hide();
+Template.actionWidget.stop=function(action) {
+    $('.popup').hide();
+    $('.popup').remove();
+    // the above is an ugly workaround
+    //$('.actionControl').hide();
     if (!Session.get(DASHBOARD_EDIT_MODE)) {
         Meteor.call('stopAction',action);
     }
 };
 
-Template.actionWidget.continue=function(action,id) {
-    $('.actionControl').hide();
+Template.actionWidget.continue=function(action) {
+    $('.popup').hide();
+    $('.popup').remove();
+    // the above is an ugly workaround
+    //$('.actionControl').hide();
     if (!Session.get(DASHBOARD_EDIT_MODE)) {
         Meteor.call('continueAction',action);
+    }
+};
+
+
+var openPopup=function(e,data) {
+    if (!Session.get(DASHBOARD_EDIT_MODE)) {
+        var target = $(e.currentTarget);
+        var template = Blaze.toHTMLWithData(Template.actionStateControl, {
+                data: data,
+                id: Template.actionWidget.idGenerator++
+            }
+        );
+        $(target).popup({
+            position: 'top left',
+            hoverable: true,
+            on:'click',
+            //variation: 'very wide',
+            html: template
+        });
+        $(target).popup('show');
     }
 };
 
@@ -63,33 +89,20 @@ Template.actionWidget.events({
         }
     },
 
-    'click .pauseAction' : function() {
-        if (!Session.get(DASHBOARD_EDIT_MODE)) {
-            Meteor.call('pauseAction',this.widget.widget.action);
+    'click .pauseAction' : function(e) {
+        console.log(this);
+        if(this.wait.pauseAvailable) {
+            if (!Session.get(DASHBOARD_EDIT_MODE)) {
+                Meteor.call('pauseAction',this.widget.widget.action);
+            }
+        }
+        else if (this.wait.cancelAvailable) {
+            openPopup(e,this);
         }
     },
 
     'click .openResumeMenu' : function(e) {
-        if (!Session.get(DASHBOARD_EDIT_MODE)) {
-            var target = $(e.currentTarget);
-            var template = Blaze.toHTMLWithData(Template.actionStateControl, {
-                    data: this,
-                    id: Template.actionWidget.idGenerator++
-                }
-            );
-            $(target).popup({
-                position: 'top left',
-                hoverable: true,
-                on:'click',
-                //variation: 'very wide',
-                html: template,
-                delay: {
-                    show: 300,
-                    hide: 800
-                }
-            });
-            $(target).popup('show');
-        }
+        openPopup(e,this);
     }
 
 });

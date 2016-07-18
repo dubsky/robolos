@@ -342,12 +342,15 @@ class Actions {
                         {
                             actionStatus.wait.since=now;
                             actionStatus.wait.currentWaitHandle=Meteor.setTimeout(function() {
-                                actionStatus.status=ActionStatus.RUNNING;
-                                let onTimeout=actionStatus.wait.onTimeout;
-                                let whenDone=actionStatus.wait.whenDone;
-                                delete actionStatus.message;
-                                delete actionStatus.wait;
-                                onTimeout(context,whenDone);
+                                if(actionStatus.status===ActionStatus.WAITING) // make sure that the action is in consistent state
+                                {
+                                    actionStatus.status=ActionStatus.RUNNING;
+                                    let onTimeout=actionStatus.wait.onTimeout;
+                                    let whenDone=actionStatus.wait.whenDone;
+                                    delete actionStatus.message;
+                                    delete actionStatus.wait;
+                                    onTimeout(context,whenDone);
+                                }
                             },actionStatus.wait.duration-actionStatus.wait.elapsedTime);
                             actionStatus.status=ActionStatus.WAITING;
                         }
@@ -355,7 +358,10 @@ class Actions {
                         {
                             srcStatus.wait.since=now;
                             actionStatus.wait.currentWaitHandle=Meteor.setTimeout(function() {
-                                context.cancelWaitForAction(actionStatus.wait.onCancel);
+                                if(actionStatus.status===ActionStatus.WAITING_FOR_CONDITION) // make sure that the action is in consistent state
+                                {
+                                    context.cancelWaitForAction(actionStatus.wait.onCancel);
+                                }
                             },actionStatus.wait.duration-actionStatus.wait.elapsedTime);
                             actionStatus.status=ActionStatus.WAITING_FOR_CONDITION;
                         }
@@ -378,8 +384,8 @@ class Actions {
             if (actionStatus === undefined) return;
             var context = new ActionContext(action, actionStatus);
 
-            if (!actionStatus.wait.cancelAvailable) {
-                log.error('This action does not support cancel operation');
+            if (actionStatus.wait===undefined || !actionStatus.wait.cancelAvailable) {
+                log.error('This action can\'t be cancelled');
                 return;
             }
 

@@ -287,7 +287,7 @@ MyBlocks=function() {
             ('function(context, whenDone) {\n      var callCompletion=true;\n  '+pause_statements+      '    if (callCompletion) whenDone(context);\n   },\n');
         let cont=continue_statements==='' ? 'undefined,\n' :
             ('function(context, whenDone) {\n      var callCompletion=true;\n  '+continue_statements+      '    if (callCompletion) whenDone(context);\n   },\n');
-        let cancel=cancel_statements==='' ? 'undefined);\n' :
+        let cancel=cancel_statements==='' ? 'undefined, whenDone);\n' :
             ('   function(context,whenDone) {\n      var callCompletion=true;\n'+cancel_statements+   '      if (callCompletion) whenDone(context);\n   },\n   whenDone);')
         var code = 'callCompletion=false;\ncontext.waitFor( '+timeout+','+condition+
             ',function(context, whenDone) {\n      var callCompletion=true;\n  '+statements_statements+'    if (callCompletion) whenDone(context);\n   },\n' +
@@ -478,7 +478,7 @@ MyBlocks=function() {
 
         let cont=continue_statements==='' ? 'undefined,\n' :
             ('function(context, whenDone) {\n      var callCompletion=true;\n  '+continue_statements+      '    if (callCompletion) whenDone(context);\n   },\n');
-        let cancel=cancel_statements==='' ? 'undefined);\n' :
+        let cancel=cancel_statements==='' ? 'undefined, whenDone);\n' :
             ('   function(context,whenDone) {\n      var callCompletion=true;\n'+cancel_statements+   '      if (callCompletion) whenDone(context);\n   },\n   whenDone);')
         var code = 'callCompletion=false;\ncontext.setTimeout( ('+value_delay+')*'+multiplier+
             ',function(context, whenDone) {\n      var callCompletion=true;\n  '+statements_statements+'    if (callCompletion) whenDone(context);\n   },\n' +
