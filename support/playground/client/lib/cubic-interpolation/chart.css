@@ -1,4 +1,4 @@
-/* cubic splines */
+ /* cubic splines */
 
 .cubic_spline { position: relative; left: 80px; font-size: 0.95em; -webkit-user-select: none; }
 .cubic_spline canvas { border: 1px solid #000; }
