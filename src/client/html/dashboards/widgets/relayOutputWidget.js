@@ -9,8 +9,9 @@ Template.relayOutputWidget.helpers({
 });
 
 Template.relayOutputWidget.events({
-   'click .button' : function() {
+   'click .button' : function(e) {
        if (!Session.get(DASHBOARD_EDIT_MODE)) {
+           $(e.toElement).transition('pulse');
            Meteor.call('actionSwitchOver', this.widget.driver, this.widget.device, this.widget.sensor);
        }
    }

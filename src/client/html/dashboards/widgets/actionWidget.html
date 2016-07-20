@@ -32,15 +32,15 @@
             {{#with data}}
                 <div class="content">
 
-                    <div style="position:absolute; left: 50%;margin-top:40px;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: white;">
 
+                    <div class="actionOverlay" style="margin-top:40px;"> {{!-- gridster css conflict--}}
                         {{#if isRunning}}
-                            <div style="position: relative; left: -50%;" class="stopAction">
-                                <div style="width: 165px;border-bottom: 8px">
+                            <div class="actionTexts {{actionClass}}">
+                                <div class="actionLabel">
                                     {{#if message}}
-                                        <span class="sensorLabelSmall" style="font-weight: 900;color: black">&nbsp;{{message}}</span>
+                                        <span class="sensorLabelSmall actionMessage">&nbsp;{{message}}</span>
                                     {{else}}
-                                        <span class="sensorLabelSmall">RUNNING...</span>
+                                            <span class="sensorLabelSmall">RUNNING...</span>
                                     {{/if}}
                                 </div>
                                 <div>
@@ -49,9 +49,16 @@
                                     {{/if}}
                                 </div>
                             </div>
-
                         {{/if}}
                     </div>
+
+                    {{#if paused}}
+                        <div class="actionOverlay openResumeMenu" style="margin-top:40px;"> {{!-- gridster css conflict--}}
+                            <div class="actionTexts">
+                                <span class="sensorLabelMedium">PAUSED</span>
+                            </div>
+                        </div>
+                    {{/if}}
 
                     <img class="button dashboardIcon" src="{{icon}}"/>
 

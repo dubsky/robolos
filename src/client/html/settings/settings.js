@@ -3,7 +3,10 @@ Router.route('settings',
         this.render('settings');
     },
     {
-        name: 'settings'
+        name: 'settings',
+        waitOn: function() {
+            return [App.subscribe("settings")];
+        }
     }
 );
 

@@ -1,0 +1,40 @@
+<template name="emailSettings">
+
+
+    <div class="ui padded segment">
+        <h2 class="ui header">Email Notifications</h2>
+        <p>
+            Setup SMTP server to deliver email notifications. If you don't have access to your own server you may use the Google SMTP service
+            as described <a href="https://www.digitalocean.com/community/tutorials/how-to-use-google-s-smtp-server">here.</a>
+        </p>
+
+        {{#if message}}
+        <div class="ui message">
+            <i class="close icon"></i>
+            <div class="header">
+                Message Sent with the following results:
+            </div>
+            <p>{{message}}</p>
+        </div>
+        {{/if}}
+
+        <div>
+            {{#autoForm id="emailSettingsForm" type="method-update" validation="keyup" meteormethod="updateSettings" collection=collection doc=settings schema=schema autocomplete="nope"}}
+                <div class="two fields">
+                    {{> afQuickField name="smtpServer"}}
+                    {{> afQuickField name="smtpTLS" type="boolean-select" trueLabel="Yes" falseLabel="No"}}
+                </div>
+                <div class="two fields">
+                    {{> afQuickField name="smtpUserName" autocomplete='nope'}}
+                    {{> afQuickField name="smtpPassword" type="password" autocomplete='nope'}}
+                </div>
+                <button class="ui primary button customSubmit" disabled="{{saveDisabled}}">Save</button>
+                <button href="#" class="ui secondary button sendTestMessage">
+                    Send Test Message
+                </button>
+            {{/autoForm}}
+        </div>
+
+    </div>
+
+</template>

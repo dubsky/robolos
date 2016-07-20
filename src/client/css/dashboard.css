@@ -164,3 +164,35 @@
     top:44%;
 }
 
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -khtml-user-select: none;    /* Konqueror */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
+}
+
+.actionOverlay {
+    position:absolute; left: 50%;margin-top:40px;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: white;
+}
+
+.actionTexts {
+    position: relative;
+    left: -50%;
+}
+
+.actionLabel {
+    width: 165px;
+    border-bottom: 8px
+}
+
+.actionMessage {
+    font-weight: 900;
+    color: black;
+}
+
+.resumeAction {
+    opacity:0.4;
+}

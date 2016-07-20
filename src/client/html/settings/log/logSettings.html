@@ -12,7 +12,7 @@
                 {{> afQuickField name="logCapacity"}}
                 <p>By default logging of sensor changes and action execution is disabled:</p>
                 {{> afQuickField name="enableEventLogging"}}
-                <button type="submit" class="ui primary button submit" disabled="{{saveDisabled}}">Save</button>
+                <button class="ui primary button customSubmit" disabled="{{saveDisabled}}">Save</button>
                 <a href="{{pathFor 'log'}}" class="ui secondary button resetKeywords">
                     View Log Messages
                 </a>

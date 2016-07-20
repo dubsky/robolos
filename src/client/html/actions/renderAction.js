@@ -67,6 +67,7 @@ Template.renderAction.onRendered(function() {
         blocklyDiv.style.height = (contentWrapper.offsetHeight-contentHeader.offsetHeight-30-55+40) + 'px';
     };
     window.addEventListener('resize', onresize, false);
+    onresize();
     blocklyDiv.style.height = (contentWrapper.offsetHeight-contentHeader.offsetHeight-30-55+40) + 'px';
 
     MyBlocks();
@@ -93,7 +94,7 @@ Template.renderAction.onRendered(function() {
     var xmlDom = Blockly.Xml.textToDom(xml);
 
     try {
-        Blockly.Xml.domToWorkspace(this.workspace, xmlDom);
+        Blockly.Xml.domToWorkspace( xmlDom,this.workspace);
     }
     catch(e) {
         console.log(e);
@@ -106,7 +107,7 @@ Template.renderAction.onRendered(function() {
         var xml_text = Blockly.Xml.domToText(xml);
 
         var code = Blockly.JavaScript.workspaceToCode(self.workspace);
-        //console.log(code);
+        console.log(code);
 
         if(xml_text!==action.xml)
         {

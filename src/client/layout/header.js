@@ -2,7 +2,12 @@ Template.header.events({
     "click .signOut": function() {
         AccountsTemplates.logout();
         Router.go('homepage');
-    }
+    },
+
+    "click .signIn": function() {
+        Router.go('atSignIn');
+    },
+
     /*
     ,
     "click .item": function() {
@@ -17,7 +22,12 @@ Template.header.events({
 
 Template.header.helpers({
     renderHeader:function() {
-        let settings=Collections.Settings.findOne(Collections.Settings.SETTINGS_DOCUMENT_ID);
+        let settings=Collections.Settings.findOne(Collections.Settings.USER_SETTINGS_DOCUMENT_ID);
         return Meteor.user()!=null || (settings!=undefined && settings.anonymousAccessToDashboards);
+    },
+
+    isAdministrator : function() {
+        return Session.get(USER_ROLE)===Collections.Users.RoleKeys.administrator;
     }
+
 });

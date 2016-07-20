@@ -1,0 +1,22 @@
+<template name="actionStateControl">
+    {{#if data.wait.pauseAvailable}}
+        {{#if data.wait.cancelAvailable}}
+            <div class="ui two column divided center aligned grid actionControl">
+                <div class="column" style="margin-right:-3px;cursor: pointer;" onclick="Template.actionWidget.continue('{{data.widget.widget.action}}');">
+                    <i class="play icon"></i>
+                </div>
+                <div class="column" style="margin-right:-3px;cursor: pointer;" onclick="Template.actionWidget.stop('{{data.widget.widget.action}}');">
+                    <i class="stop icon"></i>
+                </div>
+            </div>
+        {{else}}
+               <div class="actionControl" style="margin-right:-3px;cursor: pointer;" onclick="Template.actionWidget.continue('{{data.widget.widget.action}}');">
+                    <i class="play icon"></i>
+               </div>
+        {{/if}}
+    {{else}}
+            <div class="actionControl" style="margin-right:-3px;cursor: pointer;" onclick="Template.actionWidget.stop('{{data.widget.widget.action}}');">
+                <i class="stop icon"></i>
+            </div>
+    {{/if}}
+</template>

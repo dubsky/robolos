@@ -7,8 +7,8 @@ Template.dataLoggingSettings.helpers({
     schema: Schemas.Settings,
 
     settings: function() {
-        let doc=Collections.Settings.findOne(Collections.Settings.SETTINGS_DOCUMENT_ID);
-        Schemas.Settings.clean(doc);
+        let doc=Collections.Settings.findOne(Collections.Settings.SETTINGS_DOCUMENT_ID,{reactive:false});
+        //Schemas.Settings.clean(doc);
         return doc;
     },
 
@@ -27,25 +27,39 @@ Template.dataLoggingSettings.onCreated(function() {
     Session.set(LOG_DATA_CLEARED,false);
 });
 
+Template.dataLoggingSettings.onRendered(function() {
+    let enable=function() {
+        Session.set(SESSION_KEY,false);
+    };
+    let selector=$("#dataLoggingSettingsForm :input");
+    selector.keyup(enable);
+    selector.change(enable);
+});
+
+Template.dataLoggingSettings.onDestroyed(function() {
+    delete Template.dataLoggingSettings.modifier;
+});
+
 Template.dataLoggingSettings.events({
     'click .clearLogData' : function() {
         Meteor.call('DataLoggingUI_clearData',function() {
             Session.set(LOG_DATA_CLEARED, true);
         });
         return false;
+    },
+
+    'click .customSubmit': function() {
+        if (AutoForm.validateForm('dataLoggingSettingsForm')) {
+            Meteor.call('updateSettings',Template.dataLoggingSettings.modifier,function() { Session.set(SESSION_KEY,true); });
+        }
+        return false;
     }
 });
 
-
 AutoForm.hooks({
     dataLoggingSettingsForm: {
-        after: {
-            'method-update': function() {
-                Session.set(SESSION_KEY,true);//setTimeout(function() {Session.set(SESSION_KEY,true);},100);
-            }
-        },
         formToModifier: function(modifier) {
-            Session.set(SESSION_KEY,false);
+            Template.dataLoggingSettings.modifier=modifier;
             return modifier;
         }
     }

@@ -1,9 +1,12 @@
+USER_ROLE="CURRENT_USER_ROLE";
 
 var routesConfigured=false;
 
 var settingsReady=function() {
 
-    let settings=Collections.Settings.findOne(Collections.Settings.SETTINGS_DOCUMENT_ID);
+    let settings=Collections.Settings.findOne(Collections.Settings.USER_SETTINGS_DOCUMENT_ID,{reactive:false});
+    Session.set(USER_ROLE,settings.role);
+
     AccountsTemplates._initialized = false;
 
     AccountsTemplates.configure({
@@ -11,8 +14,16 @@ var settingsReady=function() {
         forbidClientAccountCreation: !settings.selfRegistration,
         enablePasswordChange:true,
         onLogoutHook: function() {
+            Session.set(USER_ROLE,Collections.Users.RoleKeys.observer);
             Router.go('homepage');
+        },
+        onSubmitHook: function() {
+            Meteor.subscribe('userSettings',false,{ onReady: function() {
+                let settings=Collections.Settings.findOne(Collections.Settings.USER_SETTINGS_DOCUMENT_ID,{reactive:false});
+                Session.set(USER_ROLE,settings.role);
+            } } );
         }
+
     });
 
     if(!routesConfigured)
@@ -22,16 +33,17 @@ var settingsReady=function() {
         routesConfigured=true;
     }
 
-    let softPages=settings.anonymousAccessToDashboards ? ['homepage', 'render.dashboard.redirect', 'render.dashboard','calendar']: [];
+    let softPages=settings.anonymousAccessToDashboards ? ['/','homepage', 'render.dashboard.redirect', 'render.dashboard','calendar']: [];
+    let allSoftPages=_.pluck(AccountsTemplates.routes, 'name').concat(softPages);
     Router.plugin('ensureSignedIn', {
-        except: _.pluck(AccountsTemplates.routes, 'name').concat(softPages)
+        except: allSoftPages
     });
 
 };
 
 let ApplicationController = RouteController.extend({
     layoutTemplate: 'layout',
-    waitOn: function () { return Meteor.subscribe('settings', { onReady: settingsReady } ); },
+    waitOn: function () { return Meteor.subscribe('userSettings', { onReady: settingsReady } ); },
     onBeforeAction : function () {
         var context=EditContext.getContext();
         if(context!==undefined) context.contextHook(this);
@@ -51,10 +63,3 @@ Meteor.startup(function() {
     Uploader.uploadUrl = Meteor.absoluteUrl("upload"); // Cordova needs absolute URL
 });
 
-/*
-Router.onBeforeAction(function () {
- var context=EditContext.getContext();
- if(context!==undefined) context.contextHook(this);
- this.next();
-});
-*/

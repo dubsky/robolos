@@ -11,8 +11,8 @@ DefineVariableField =function () {
      * @constructor
      */
     Blockly.FieldControlVariable = function(text, opt_changeHandler) {
-        Blockly.FieldControlVariable.superClass_.constructor.call(this, text);
-        this.setChangeHandler(opt_changeHandler);
+        Blockly.FieldControlVariable.superClass_.constructor.call(this, text,opt_changeHandler);
+        //this.setChangeHandler(opt_changeHandler);
     };
     goog.inherits(Blockly.FieldControlVariable, Blockly.Field);
 
@@ -34,7 +34,7 @@ DefineVariableField =function () {
      * Allow browser to spellcheck this field.
      * @private
      */
-    Blockly.FieldControlVariable.prototype.spellcheck_ = true;
+    Blockly.FieldControlVariable.prototype.spellcheck_ = false;
 
     /**
      * Close the input widget if this input is being deleted.
@@ -44,31 +44,12 @@ DefineVariableField =function () {
         Blockly.FieldControlVariable.superClass_.dispose.call(this);
     };
 
-    /**
-     * Set the text in this field.
-     * @param {?string} text New text.
-     * @override
-     */
-    Blockly.FieldControlVariable.prototype.setText = function(text) {
-        if (text === null) {
-            // No change if null.
-            return;
-        }
-        if (this.sourceBlock_ && this.changeHandler_) {
-            var validated = this.changeHandler_(text);
-            // If the new text is invalid, validation returns null.
-            // In this case we still want to display the illegal result.
-            if (validated !== null && validated !== undefined) {
-                text = validated;
-            }
-        }
-        Blockly.Field.prototype.setText.call(this, text);
-        this.fs_text=text;
-    };
-
     Blockly.FieldControlVariable.prototype.setValue=function(value) {
         if((typeof value)!=='undefined' && value!==null && value!=='') {
-            this.setText(EJSON.parse(value).name);
+            if(value==='...')
+                this.setText(value);
+            else
+                this.setText(EJSON.parse(value).name);
         }
         this.value=value;
     };

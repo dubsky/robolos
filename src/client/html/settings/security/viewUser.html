@@ -1,0 +1,31 @@
+<template name="viewUser">
+
+    <div class="ui container">
+
+        <section class="content-header narrow">
+            <h1 class="ui dividing header">Edit User Properties
+                <small>{{name}}</small>
+            </h1>
+            <br/>
+        </section>
+
+        <section class="content">
+
+            <div>
+                {{#autoForm id="viewUserForm" type="method" validation="keyup" doc=user meteormethod="updateUser" schema=schema}}
+                    {{#unless isSelfEdit}}
+                        {{> afQuickField name="password" type="password"}}
+                        {{> afQuickField name="role" type="select" options=roleOptions }}
+                    {{/unless}}
+                    <div class="ui visible message">
+                        <p>If left unchecked, the user will not receive email notifications</p>
+                    </div>
+                    {{> afQuickField name="receivesNotifications"}}
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default cancel">Cancel</button>
+                {{/autoForm}}
+            </div>
+        </section>
+    </div>
+
+</template>

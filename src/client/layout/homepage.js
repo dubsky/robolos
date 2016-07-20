@@ -22,11 +22,9 @@ var loadStats=function () {
     }
 };
 
-var wait={
-    waitOn: function() {
+var wait=function() {
         return Meteor.subscribe('systemStatistics');
-    }
 };
 
-Router.route('/', loadStats, wait);
-Router.route('homepage',loadStats,wait);
+Router.route('/', loadStats,{name:'/', waitOn:wait});
+Router.route('homepage',loadStats,{name:'homepage', waitOn:wait});
