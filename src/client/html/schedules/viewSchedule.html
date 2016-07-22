@@ -16,17 +16,33 @@
                 {{> afQuickField name="title"}}
                 {{> afQuickField name="description" rows=3}}
                 {{> afQuickField name="keywords" type="keywords"}}
-                {{> afQuickField name="action" type="action" icon="fa-clock-o"}}
-                <h4 class="ui dividing header">Schedule</h4>
-                {{#if schedule.cron}}
+
+                {{#if type 'cron'}}
+                    <h4 class="ui dividing header">Schedule</h4>
                     {{> afQuickField label=false name="cron" type="cronEntry"}}
-                {{else}}
+                    {{> afQuickField name="action" type="action" icon="fa-clock-o"}}
+                {{/if}}
+                <br/>
+                {{#if type 'one-time'}}
                     {{> afQuickField name="executeOn" type="datetime-local"}}
+                    {{> afQuickField name="action" type="action" icon="fa-clock-o"}}
+                {{/if}}
+                {{#if type 'value'}}
+
+                    <h4 class="ui dividing header" style="margin-top:0">Value Schedule for the Whole Day</h4>
+                    {{> analogValueChart data=analogValueData }}
+                    <br/>
+                    <br/>
+                    {{> afQuickField name="analogValueSchedule.minValue"}}
+                    {{> afQuickField name="analogValueSchedule.maxValue"}}
+                    {{> afQuickField label="Execute an action when value changes more than 1%" name="action" type="action" icon="fa-clock-o"}}
                 {{/if}}
 
                 <br/>
                 <button type="submit" class="btn btn-primary">Save</button>
                 <button type="button" class="btn btn-default cancel">Cancel</button>
+                <br/>
+                <br/>
             {{/autoForm}}
         </div>
     </section>

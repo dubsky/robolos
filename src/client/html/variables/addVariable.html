@@ -21,7 +21,7 @@
                         {{> afQuickField name="onChangeAction" type="action" icon="fa-clock-o"}}
 
                         {{> afQuickField type="select" name="modifiedBy" options=modificationOptions}}
-                        {{> afQuickField class="typeSelector" name="type" type="select" options=typeOptions}}
+                        {{> afQuickField class="fluid selection typeSelector" name="type" type="select" options=typeOptions}}
 
                         {{#if selectedType 'string'}}
                             {{> afQuickField label="Initial Value" name="stringValue"}}

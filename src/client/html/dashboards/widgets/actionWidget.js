@@ -1,3 +1,9 @@
+isActionRunning=function(actionData) {
+    if(actionData===undefined||actionData.actionStatus===undefined) return false;
+    return actionData.actionStatus.status==='RUN' || actionData.actionStatus.status==='WAIT' || actionData.actionStatus.status==='CONDITION' || actionData.actionStatus.status==='PAUSED';
+};
+
+
 Template.actionWidget.helpers({
 
     data: function () {
@@ -10,7 +16,7 @@ Template.actionWidget.helpers({
         var wait;
         var paused;
 
-        if((typeof actionData)==='undefined'||(typeof actionData.actionStatus)==='undefined') {
+        if(actionData===undefined||actionData.actionStatus===undefined) {
             lastRun="Unknown";
             isRunning=false;
             message='';
@@ -19,7 +25,7 @@ Template.actionWidget.helpers({
         {
             wait=actionData.actionStatus.wait;
             lastRun=DateUtils.getDateString(actionData.actionStatus.lastRun);
-            isRunning=actionData.actionStatus.status==='RUN' || actionData.actionStatus.status==='WAIT' || actionData.actionStatus.status==='CONDITION' || actionData.actionStatus.status==='PAUSED';
+            isRunning=isActionRunning(actionData);
             paused=actionData.actionStatus.status==='PAUSED';
             message=actionData.actionStatus.message;
         }
@@ -37,6 +43,7 @@ Template.actionWidget.helpers({
     },
 
 });
+
 
 Template.actionWidget.idGenerator=0;
 
@@ -90,7 +97,6 @@ Template.actionWidget.events({
     },
 
     'click .pauseAction' : function(e) {
-        console.log(this);
         if(this.wait.pauseAvailable) {
             if (!Session.get(DASHBOARD_EDIT_MODE)) {
                 Meteor.call('pauseAction',this.widget.widget.action);

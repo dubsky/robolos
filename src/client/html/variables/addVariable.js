@@ -1,3 +1,9 @@
+let prepareInitialType=function(context) {
+    let c=Collections.Variables.Types[0].value;
+    if(context!==undefined && context.variable!==undefined && context.variable.type!==undefined) c=context.variable.type;
+    return c;
+}
+
 Template.addVariable.helpers({
 
     collection: function() {
@@ -16,21 +22,30 @@ Template.addVariable.helpers({
 
     selectedType:function(type) {
         return type===Session.get("selectedType");
+    },
+
+    variable() {
+        return (this.variable===undefined || this.variable.type===undefined) ? { type: prepareInitialType(this) } : this.variable;
     }
 });
 
 Template.addVariable.events({
 
     'change .typeSelector' : function(e) {
-        console.log(e.target.value);
         Session.set("selectedType", e.target.value);
     },
 
     'click .cancel' :function(event) {
+        EditContext.setContext(undefined);
         Router.go('variables');
         return false;
     }
 
+});
+
+
+Template.addVariable.onCreated(function() {
+    Session.set("selectedType", prepareInitialType(this.data));
 });
 
 Router.route('variable-create', function () {

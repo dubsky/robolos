@@ -10,7 +10,11 @@
 
     {{#if renderBox}}
         <div>
-            {{> tableTextSearch filterKey='actions' customContent='newActionButton'}}
+            {{#if disableCreateAction}}
+                {{> tableTextSearch filterKey='actions' customContent='newActionButton'}}
+            {{else}}
+                {{> tableTextSearch filterKey='actions'}}
+            {{/if}}
         </div>
         <div>
             {{> reactiveTable collection=actions showFilter=false rowsPerPage=100 settings=settings }}
@@ -18,7 +22,11 @@
     {{else}}
         <div>
             <div>
+            {{#if disableCreateAction}}
                 {{> tableTextSearch filterKey='actions' customContent='newActionButton'}}
+            {{else}}
+                {{> tableTextSearch filterKey='actions'}}
+            {{/if}}
             </div>
             <div>
                 {{> reactiveTable collection=actions showFilter=false showNavigation='always' maxHeight=400 rowsPerPage=100 settings=settings }}

@@ -4,7 +4,7 @@
             Select action
         </div>
         <div class="content">
-            {{> actionSelectionTable renderBox=false allowSelection=true}}
+            {{> actionSelectionTable renderBox=false allowSelection=true disableCreateAction=disableCreateAction}}
         </div>
         <div class="actions">
             <button type="button" class="ok selectAction btn btn-primary" disabled={{emptySelection}}>Select</button>

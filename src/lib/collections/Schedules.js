@@ -15,6 +15,11 @@ Schemas.Schedule=new SimpleSchema({
         label: "Keywords",
         optional: true
     },
+    type: {
+        label: "Schedule Type",
+        type: String,
+        allowedValues:['cron','one-time','value'],
+    },
     cron: {
         label: "Schedule",
         type: [String],
@@ -28,10 +33,32 @@ Schemas.Schedule=new SimpleSchema({
     action: {
         label: "Action",
         type: String,
+        optional: true,
         autoform: {
             icon: 'fa-clock-o'
         }
+    },
+    'analogValueSchedule.minValue': {
+        type: Number,
+        label: "Minimum Value",
+        defaultValue:0
+    },
+    'analogValueSchedule.maxValue': {
+        type: Number,
+        label: "Maximum Value",
+        defaultValue:100
+    },
+    'analogValueSchedule.data': {
+        label: "Analog Value Data",
+        optional: true,
+        blackbox: true,
+        type: Object
     }
 });
 
+Collections.Schedules.Types=[
+    {label: "Recurring", value: 'cron'},
+    {label: "Analog Value Daily Schedule", value: 'value'},
+    {label: "One Time Calendar Event", value: 'one-time'},
+];
 Collections.Schedules.attachSchema(Schemas.Schedule);

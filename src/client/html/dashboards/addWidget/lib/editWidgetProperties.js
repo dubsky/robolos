@@ -43,7 +43,7 @@ EditWidgetProperties={
         if(floorPlanMode) {
             var floorPlan=this.getWidget(dashboard,Session.get(Template.floorPlanWidget.ADD_TO).id);
             widgets=floorPlan.widgets;
-            if((typeof widgets)==='undefined') {
+            if(widgets===undefined) {
                 widgets=[];
                 floorPlan.widgets=widgets;
             }
@@ -51,13 +51,13 @@ EditWidgetProperties={
         }
         else {
             widgets=dashboard.widgets;
-            if((typeof widgets)==='undefined') dashboard.widgets=widgets=[];
+            if(widgets===undefined) dashboard.widgets=widgets=[];
             return widgets;
         }
     },
 
     updateDashboard: function(dashboard) {
-        console.log(dashboard);
+        //console.log('update dashboard',dashboard);
         Meteor.call('updateDashboard',{$set : { widgets : dashboard.widgets}},dashboard._id);
         Router.go('render.dashboard',{_id: dashboard._id});
         Session.set(Template.floorPlanWidget.ADD_TO,undefined);

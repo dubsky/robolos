@@ -1,11 +1,13 @@
 <template name="sensorWidget">
 
     {{#if floorPlanView}}
+        {{>actionsOverlay sensorData=sensorData widget=widget floorPlanView=true}}
         {{>sensorContent sensorData=sensorData widget=widget floorPlanView=true}}
     {{else}}
-        <div class="ui card" style="width:100%;height:100%">
+        <div class="ui card" style="width:100%;height:100%;">
             {{> widgetHeader sensorData=sensorData widget=widget}}
-            <div class="content">
+            <div class="contentNoPadding">
+                {{>actionsOverlay sensorData=sensorData widget=widget}}
                 {{>sensorContent sensorData=sensorData widget=widget floorPlanView=false}}
             </div>
             {{>sensorWidgetFooter data=sensorData}}

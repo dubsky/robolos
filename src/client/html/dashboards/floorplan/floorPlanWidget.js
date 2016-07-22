@@ -69,6 +69,8 @@ Template.floorPlanWidget.events({
         let fpId=floorPlan.id;
         var currentSelection=Template.floorPlanWidget.getSelection(fpId);
         if(currentSelection!=undefined) {
+            Session.set(Template.addWidgetSelectWidgetType.FLOOR_PLAN_MODE,true);
+            Session.set(Template.floorPlanWidget.ADD_TO,floorPlan);
             var widgetToEdit=EditWidgetProperties.getWidget(floorPlan,currentSelection[0]);
             Template.renderDashboard.editProperties(widgetToEdit);
         }

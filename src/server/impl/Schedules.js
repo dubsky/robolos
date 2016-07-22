@@ -29,8 +29,10 @@ class Schedules {
                             schedule
                         );
                         log.info('Executing regularly scheduled task:'+schedule.title);
-                        var action=ActionsInstance.getAction(schedule.action);
-                        if ((typeof action)!=='undefined') ActionsInstance.startAction(action);
+                        if(schedule.action!=undefined) {
+                            var action=ActionsInstance.getAction(schedule.action);
+                            if (action!==undefined) ActionsInstance.startAction(action);
+                        }
                     }
                 });
                 this.runningTasks[schedule._id][i]=taskId;

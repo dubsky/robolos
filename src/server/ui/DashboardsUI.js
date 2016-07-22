@@ -42,6 +42,14 @@ function collectWidgetStatuses(subscription, widgets,dashboardCollection,dashboa
                 collectWidgetStatuses(subscription,widget.widgets,dashboardCollection,dashboardSensors,dashboardActions,dashboardVariables);
             }
 
+            if(widget.actions!==undefined) {
+                for(let i in widget.actions) {
+                    let actionId=widget.actions[i];
+                    dashboardActions[actionId] = true;
+                    var action = ActionsInstance.getAction(actionId);
+                    subscription.added(dashboardCollection, actionId, ActionsUI.cleanAction(action));
+                }
+            }
         }
     }
 }

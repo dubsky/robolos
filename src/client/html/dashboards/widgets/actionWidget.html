@@ -1,17 +1,18 @@
 <template name="actionWidget">
 
+    {{#if sensorView}}
 
-    {{#if floorPlanView}}
         {{#with data}}
-                <div style="position:absolute; left: 50%;margin-top:10px;">
 
+            {{#if ../floorPlanView}}
+                <div class="actionOverlayFP"> {{!-- gridster css conflict--}}
                     {{#if isRunning}}
-                        <div style="position: relative; left: -50%;" class="stopAction">
-                            <div style="width: 100%;border-bottom: 2px">
+                        <div class="actionTexts {{actionClass}}">
+                            <div class="actionLabelFP">
                                 {{#if message}}
-                                    <span class="sensorLabelSmallFP" style="font-weight: 900;color: black">&nbsp;{{message}}</span>
+                                    <span class="sensorLabelSmallFP actionMessage">{{message}}</span>
                                 {{else}}
-                                    <span class="sensorLabelSmallFP">RUNNING...</span>
+                                    <span class="sensorLabelSmallFP">RUNNING</span>
                                 {{/if}}
                             </div>
                             <div class="FP">
@@ -20,54 +21,121 @@
                                 {{/if}}
                             </div>
                         </div>
+                    {{/if}}
+                </div>
+                {{#if paused}}
+                    <div class="actionOverlayFP openResumeMenu"> {{!-- gridster css conflict--}}
+                        <div class="actionTexts">
+                            <span class="sensorLabelSmallFP">PAUSED</span>
+                        </div>
+                    </div>
+                {{/if}}
+            {{else}}
+                <div class="actionOverlay" style="margin-top:40px;"> {{!-- gridster css conflict--}}
+                    {{#if isRunning}}
+                        <div class="actionTexts {{actionClass}}">
+                            <div class="actionLabel">
+                                {{#if message}}
+                                    <span class="sensorLabelSmall actionMessage">&nbsp;{{message}}</span>
+                                {{else}}
+                                    <span class="sensorLabelSmall">RUNNING...</span>
+                                {{/if}}
+                            </div>
+                            <div>
+                                {{#if wait}}
+                                    {{> actionTimer}}
+                                {{/if}}
+                            </div>
+                        </div>
+                    {{/if}}
+                </div>
+                {{#if paused}}
+                    <div class="actionOverlay openResumeMenu" style="margin-top:40px;"> {{!-- gridster css conflict--}}
+                        <div class="actionTexts">
+                            <span class="sensorLabelMedium">PAUSED</span>
+                        </div>
+                    </div>
+                {{/if}}
+            {{/if}}
+        {{/with}}
 
+    {{else}}
+
+        {{#if floorPlanView}}
+            {{#with data}}
+                <div style="position:absolute; left: 50%;margin-top:10px;z-index:200005">
+                    {{#if isRunning}}
+                        <div style="position: relative; left: -50%;" class="{{actionClass}}">
+                            <div style="width: 100%;border-bottom: 2px">
+                                {{#if message}}
+                                    <span class="sensorLabelSmallFP" style="font-weight: 900;color: black">&nbsp;{{message}}</span>
+                                {{else}}
+                                    <span class="sensorLabelSmallFP">RUNNING</span>
+                                {{/if}}
+                            </div>
+                            <div class="FP">
+                                {{#if wait}}
+                                    {{> actionTimer}}
+                                {{/if}}
+                            </div>
+                        </div>
+                    {{/if}}
+                </div>
+                <div style="position:absolute; left: 50%;margin-top:10px;z-index:200010">
+                    {{#if paused}}
+                        <div class="openResumeMenu">
+                            <div class="actionTexts">
+                                <span class="sensorLabelSmallFP">PAUSED</span>
+                            </div>
+                        </div>
                     {{/if}}
                 </div>
                 <img class="button dashboardIconFP" src="{{icon}}"/>
-        {{/with}}
-    {{else}}
-        <div class="ui card" style="width:100%;height:100%">
+            {{/with}}
+        {{else}}
+            <div class="ui card" style="width:100%;height:100%">
 
-            {{> widgetHeader }}
-            {{#with data}}
-                <div class="content">
+                {{> widgetHeader }}
+                {{#with data}}
+                    <div class="content">
 
+                        <div class="dashboardIcon">
+                            <img style="max-width:128px;max-height:128px" class="button" src="{{icon}}"/>
+                        </div>
 
-                    <div class="actionOverlay" style="margin-top:40px;"> {{!-- gridster css conflict--}}
-                        {{#if isRunning}}
-                            <div class="actionTexts {{actionClass}}">
-                                <div class="actionLabel">
-                                    {{#if message}}
-                                        <span class="sensorLabelSmall actionMessage">&nbsp;{{message}}</span>
-                                    {{else}}
+                        <div class="actionOverlay" style="margin-top:40px;"> {{!-- gridster css conflict--}}
+                            {{#if isRunning}}
+                                <div class="actionTexts {{actionClass}}">
+                                    <div class="actionLabel">
+                                        {{#if message}}
+                                            <span class="sensorLabelSmall actionMessage">&nbsp;{{message}}</span>
+                                        {{else}}
                                             <span class="sensorLabelSmall">RUNNING...</span>
-                                    {{/if}}
+                                        {{/if}}
+                                    </div>
+                                    <div>
+                                        {{#if wait}}
+                                            {{> actionTimer}}
+                                        {{/if}}
+                                    </div>
                                 </div>
-                                <div>
-                                    {{#if wait}}
-                                        {{> actionTimer}}
-                                    {{/if}}
+                            {{/if}}
+                        </div>
+                        {{#if paused}}
+                            <div class="actionOverlay openResumeMenu" style="margin-top:40px;"> {{!-- gridster css conflict--}}
+                                <div class="actionTexts">
+                                    <span class="sensorLabelMedium">PAUSED</span>
                                 </div>
                             </div>
                         {{/if}}
                     </div>
 
-                    {{#if paused}}
-                        <div class="actionOverlay openResumeMenu" style="margin-top:40px;"> {{!-- gridster css conflict--}}
-                            <div class="actionTexts">
-                                <span class="sensorLabelMedium">PAUSED</span>
-                            </div>
-                        </div>
-                    {{/if}}
-
-                    <img class="button dashboardIcon" src="{{icon}}"/>
-
-                </div>
-
-                <div class="extra content" style="height:32px;padding-top:8px">
-                    <i>Last run: {{lastRun}}</i>
-                </div>
-            {{/with}}
-        </div>
+                    <div class="extra content" style="height:32px;padding-top:8px">
+                        <i>Last run: {{lastRun}}</i>
+                    </div>
+                {{/with}}
+            </div>
+        {{/if}}
     {{/if}}
+
 </template>

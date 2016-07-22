@@ -6,9 +6,15 @@ Template.viewSchedule.helpers({
         return Collections.Schedules
     },
 
-    schema: Schemas.Schedule
+    schema: Schemas.Schedule,
 
+    type(type) {
+        return this.schedule.type==type;
+    },
 
+    analogValueData() {
+        return this.schedule.analogValueSchedule.data;
+    }
 });
 
 
@@ -44,6 +50,7 @@ Router.route('schedules/:_id',
 Template.viewSchedule.events({
 
     'click .cancel' :function(event) {
+        Session.set(CURRENT_GRAPH_SESSION_KEY,undefined);
         EditContext.setContext(undefined);
         Router.go('schedules');
         return false;
@@ -56,10 +63,13 @@ AutoForm.hooks({
         after: {
             'method-update': function() {
                 EditContext.setContext(undefined);
+                Session.set(CURRENT_GRAPH_SESSION_KEY,undefined);
                 Router.go('schedules');
             }
         },
-
+        before:{
+            'method-update': analogValueChartGetData,
+        },
         formToModifier: function(modifier) {
             EditContext.getContext().modifier=modifier;
             return modifier;

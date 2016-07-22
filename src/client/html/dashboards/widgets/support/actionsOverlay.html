@@ -1,0 +1,22 @@
+<template name="actionsOverlay">
+    {{#with runningAction}}
+        {{#if actionData}}
+            {{#if ../floorPlanView}}
+                <div class="sensorActionOverlay">
+                    {{>actionWidget sensorView=true floorPlanView=true widget=widget }}
+                </div>
+            {{else}}
+                <div class="sensorActionOverlay" style="background-color:rgba(255,255,255,0.9)">
+                    {{>actionWidget sensorView=true widget=widget }}
+                </div>
+            {{/if}}
+        {{else}}
+            {{#with ..}}
+                {{#if widget.actions}}
+                   <div class="sensorActionOverlay openActionsMenu">
+                   </div>
+                {{/if}}
+            {{/with}}
+        {{/if}}
+    {{/with}}
+</template>

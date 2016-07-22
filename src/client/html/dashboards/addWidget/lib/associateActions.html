@@ -1,0 +1,12 @@
+<template name="associateActions">
+
+
+    <label>Linked Actions</label>
+
+    <div class="ui fluid search dropdown selection multiple">
+        {{#each actions}}
+            <a class="ui label transition visible" style="display: inline-block !important;">{{name}}<i class="delete icon"></i></a>
+        {{/each}}
+        <a class="addAction ui label transition visible black" style="display: inline-block !important;">{{name}}Add...</a>
+    </div>
+</template>

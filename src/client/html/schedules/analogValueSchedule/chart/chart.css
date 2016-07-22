@@ -1,0 +1,21 @@
+/* cubic splines */
+
+.cubic_spline { position: relative; font-size: 0.95em; -webkit-user-select: none; }
+.cubic_spline canvas { border: 1px solid rgba(0, 0, 0, 0.37); }
+.cubic_spline_xlabel, .cubic_spline_ylabel { position: absolute; }
+.cubic_spline_ylabel { width: 50px; left: -65px; text-align: right; }
+.cubic_spline_xlabel { width: 150px; text-align: center; }
+.cubic_spline_xaxis_label { position: relative; top: 2em; text-align: center; }
+.cubic_spline_yaxis_label {
+    position: absolute; left: -160px; width: 200px; text-align: center;
+    -moz-transform:    rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+    -o-transform:      rotate(-90deg);
+    -ms-transform:     rotate(-90deg);
+    transform:         rotate(-90deg);
+    filter:     progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    -ms-filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    zoom: 1;
+}
+.cubic_spline_handle { border: 2px solid #000; position: absolute; cursor: col-resize; font-size: 1px; background: #fff; -webkit-user-select: none; }
+.cubic_spline_message, .cubic_spline_popup { border: 1px solid #fff; background: #fbc60f; font-size: 0.9em; line-height: 1.2; padding: 3px 9px; }

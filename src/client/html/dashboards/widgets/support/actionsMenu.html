@@ -1,0 +1,16 @@
+<template name="actionsMenu">
+    <div style="margin:-7px -7px -7px" class="ui secondary vertical menu actionsMenu">
+        {{#if switchOver}}
+            {{#with switchOver}}
+                <div style="padding:3px">
+                    <div class="ui fluid primary button" onclick="Template.actionsOverlay.switchOver('{{driver}},{{device}},{{sensor}}')">Switch over</div>
+                </div>
+            {{/with}}
+        {{/if}}
+        {{#each actions}}
+            <div style="padding:3px">
+                <div class="ui fluid basic button" onclick="Template.actionsOverlay.startAction('{{id}}')">{{name}}</div>
+            </div>
+        {{/each}}
+    </div>
+</template>

@@ -44,12 +44,6 @@ Template.renderSensorValue.helpers({
 
 Template.renderSensorValue.IdGenerator=0;
 
-OPENED_POPOVER=null;
-Template.renderSensorValue.hidePopout=function () {
-
-    if(OPENED_POPOVER!==null) OPENED_POPOVER.popover('destroy');
-    OPENED_POPOVER=null;
-}
 
 Template.renderSensorValue.events({
     'click .popupSlider': function(e) {
@@ -90,4 +84,5 @@ Template.renderSensorValue.events({
     'click .binarySwitch' : function() {
         Meteor.call('actionSwitchOver',this.driver,this.deviceId,this.sensorId);
     }
+
 });

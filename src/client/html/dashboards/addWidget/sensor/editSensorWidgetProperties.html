@@ -13,7 +13,9 @@
                     <input name="sensor" type="text" id="sensor" class="form-control" readonly>
                 {{/unless}}
                 <label class="control-label" for="title">Icon</label>
-                {{> widgetIconSelector selectedIcon=selectedIcon type='icon'}}
+                {{>widgetIconSelector selectedIcon=selectedIcon type='icon'}}
+                <br/>
+                {{>associateActions widget=widget}}
             </form>
         </div>
         <div class="actions">

@@ -31,8 +31,9 @@ Template.editSensorWidgetProperties.events({
             let widget=EditWidgetProperties.getWidget(dashboard,this.widget.id);
             widget.icon=document.forms['editProperties'].elements['icon'].value;
             widget.title=document.forms['editProperties'].elements['title'].value;
+            widget.actions=this.widget.actions;
         }
-
+console.log('dash:',dashboard);
         EditWidgetProperties.updateDashboard(dashboard);
     },
 
@@ -40,11 +41,12 @@ Template.editSensorWidgetProperties.events({
         var dashboard=Session.get(CURRENT_DASHBOARD);
         Router.go('render.dashboard',{_id: dashboard._id});
     }
+
 });
 
 
 Template.editSensorWidgetProperties.onRendered(function() {
-    SemanticUI.modal("#editWidgetProperties");
+    SemanticUI.modal2ndLayer("#editWidgetProperties");
     if(!this.data.create) {
         document.forms['editProperties'].elements['title'].value=this.data.widget.title;
         document.forms['editProperties'].elements['icon'].value=this.data.widget.icon;
@@ -54,7 +56,6 @@ Template.editSensorWidgetProperties.onRendered(function() {
                {_id:sensorId },
                false,
                {
-                   onStop: function(e) {console.log('Unexpected error',e)},
                    onReady: () => {
                         let sensor=SensorsCollection.findOne(sensorId);
                         let name=sensorId;
@@ -63,6 +64,8 @@ Template.editSensorWidgetProperties.onRendered(function() {
                     }
                }
         );
+
+        Template.editSensorWidgetProperties.actionsHandle=App.subscribe('actions');
     }
 });
 
@@ -70,5 +73,6 @@ Template.editSensorWidgetProperties.onDestroyed(function() {
     if(!this.data.create) {
         Template.editSensorWidgetProperties.handle.stop();
         delete Template.editSensorWidgetProperties.handle;
+        if(Template.editSensorWidgetProperties.actionsHandle!==undefined) Template.editSensorWidgetProperties.actionsHandle.stop();
     }
 });

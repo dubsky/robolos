@@ -16,7 +16,7 @@ class Question  {
 }
 
 class SplineChart {
-    constructor(div_id, xAxisLabel, yAxisLabel, color, xMin, xMax, splineFunc) {
+    constructor(div_id, xAxisLabel, yAxisLabel, color, xMin, xMax, yMin,yMax,splineFunc) {
         this.div_id = div_id;
         this.iOS = !! window.navigator.appVersion.match(/\biP(ad|od|hone)\b/);
         this.xAxisLabel = xAxisLabel;
@@ -24,6 +24,8 @@ class SplineChart {
         this.color = color;
         this.xMin = xMin;
         this.xMax = xMax;
+        this.yMin = yMin;
+        this.yMax = yMax;
         this.splineFunc = splineFunc;
 
         this.questions = [];

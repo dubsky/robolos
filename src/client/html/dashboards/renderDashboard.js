@@ -59,7 +59,7 @@ Template.renderDashboard.editProperties=function(widget) {
             Template.modal.current.set({template : 'editActionWidgetProperties', data : {widget: widget }});
             break;
         case 'sensor':
-            Template.modal.current.set({template : 'editSensorWidgetProperties', data : {widget: widget }});
+            Template.modalBackup.current.set({template : 'editSensorWidgetProperties', data : {widget: widget }});
             break;
         case 'floorPlan':
             Template.modal.current.set({template : 'editFloorPlanWidgetProperties', data : {widget: widget }});

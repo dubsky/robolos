@@ -155,7 +155,7 @@ MyBlocks=function() {
                 .setCheck("Boolean")
                 .appendField("Wait for");
             this.appendDummyInput()
-                .appendField("become true");
+                .appendField("to become true");
             this.setInputsInline(true);
             this.appendStatementInput("statements")
                 .appendField("then");

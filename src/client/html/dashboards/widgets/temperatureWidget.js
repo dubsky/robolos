@@ -18,10 +18,11 @@ Template.temperatureWidget.onCreated(function () {
 });
 
 Template.temperatureWidget.events({
+    /*
     'click .widgetContent' : function(e) {
         if (!Session.get(DASHBOARD_EDIT_MODE)) {
             Template.modal.current.set({template: 'renderTimeSeries', data: {sensor: this.sensorData._id}});
         }
-    }
+    }*/
 });
 
