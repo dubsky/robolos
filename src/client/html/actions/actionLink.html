@@ -1,3 +1,13 @@
 <template name="actionLink">
-    <a href="/actions/{{_id}}">{{title}}</a>
+    <a href="/actions/{{_id}}">
+        {{#if disabled}}
+            <span title="This schedule has been disabled" style="text-decoration:line-through">{{title}}</span>
+        {{else}}
+            {{title}}
+        {{/if}}
+        <span style="float: right">
+            {{#if calendarDroppable}}<i class="calendar icon" title="Available in calendar"></i>{{/if}}
+            {{#if executeOnStartup}}<i class="power icon" title="Executed on system startup"></i>{{/if}}
+        </span>
+    </a>
 </template>

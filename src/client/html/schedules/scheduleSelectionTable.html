@@ -1,0 +1,27 @@
+<template name="scheduleSelectionTable">
+
+    {{#unless schedules.count}}
+        {{>noSchedules}}
+    {{/unless}}
+
+
+    {{#if renderBox}}
+        <div>
+            {{> tableTextSearch filterKey='schedules'}}
+        </div>
+        <div>
+            {{> reactiveTable collection=schedules showFilter=false rowsPerPage=100 settings=settings }}
+        </div>
+    {{else}}
+        <div>
+            <div class="box-header">
+                {{> tableTextSearch filterKey='schedules'}}
+            </div>
+            <div class="box-body no-padding">
+                {{> reactiveTable collection=schedules showNavigation='always' showFilter=false rowsPerPage=100 maxHeight=400 settings=settings }}
+            </div>
+        </div>
+
+    {{/if}}
+
+</template>

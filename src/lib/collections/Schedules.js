@@ -15,6 +15,11 @@ Schemas.Schedule=new SimpleSchema({
         label: "Keywords",
         optional: true
     },
+    disabled: {
+        type: Boolean,
+        label: "Disabled",
+        optional: true
+    },
     type: {
         label: "Schedule Type",
         type: String,

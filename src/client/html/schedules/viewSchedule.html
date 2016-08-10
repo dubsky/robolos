@@ -18,9 +18,15 @@
                 {{> afQuickField name="keywords" type="keywords"}}
 
                 {{#if type 'cron'}}
-                    <h4 class="ui dividing header">Schedule</h4>
-                    {{> afQuickField label=false name="cron" type="cronEntry"}}
+                    <label>Schedule</label>
+                    <div class="ui segment" style="margin-top:0">
+                        {{> afQuickField label=false name="cron" type="cronEntry"}}
+                    </div>
                     {{> afQuickField name="action" type="action" icon="fa-clock-o"}}
+                    <label>Settings</label>
+                    <div class="ui segment" style="margin-top:0">
+                        {{> afQuickField name="disabled" checkboxType="toggle"}}
+                    </div>
                 {{/if}}
                 <br/>
                 {{#if type 'one-time'}}

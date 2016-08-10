@@ -22,8 +22,20 @@
                 {{> afQuickField name="title"}}
                 {{> afQuickField name="description" rows=3}}
                 {{> afQuickField name="keywords" type="keywords"}}
-
-                {{> afQuickField name="calendarDroppable" }}
+                <label>Settings</label>
+                <div class="ui segment" style="margin-top:0">
+                    <div class="fields">
+                        <div class="five wide field">
+                            {{> afQuickField name="calendarDroppable" checkboxType="toggle"}}
+                        </div>
+                        <div class="six wide field">
+                            {{> afQuickField name="executeOnStartup" checkboxType="toggle"}}
+                        </div>
+                        <div class="five wide field">
+                            {{> afQuickField name="disabled" checkboxType="toggle"}}
+                        </div>
+                    </div>
+                </div>
 
                 <br/>
                 <button type="submit" class="btn btn-primary">Save</button>

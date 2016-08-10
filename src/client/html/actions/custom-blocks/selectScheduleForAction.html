@@ -1,0 +1,16 @@
+<template name="selectScheduleForAction">
+
+    <div class="ui modal" id="selectScheduleBlock">
+        <i class="close icon"></i>
+        <div class="header">
+            Select Analog Value Schedule
+        </div>
+        <div class="content" style="padding-bottom:5px">
+            {{> scheduleSelectionTable filter=filter renderBox=false}}
+        </div>
+        <div class="actions">
+            <button type="button" class="ok btn btn-default selectSchedule" data-dismiss="modal" disabled={{emptySelection}}>Ok</button>
+            <button type="button" class="cancel btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+</template>

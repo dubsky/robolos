@@ -1,10 +1,7 @@
 <template name="actionSelectionTable">
 
-
-    {{#unless actions}}
-        <div style="color:red" class="alert alert-warning text-center">
-            <span style="color:black">No actions available yet</span>
-        </div>
+    {{#unless actions.count}}
+        {{> noActions }}
     {{/unless}}
 
 

@@ -17,6 +17,11 @@ Template.selectSensorForAction.events({
     }
 });
 
-Template.selectSensorForAction.rendered=function() {
+Template.selectSensorForAction.onRendered(function() {
     Session.set('selectedSensor',null);
-}
+    SemanticUI.modal('#selectSensorBlock');
+});
+
+Template.selectSensorForAction.onDestroyed(function() {
+    Template.modal.current.set(undefined);
+});

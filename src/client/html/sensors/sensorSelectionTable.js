@@ -2,7 +2,7 @@
 
 Template.sensorSelectionTable.helpers({
     sensors: function () {
-        return SensorsCollection.find();
+        return this.filter===undefined ? SensorsCollection.find() : SensorsCollection.find(this.filter);
     },
 
     settings: function() {

@@ -33,7 +33,17 @@
                 {{> afQuickField name="description" placeholder="Description" rows=5}}
                 {{> afQuickField name="keywords" type="keywords"}}
 
-                {{> afQuickField name="calendarDroppable"}}
+                <label>Settings</label>
+                <div class="ui segment" style="margin-top:0">
+                    <div class="fields">
+                        <div class="eight wide field">
+                            {{> afQuickField name="calendarDroppable" checkboxType="toggle"}}
+                        </div>
+                        <div class="eight wide field">
+                            {{> afQuickField name="executeOnStartup" checkboxType="toggle"}}
+                        </div>
+                    </div>
+                </div>
                 <br/>
 
                 <button type="submit" class="submit btn btn-primary">Save</button>

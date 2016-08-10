@@ -15,6 +15,7 @@
         <xml id="toolbox" style="display: none">
             <block type="get_value"></block>
             <block type="set_value"></block>
+            <block type="follow_schedule"></block>
             <block type="switch"></block>
             <block type="after"></block>
             <block type="waitFor"></block>
@@ -43,8 +44,8 @@
             <div id="blocklyDiv" style="position: absolute"></div>
         </div>
 
-        {{> selectSensorForAction renderBox=true}}
         {{> selectVariableForAction renderBox=true}}
+        {{> selectScheduleForAction renderBox=true}}
 
     </section>
 </template>

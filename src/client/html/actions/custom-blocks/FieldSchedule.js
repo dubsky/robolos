@@ -1,4 +1,4 @@
-DefineSensorField =function () {
+DefineScheduleField =function () {
 
     /**
      * Class for an editable text field.
@@ -7,48 +7,46 @@ DefineSensorField =function () {
      *     to validate any constraints on what the user entered.  Takes the new
      *     text as an argument and returns either the accepted text, a replacement
      *     text, or null to abort the change.
-     * @param filter mongo db filter
      * @extends {Blockly.Field}
      * @constructor
      */
-    Blockly.FieldSensor = function(text,filter, opt_changeHandler) {
-        Blockly.FieldSensor.superClass_.constructor.call(this, text, opt_changeHandler);
-        this.filter=filter;
+    Blockly.FieldSchedule = function(text, opt_changeHandler) {
+        Blockly.FieldSchedule.superClass_.constructor.call(this, text, opt_changeHandler);
         //this.setChangeHandler(opt_changeHandler);
     };
-    goog.inherits(Blockly.FieldSensor, Blockly.Field);
+    goog.inherits(Blockly.FieldSchedule, Blockly.Field);
 
     /**
-     * Clone this FieldSensor.
-     * @return {!Blockly.FieldSensor} The result of calling the constructor again
+     * Clone this FieldSchedule.
+     * @return {!Blockly.FieldSchedule} The result of calling the constructor again
      *   with the current values of the arguments used during construction.
      */
-    Blockly.FieldSensor.prototype.clone = function() {
-        return new Blockly.FieldSensor(this.getText(), this.changeHandler_);
+    Blockly.FieldSchedule.prototype.clone = function() {
+        return new Blockly.FieldSchedule(this.getText(), this.changeHandler_);
     };
 
     /**
      * Mouse cursor style when over the hotspot that initiates the editor.
      */
-    Blockly.FieldSensor.prototype.CURSOR = 'text';
+    Blockly.FieldSchedule.prototype.CURSOR = 'text';
 
     /**
      * Allow browser to spellcheck this field.
      * @private
      */
-    Blockly.FieldSensor.prototype.spellcheck_ = true;
+    Blockly.FieldSchedule.prototype.spellcheck_ = true;
 
     /**
      * Close the input widget if this input is being deleted.
      */
-    Blockly.FieldSensor.prototype.dispose = function() {
+    Blockly.FieldSchedule.prototype.dispose = function() {
         Blockly.WidgetDiv.hideIfOwner(this);
-        Blockly.FieldSensor.superClass_.dispose.call(this);
+        Blockly.FieldSchedule.superClass_.dispose.call(this);
     };
 
 
 
-    Blockly.FieldSensor.prototype.setValue=function(value) {
+    Blockly.FieldSchedule.prototype.setValue=function(value) {
         if((typeof value)!=='undefined' && value!==null && value!=='') {
             if(value==='...')
                 this.setText(value);
@@ -58,7 +56,7 @@ DefineSensorField =function () {
         this.value=value;
     };
 
-    Blockly.FieldSensor.prototype.getValue=function(value) {
+    Blockly.FieldSchedule.prototype.getValue=function(value) {
         return this.value;
     };
 
@@ -68,20 +66,21 @@ DefineSensorField =function () {
      *     focus.  Defaults to false.
      * @private
      */
-    Blockly.FieldSensor.prototype.showEditor_ = function(opt_quietInput) {
-        Template.modal.current.set({template: 'selectSensorForAction',data:{renderBox:true, filter:this.filter}});
-        Blockly.FieldSensor.activeBlock=this;
+    Blockly.FieldSchedule.prototype.showEditor_ = function(opt_quietInput) {
+        SemanticUI.modal('#selectScheduleBlock');
+        Blockly.FieldSchedule.activeBlock=this;
     };
+
 
     /**
      * Check to see if the contents of the editor validates.
      * Style the editor accordingly.
      * @private
      */
-    Blockly.FieldSensor.prototype.validate_ = function() {
+    Blockly.FieldSchedule.prototype.validate_ = function() {
         var valid = true;
-        goog.asserts.assertObject(Blockly.FieldSensor.htmlInput_);
-        var htmlInput = /** @type {!Element} */ (Blockly.FieldSensor.htmlInput_);
+        goog.asserts.assertObject(Blockly.FieldSchedule.htmlInput_);
+        var htmlInput = /** @type {!Element} */ (Blockly.FieldSchedule.htmlInput_);
         if (this.sourceBlock_ && this.changeHandler_) {
             valid = this.changeHandler_(htmlInput.value);
         }
@@ -96,7 +95,7 @@ DefineSensorField =function () {
      * Resize the editor and the underlying block to fit the text.
      * @private
      */
-    Blockly.FieldSensor.prototype.resizeEditor_ = function() {
+    Blockly.FieldSchedule.prototype.resizeEditor_ = function() {
         var div = Blockly.WidgetDiv.DIV;
         var bBox = this.fieldGroup_.getBBox();
         div.style.width = bBox.width + 'px';
@@ -123,10 +122,10 @@ DefineSensorField =function () {
      * @return {!Function} Closure to call on destruction of the WidgetDiv.
      * @private
      */
-    Blockly.FieldSensor.prototype.widgetDispose_ = function() {
+    Blockly.FieldSchedule.prototype.widgetDispose_ = function() {
         var thisField = this;
         return function() {
-            var htmlInput = Blockly.FieldSensor.htmlInput_;
+            var htmlInput = Blockly.FieldSchedule.htmlInput_;
             // Save the edit (if it validates).
             var text = htmlInput.value;
             if (thisField.sourceBlock_ && thisField.changeHandler_) {
@@ -141,7 +140,7 @@ DefineSensorField =function () {
             }
             thisField.setText(text);
             thisField.sourceBlock_.rendered && thisField.sourceBlock_.render();
-            Blockly.FieldSensor.htmlInput_ = null;
+            Blockly.FieldSchedule.htmlInput_ = null;
             // Delete the width property.
             Blockly.WidgetDiv.DIV.style.width = 'auto';
         };

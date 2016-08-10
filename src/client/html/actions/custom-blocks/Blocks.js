@@ -2,9 +2,9 @@ MyBlocks=function() {
 
     DefineSensorField();
     DefineVariableField();
+    DefineScheduleField();
 
-    function getSensorValue(block) {
-        let v=block.getFieldValue('selectedSensor');
+    function getValue(v) {
         let value={id: null, name:null};
         if(v!=undefined && v!='') {
             if(v==='...')
@@ -15,16 +15,19 @@ MyBlocks=function() {
         return value;
     }
 
+    function getSensorValue(block) {
+        let v=block.getFieldValue('selectedSensor');
+        return getValue(v);
+    }
+
+    function getScheduleValue(block) {
+        let v=block.getFieldValue('selectedSchedule');
+        return getValue(v);
+    }
+
     function getVariableValue(block) {
         var v=block.getFieldValue('selectedVariable');
-        var value={id: null, name:null};
-        if(v!=undefined && v!='') {
-            if(v==='...')
-                value=v;
-            else
-                value=EJSON.parse(v);
-        }
-        return value;
+        return getValue(v);
     }
 
     function getParam(p) {
@@ -34,9 +37,10 @@ MyBlocks=function() {
 
     Blockly.Blocks['get_value'] = {
         init: function() {
+            let filter={class: {$in :[SensorClasses.ANALOG_INPUT,SensorClasses.ANALOG_INPUT_0_100,SensorClasses.BINARY_INPUT,SensorClasses.STRING]}};
             this.appendDummyInput()
                 .appendField("Get Value")
-                .appendField(new Blockly.FieldSensor('...'),'selectedSensor');
+                .appendField(new Blockly.FieldSensor('...',filter),'selectedSensor');
             this.setOutput(true, null);
             this.setColour(330);
             this.setTooltip('Return value of a specified sensor');
@@ -94,6 +98,7 @@ MyBlocks=function() {
     Blockly.Blocks['set_value'] = {
         init: function() {
 
+            let filter={class: {$in :[SensorClasses.ANALOG_OUTPUT,SensorClasses.ANALOG_OUTPUT_0_100,SensorClasses.BINARY_OUTPUT,SensorClasses.RGB,SensorClasses.RGBW,SensorClasses.STRING]}};
             this.appendValueInput("value")
                 .setCheck("Number")
                 .appendField("Set Value");
@@ -101,8 +106,8 @@ MyBlocks=function() {
             this.appendDummyInput()
 
                 .appendField("on")
-                .appendField(new Blockly.FieldSensor('...'),'selectedSensor')
-                .appendField(new Blockly.FieldDropdown([["in one step", "oneStep"], ["and fade in", "fade"]]), "operation");
+                .appendField(new Blockly.FieldSensor('...',filter),'selectedSensor');
+                ////deprecated:.appendField(new Blockly.FieldDropdown([["in one step", "oneStep"], ["and fade in", "fade"]]), "operation");
             this.setInputsInline(true);
             this.setPreviousStatement(true);
             this.setNextStatement(true);
@@ -114,9 +119,36 @@ MyBlocks=function() {
     Blockly.JavaScript['set_value'] = function(block) {
         var text_value = Blockly.JavaScript.valueToCode(block, 'value', Blockly.JavaScript.ORDER_ATOMIC);
         var value=getSensorValue(block);
-        var dropdown_operation = block.getFieldValue('operation');
+        var dropdown_operation = null;//deprecated: block.getFieldValue('operation');
         // TODO: Assemble JavaScript into code variable.
         var code = 'context.setValue(\"'+dropdown_operation+'\",'+getParam(value.id)+','+getParam(value.name)+','+text_value+');\n';
+        return code;
+    };
+
+
+    Blockly.Blocks['follow_schedule'] = {
+        init: function() {
+
+            this.appendDummyInput()
+                .appendField("Follow schedule")
+                .appendField(new Blockly.FieldSchedule('...'),'selectedSchedule')
+
+            this.appendDummyInput()
+                .appendField("on")
+                .appendField(new Blockly.FieldSensor('...',{class: {$in :[SensorClasses.ANALOG_OUTPUT,SensorClasses.ANALOG_OUTPUT_0_100]}}),'selectedSensor')
+            this.setInputsInline(true);
+            this.setPreviousStatement(true);
+            this.setNextStatement(true);
+            this.setColour(330);
+            this.setTooltip('Force output to follow analog value schedule');
+        }
+    };
+
+    Blockly.JavaScript['follow_schedule'] = function(block) {
+        var value=getSensorValue(block);
+        var schedule=getScheduleValue(block);
+        // TODO: Assemble JavaScript into code variable.
+        var code = 'context.followSchedule('+getParam(schedule.id)+','+getParam(schedule.name)+','+getParam(value.id)+','+getParam(value.name)+');\n';
         return code;
     };
 

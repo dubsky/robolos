@@ -6,7 +6,7 @@
             Select Sensor
         </div>
         <div class="content" style="padding-bottom:5px">
-            {{> sensorSelectionTable renderBox=false}}
+            {{> sensorSelectionTable filter=filter renderBox=false}}
         </div>
         <div class="actions">
             <button type="button" class="ok btn btn-default selectSensor" data-dismiss="modal" disabled={{emptySelection}}>Ok</button>

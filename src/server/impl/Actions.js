@@ -169,6 +169,11 @@ class ActionContext {
         Sensors.performAction(id[0], id[1], id[2], SENSOR_ACTIONS.SET_VALUE, value);
     }
 
+    followSchedule(scheduleId, scheduleName, sensorId, sensorName) {
+//        var id=this.getSensorIdComponents(sensorId);
+//        Sensors.performAction(id[0], id[1], id[2], SENSOR_ACTIONS.SET_VALUE, value);
+    }
+
     getValue(sensorId, sensorName) {
         if(this.trackDependencies) {
             this.sensorDependencies[sensorId]=true;

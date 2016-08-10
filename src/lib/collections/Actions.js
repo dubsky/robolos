@@ -16,6 +16,16 @@ Schemas.Action=new SimpleSchema({
         label: "Keywords",
         optional: true
     },
+    disabled: {
+        type: Boolean,
+        label: "Disabled",
+        optional: true
+    },
+    executeOnStartup: {
+        type: Boolean,
+        label: "Execute on System Startup",
+        optional: true
+    },
     code: {
         label: "Code",
         type: String,

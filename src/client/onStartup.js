@@ -20,7 +20,7 @@ var settingsReady=function() {
         onSubmitHook: function() {
             Meteor.subscribe('userSettings',false,{ onReady: function() {
                 let settings=Collections.Settings.findOne(Collections.Settings.USER_SETTINGS_DOCUMENT_ID,{reactive:false});
-                Session.set(USER_ROLE,settings.role);
+                Session.set(USER_ROLE,settings.role === undefined ? Collections.Users.RoleKeys.administrator : settings.role);
             } } );
         }
 
