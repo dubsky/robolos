@@ -8,7 +8,6 @@ Template.editSensorWidgetProperties.events({
 
     'click .updateProperties': function(event, instance) {
 
-        $('#editWidgetProperties').modal('hide');
         let selection=Session.get('selectedSensor');
         let dashboard=Session.get(CURRENT_DASHBOARD);
         let widgets=EditWidgetProperties.getWidgetsCollection(dashboard);
@@ -33,8 +32,10 @@ Template.editSensorWidgetProperties.events({
             widget.title=document.forms['editProperties'].elements['title'].value;
             widget.actions=this.widget.actions;
         }
-console.log('dash:',dashboard);
+
         EditWidgetProperties.updateDashboard(dashboard);
+        event.stopImmediatePropagation();
+        $('#editWidgetProperties').modal('hide');
     },
 
     'click .cancel': function(event, instance) {

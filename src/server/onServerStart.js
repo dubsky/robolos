@@ -11,9 +11,11 @@ Meteor.startup(function () {
     log.info("Starting Notifications Processing");
     NotificationsInstance.start();
     log.info("Loading actions");
-    ActionsInstance.refresh();
+    ActionsInstance.start();
     log.info('Starting drivers');
     Drivers.start();
+    log.info('Executing on startup actions');
+    ActionsInstance.executeOnStartupActions();
     log.info('Sensor input processing started');
     EventsInstance.start();
     log.info("Preparing scheduled tasks");

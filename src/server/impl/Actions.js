@@ -143,35 +143,21 @@ class ActionContext {
         log.debug(message);
     }
 
-    getSensorIdComponents(sensorId) {
-        if(sensorId!=null) {
-            var id = sensorId.split(';');
-            if (id.length === 3) {
-                return id;
-            }
-            else {
-                throw 'Invalid sensor id:' + sensorId;
-            }
-        }
-        else {
-            throw 'Invalid sensor id:'+sensorId;
-        }
-    }
-
     switchOutput(operation, sensorId, sensorName) {
         //log.debug('switchOutput '+operation);
-        var id=this.getSensorIdComponents(sensorId);
+        var id=Sensors.getSensorIdComponents(sensorId);
         Sensors.performAction(id[0],id[1],id[2],operation);
     }
 
     setValue(mode, sensorId, sensorName, value) {
-        var id=this.getSensorIdComponents(sensorId);
+        ValueSchedules.unbindSensorFromSchedules(sensorId);
+        var id=Sensors.getSensorIdComponents(sensorId);
         Sensors.performAction(id[0], id[1], id[2], SENSOR_ACTIONS.SET_VALUE, value);
     }
 
     followSchedule(scheduleId, scheduleName, sensorId, sensorName) {
-//        var id=this.getSensorIdComponents(sensorId);
-//        Sensors.performAction(id[0], id[1], id[2], SENSOR_ACTIONS.SET_VALUE, value);
+        console.log('bind '+scheduleId+' : '+sensorId);
+        ValueSchedules.bindSensorToSchedule(scheduleId,sensorId);
     }
 
     getValue(sensorId, sensorName) {
@@ -179,7 +165,7 @@ class ActionContext {
             this.sensorDependencies[sensorId]=true;
             this.sensorDependencies.notEmpty=true;
         }
-        var id=this.getSensorIdComponents(sensorId);
+        var id=Sensors.getSensorIdComponents(sensorId);
         var status=Sensors.getSensorStatus(id[0],id[1],id[2]);
         if((typeof status)==='undefined') return null;
         return status.value;
@@ -214,10 +200,17 @@ class Actions {
         return this.length;
     }
 
-    refresh() {
+    start() {
         var self=this;
         Collections.Actions.find().forEach(function(action) {
             self.upsertAction(action);
+        });
+    }
+
+    executeOnStartupActions() {
+        var self=this;
+        Collections.Actions.find({executeOnStartup:true}).forEach((action) => {
+            this.startAction(this.getAction(action._id));
         });
     }
 
@@ -252,7 +245,15 @@ class Actions {
     }
 
     startAction(action) {
-
+        if(action.disabled) {
+            log.event(
+                function(context) {
+                    return ['Disabled Action Ignored\''+context.title+'\'',context.keywords];
+                },
+                action
+            );
+            return;
+        }
         log.event(
             function(context) {
                 return ['Starting action \''+context.title+'\'',context.keywords];

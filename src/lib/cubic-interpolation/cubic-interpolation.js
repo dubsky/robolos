@@ -1,5 +1,6 @@
 /* taken from http://blog.mackerron.com/2011/01/01/javascript-cubic-splines/ */
 
+CubicInterpolationAnticipationDirection={UP:'up',DOWN:'down',ANY:'any'};
 
 class CubicSplineClass {
 
@@ -98,6 +99,56 @@ class CubicSplineClass {
         deltaX = x - this.x[i];
         y = this.a[i] + this.b[i] * deltaX + this.c[i] * Math.pow(deltaX, 2) + this.d[i] * Math.pow(deltaX, 3);
         return y;
+    }
+
+
+    anticipate(x,deltaY,direction,xLimit) {
+        var deltaX, i, y, _ref;
+        for (i = _ref = this.x.length - 1; (_ref <= 0 ? i <= 0 : i >= 0); (_ref <= 0 ? i += 1 : i -= 1)) {
+            if (this.x[i] <= x) {
+                break;
+            }
+        }
+        deltaX = x - this.x[i];
+        y = this.a[i] + this.b[i] * deltaX + this.c[i] * Math.pow(deltaX, 2) + this.d[i] * Math.pow(deltaX, 3);
+
+        //log.debug('x :',x);
+        //log.debug('y :',y);
+        //log.debug('i :',i);
+        for (let j=0; j<this.x.length; j++) {
+
+            let calculateMin=(k,deltaY) => {
+                let a=this.a[k]-(y+deltaY);
+                let roots=solveCubic(this.d[k],this.c[k],this.b[k],a);
+                //log.debug(roots);
+                let min=undefined;
+                for(let i=0;i<roots.length;i++) {
+                    let r=roots[i]+this.x[k];
+                    let highRange=i===this.x.length-1 ? xLimit : this.x[k+1];
+                    let lowRange=j===0 ? x : this.x[k];
+                    if(r>lowRange && r<highRange) {
+                        if(min===undefined) min=r; else min=Math.min(min,r);
+                    }
+                }
+                return min;
+            };
+
+            let index=(i+j)%this.x.length;
+            //log.debug('at index :',index);
+
+            let m1=undefined,m2=undefined;
+            if(direction===CubicInterpolationAnticipationDirection.ANY||direction===CubicInterpolationAnticipationDirection.UP) m1=calculateMin(index,deltaY);
+            if(direction===CubicInterpolationAnticipationDirection.ANY||direction===CubicInterpolationAnticipationDirection.DOWN) m2=calculateMin(index,-deltaY);
+            //log.debug('m1 :',m1);
+            //log.debug('m2 :',m2);
+            let m=m1;
+            if(m==undefined) m=m2; else if(m2!==undefined && m2<m1) m=m2;
+            if(m!==undefined) {
+                if(j+i>this.x.length) return m+xLimit-x; else return m;
+            }
+        }
+
+        return undefined;
     }
 }
 

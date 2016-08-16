@@ -46,7 +46,7 @@ class CFoxInelsDriver extends AbstractDriver {
     constructor() {
         super();
         this.packet=0;
-        this.sensors={};
+        this.drivenSensors={};
         this.addresses={};
         this.sensorsInUpdate={};
     }
@@ -336,7 +336,7 @@ class CFoxInelsDriver extends AbstractDriver {
                         deviceType: 'Generic Binary Input'
                     };
                     this.mergeSensorComments(sensor);
-                    this.sensors[name] = sensor;
+                    this.drivenSensors[name] = sensor;
                     var a = this.addresses[address];
                     if ((typeof a) === 'undefined') {
                         this.addresses[address] = a = [];
@@ -360,7 +360,7 @@ class CFoxInelsDriver extends AbstractDriver {
                         deviceType: 'Generic Binary Output'
                     };
                     this.mergeSensorComments(sensor);
-                    this.sensors[name] = sensor;
+                    this.drivenSensors[name] = sensor;
                     var a = this.addresses[address];
                     if ((typeof a) === 'undefined') {
                         this.addresses[address] = a = [];
@@ -401,7 +401,7 @@ class CFoxInelsDriver extends AbstractDriver {
                         deviceType: 'Thermometer'
                     };
                     this.mergeSensorComments(sensor);
-                    this.sensors[name] = sensor;
+                    this.drivenSensors[name] = sensor;
                     if (typeof this.addresses[address] !== 'undefined') throw 'Unexpected mismatch in input data at address:' + index;
                     if (this.addresses < 0) throw 'Inconsistent data';
                     this.addresses[address] = sensor;
@@ -422,7 +422,7 @@ class CFoxInelsDriver extends AbstractDriver {
                         deviceType: 'Generic Analog Output'
                     };
                     this.mergeSensorComments(sensor);
-                    this.sensors[name] = sensor;
+                    this.drivenSensors[name] = sensor;
                     if (typeof this.addresses[address] !== 'undefined') throw 'Unexpected mismatch in input data at address:' + index;
                     if (this.addresses < 0) throw 'Inconsistent data';
                     this.addresses[address] = sensor;
@@ -799,8 +799,8 @@ class CFoxInelsDriver extends AbstractDriver {
     getSensors() {
         var array = [];
         var i = 0;
-        for (var key in this.sensors) {
-            array[i++] = this.sensors[key];
+        for (var key in this.drivenSensors) {
+            array[i++] = this.drivenSensors[key];
         }
         return array;
     }
@@ -829,7 +829,7 @@ class CFoxInelsDriver extends AbstractDriver {
      * @param parameters @see SENSOR_ACTIONS
      */
     performAction(deviceId, sensorId, action, parameters) {
-        var sensor = this.sensors[sensorId];
+        var sensor = this.drivenSensors[sensorId];
         if (action === SENSOR_ACTIONS.SWITCH_OFF) {
             if ((typeof sensor.bit) === 'undefined') return;
             this.writeb(sensor.registerSpace, sensor.index, sensor.bit, false, function () {});

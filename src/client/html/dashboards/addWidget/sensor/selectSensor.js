@@ -9,7 +9,7 @@ Template.selectSensor.helpers({
 Template.selectSensor.events({
 
     'click .addSensor': function(event, instance) {
-        Template.modal.current.set({template : 'editSensorWidgetProperties', data : {widget: this, create : true }});
+        Template.modalBackup.current.set({template : 'editSensorWidgetProperties', data : {widget: this, create : true }});
     },
     'click .cancel': function(event, instance) {
         var dashboard=Session.get(CURRENT_DASHBOARD_ID);

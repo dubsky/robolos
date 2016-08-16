@@ -11,6 +11,7 @@ class Schedules {
 
     startSchedule(schedule) {
         this.runningTasks[schedule._id]=[];
+        if(schedule.disabled) return;
         if(schedule.cron!==undefined) {
             for(var i in schedule.cron)
             {
@@ -68,33 +69,46 @@ class Schedules {
                 this.length++;
             }
         }
+        if(schedule.type==='value') {
+            ValueSchedules.startSchedule(schedule);
+        }
     }
 
     stopSchedule(scheduleId) {
         var tasks=this.runningTasks[scheduleId];
-        for(var i in tasks) {
-            SyncedCron.remove(scheduleId+'_'+i);
+        if(tasks===undefined) {
+            ValueSchedules.stopSchedule(scheduleId);
         }
-        delete this.runningTasks[scheduleId];
-        this.length--;
+        else {
+            for(var i in tasks) {
+                SyncedCron.remove(scheduleId+'_'+i);
+            }
+            delete this.runningTasks[scheduleId];
+            this.length--;
+        }
     }
 
     nextExecution(scheduleId) {
-        var min=0;
-        var tasks=this.runningTasks[scheduleId];
-        for(var i in tasks) {
-            var nextExecution=SyncedCron.nextScheduledAtDate(scheduleId+'_'+i);
-            if(next!==0)
-            {
-                var next=nextExecution.getTime();
-                if(min<next) min=next;
-            }
-            else {
-                log.error('Assertion failed, obsolete task still in the list');
-                delete self.runningTasks[scheduleId];
-            }
+        let tasks=this.runningTasks[scheduleId];
+        if(tasks===undefined) {
+            return ValueSchedules.getNextExecutionTime(scheduleId);
         }
-        return min;
+        else {
+            let min=0;
+            for(let i in tasks) {
+                let nextExecution=SyncedCron.nextScheduledAtDate(scheduleId+'_'+i);
+                if(nextExecution!=0 && nextExecution!=undefined)
+                {
+                    let next=nextExecution.getTime();
+                    if(min<next) min=next;
+                }
+                else {
+                    log.error('Assertion failed, obsolete task still in the list');
+                    delete self.runningTasks[scheduleId];
+                }
+            }
+            return min;
+        }
     }
 
     start() {

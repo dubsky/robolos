@@ -776,10 +776,10 @@ FirmwareCollection = new Mongo.Collection("firmware");
             var results=[];
             for(var i in devices) {
                 var device=devices[i];
-                if((typeof device.sensors)==='undefined') continue;
+                if((typeof device.drivenSensors)==='undefined') continue;
 
-                for(var j=0;j<device.sensors.length;j++) {
-                    var sensor=device.sensors[j];
+                for(var j=0; j<device.drivenSensors.length; j++) {
+                    var sensor=device.drivenSensors[j];
 
                     var type=sensorTypes[sensor.type];
                     var result={

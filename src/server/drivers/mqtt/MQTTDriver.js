@@ -52,7 +52,7 @@ class MQTTDriver extends AbstractDriver {
             MQTTSensorCollection.upsert({_id: device+'/'+sensor},{$set : sensorData });
             sensorData._id=device+'/'+sensor;
 
-            this.sensors[device+'/'+sensor]=sensorData;
+            this.drivenSensors[device+'/'+sensor]=sensorData;
             this.onEventListener.onSensorDiscovery([sensorData]);
     }
 
@@ -88,7 +88,7 @@ class MQTTDriver extends AbstractDriver {
 
                     let payload=JSON.parse(packet.payload);
                     if ((typeof (this.onEventListener)!=='undefined')) {
-                        let sensorData=this.sensors[device+'/'+sensor];
+                        let sensorData=this.drivenSensors[device+'/'+sensor];
                         if(sensorData==undefined) {
                             log.error('Unknown sensor:'+device+'/'+sensor);
                             break;
@@ -185,11 +185,11 @@ class MQTTDriver extends AbstractDriver {
     /** Build list of sensors, called on driver instance start */
     getSensors() {
         let result=[];
-        this.sensors={};
+        this.drivenSensors={};
         let self=this;
         MQTTSensorCollection.find().forEach(function(s) {
             result[result.length]=s;
-            self.sensors[s.deviceId+'/'+s.sensorId]=s;
+            self.drivenSensors[s.deviceId+'/'+s.sensorId]=s;
         });
         return result;
     }
@@ -213,16 +213,16 @@ class MQTTDriver extends AbstractDriver {
         MQTTSensorCollection.delete({deviceId: id});
         MQTTDeviceCollection.delete({_id: id});
         let newSensors=[];
-        for(let i in this.sensors) {
-            if(this.sensors[i].deviceId!=id) {
-                newSensors[newSensors.length]=this.sensors[i];
+        for(let i in this.drivenSensors) {
+            if(this.drivenSensors[i].deviceId!=id) {
+                newSensors[newSensors.length]=this.drivenSensors[i];
             }
         }
-        this.sensors=newSensors;
+        this.drivenSensors=newSensors;
     }
 
     performSetValueAction(deviceId ,sensorId, value) {
-        let sensorData=this.sensors[deviceId+'/'+sensorId];
+        let sensorData=this.drivenSensors[deviceId+'/'+sensorId];
         if(sensorData==undefined) {
             log.error('Sensor '+deviceId+'/'+sensorId+' does not exist anymore');
             return;
@@ -254,7 +254,7 @@ class MQTTDriver extends AbstractDriver {
             this.performSetValueAction(deviceId, sensorId, value);
         }
         if (action == SENSOR_ACTIONS.GET_VALUE) {
-            let sensorData=this.sensors[deviceId+'/'+sensorId];
+            let sensorData=this.drivenSensors[deviceId+'/'+sensorId];
             if(sensorData!=undefined) {
                 this.server.ascoltatore.publish(sensorData.topic+'/get', 'message', {}, function() {});
             }

@@ -74,6 +74,20 @@ class SensorsClass {
         }
     }
 
+    getSensorIdComponents(sensorId) {
+        if(sensorId!=null) {
+            var id = sensorId.split(';');
+            if (id.length === 3) {
+                return id;
+            }
+            else {
+                throw 'Invalid sensor id:' + sensorId;
+            }
+        }
+        else {
+            throw 'Invalid sensor id:'+sensorId;
+        }
+    }
 
     scanForUnknownSensorStatusesOneIteration() {
         if(this.scanningStatus===undefined || this.scanningStatus.keys.length==this.scanningStatus.i) {

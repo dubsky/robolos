@@ -9,7 +9,8 @@ class DemoDriver extends AbstractDriver {
         return 'Sample driver to use as a template to build your own drivers';
     }
 
-    /** Called when the driver is started and should start reporting sensor values and listening for actor changes */
+    /** Called when the driver is started and should start reporting sensor values and listening for actor changes.
+     *  All sensors should be discoverd during this stage so that the system can safely start. */
     start(parameters) {
         // simulate updates from Temp sensor
         var self=this;
