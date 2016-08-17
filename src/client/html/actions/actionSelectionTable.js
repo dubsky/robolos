@@ -3,7 +3,7 @@
 Template.actionSelectionTable.helpers({
 
     actions: function () {
-        return Collections.Actions.find();
+        return this.filter===undefined ? Collections.Actions.find() : Collections.Actions.find(this.filter);
     },
 
     settings: function() {

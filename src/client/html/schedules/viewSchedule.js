@@ -1,4 +1,5 @@
-var CURRENT_SCHEDULE="CURRENT_SCHEDULE";
+let CURRENT_SCHEDULE="CURRENT_SCHEDULE";
+VIEW_SCHEDULE_RETURN_ROUTE="VIEW_SCHEDULE_RETURN_ROUTE";
 
 Template.viewSchedule.helpers({
 
@@ -47,12 +48,18 @@ Router.route('schedules/:_id',
     }
 );
 
+
+function calculateReturnRoute() {
+    let returnRoute=Session.get(VIEW_SCHEDULE_RETURN_ROUTE);
+    if(returnRoute!=undefined) Router.go(returnRoute); else Router.go('schedules');
+}
+
 Template.viewSchedule.events({
 
     'click .cancel' :function(event) {
         Session.set(CURRENT_GRAPH_SESSION_KEY,undefined);
         EditContext.setContext(undefined);
-        Router.go('schedules');
+        calculateReturnRoute();
         return false;
     }
 
@@ -64,11 +71,11 @@ AutoForm.hooks({
             'method-update': function() {
                 EditContext.setContext(undefined);
                 Session.set(CURRENT_GRAPH_SESSION_KEY,undefined);
-                Router.go('schedules');
+                calculateReturnRoute();
             }
         },
         before:{
-            'method-update': analogValueChartGetData,
+            'method-update': analogValueChartGetData
         },
         formToModifier: function(modifier) {
             EditContext.getContext().modifier=modifier;

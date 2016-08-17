@@ -11,7 +11,7 @@
         </div>
         <div class="content">
             {{#if firstStep}}
-                {{> actionSelectionTable renderBox=false allowSelection=true}}
+                {{> actionSelectionTable filter=filter renderBox=false allowSelection=true}}
             {{else}}
                 {{#autoForm id="eventForm" type="method-update" meteormethod="createSchedule" schema=schema doc=document}}
                     {{> afQuickField name="title"}}

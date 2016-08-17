@@ -19,12 +19,12 @@ Template.renderAction.helpers({
 
 Template.renderAction.actionEditationFinished=function(event) {
     var context=EditContext.getContext();
-    console.log('Template.renderAction.actionEditationFinished',context);
+    //console.log('Template.renderAction.actionEditationFinished',context);
     if(context!=null) {
         context.keepEditContextOnNextRoute();
         var route=context.getReturnRoute();
         context.getDocument()[context.getFieldName()]=Session.get(CURRENT_ACTION)._id;
-        console.log('calling on save',context);
+        //console.log('calling on save',context);
         route.onSave();
     }
     else {

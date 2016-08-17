@@ -1,6 +1,11 @@
+later.date.localTime();
+
+let LAST_CALENDAR_DATE='LAST_CALENDAR_DATE';
+
+
 Template.calendar.onRendered(function() {
     var calendarElement=$('#calendar');
-    calendarElement.fullCalendar({
+    let configuration={
         firstDay:1,
         header: {
             left: 'prev,next today',
@@ -10,41 +15,84 @@ Template.calendar.onRendered(function() {
         editable: true,
         handleWindowResize:true,
         eventClick: function(event, element) {
-            Template.modal.current.set( {template : 'editEvent', data : { event : event} });
+            if(event.id.startsWith('recurring')) {
+                let id=event.id.split('_')[1];
+                Router.go('render.schedule',{_id:id});
+            }
+            else {
+                Router.go('render.schedule',{_id:event.id});
+            }
         },
         dayClick: function(date, jsEvent, view) {
             Template.modal.current.set( {template : 'addEvent', data : { date : date} });
         },
         eventDrop: function(event, delta, revertFunc) {
-            Meteor.call("updateSchedule",{ $set : {executeOn: event.start.toDate()} },event.id,function() {
+            if(event.id.startsWith('recurring')) {
                 $('#calendar').fullCalendar('refetchEvents');
-            });
+            }
+            else {
+                Meteor.call("updateSchedule",{ $set : {executeOn: event.start.toDate()} },event.id,function() {
+                    $('#calendar').fullCalendar('refetchEvents');
+                });
+            }
         },
         events: function(start, end, timezone, callback) {
             var events=[];
             var filter={
-                $and: [
-                    {executeOn: {$gt: start.toDate()}},
-                    {executeOn: {$lt: end.toDate()}}
-                ]
+                /*$and: [
+                 {executeOn: {$gt: start.toDate()}},
+                 {executeOn: {$lt: end.toDate()}}
+                 ]*/
             };
+            let today=new Date().getTime();
+
+            function colorize(e) {
+                if(e.start<today) {
+                    e.color='grey';
+                }
+            }
+
             Collections.Schedules.find(filter).forEach(function(schedule) {
+                console.log(schedule);
                 if(schedule.executeOn) {
-                    var i=events.length;
+                    let i=events.length;
                     events[i]=
                     {
                         id:schedule._id,
                         title: schedule.title,
                         start: schedule.executeOn
                     };
-                    if(events[i].start<new Date().getTime()) {
-                        events[i].color='grey';
+                    colorize(events[i]);
+                }
+                else if(schedule.cron) {
+
+                    for(let cron of schedule.cron) {
+                        console.log('cro:'+cron);
+                        let sched=later.schedule(later.parse.cron(CronExpression.getCronExpression(cron)));
+                        console.log(new Date(start));
+                        let dates=sched.nextRange(50, new Date(start), new Date(end));
+                        console.log(dates);
+                        for(let date of dates) {
+                            let i=events.length;
+                            events[i]=
+                            {
+                                id:'recurring_'+schedule._id+'_'+i,
+                                title: schedule.title,
+                                start: date[1]
+                            };
+                            events[i].color='#477343';
+                            colorize(events[i]);
+                        }
                     }
                 }
             });
             callback(events);
         }
-    });
+    };
+    let lastDate=Session.get(LAST_CALENDAR_DATE);
+    if(lastDate!==undefined) configuration.defaultDate=moment(lastDate);
+    calendarElement.fullCalendar(configuration);
+
     /*
     if(!TOUCH_DEVICE) {
         var scrollBarParams = {
@@ -58,8 +106,15 @@ Template.calendar.onRendered(function() {
     }*/
 });
 
+
+Template.calendar.onDestroyed(function() {
+    Session.set(LAST_CALENDAR_DATE,$('#calendar').fullCalendar('getDate').toDate());
+});
+
+
 Router.route('calendar',
     function () {
+        Session.set(VIEW_SCHEDULE_RETURN_ROUTE,'calendar');
         this.render('calendar');
     },
     {

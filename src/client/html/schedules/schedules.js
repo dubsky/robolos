@@ -42,6 +42,7 @@ Template.schedules.events({
 
 
 Template.schedules.onRendered(function() {
+    Session.set(VIEW_SCHEDULE_RETURN_ROUTE,'schedules');
     Session.set('selectedSchedules',[]);
     HeightController.onAreaRendered('table.reactive-table > tbody');
     HeightController.maintainPosition('schedules');

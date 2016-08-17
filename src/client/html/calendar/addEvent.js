@@ -20,6 +20,7 @@ Template.addEvent.helpers({
         return Collections.Schedules
     },
 
+    filter : { calendarDroppable: true },
     schema: function() {
         return new SimpleSchema({
             title: {
@@ -46,6 +47,11 @@ Template.addEvent.helpers({
                 autoform: {
                     icon: 'fa-clock-o'
                 }
+            },
+            type: {
+                label: "Schedule Type",
+                type: String,
+                defaultValue:'one-time'
             }
         });
     }
@@ -84,6 +90,7 @@ AutoForm.hooks({
             'method-update': function(doc) {
                 var selection=Session.get('selectedAction');
                 doc.$set.action=selection;
+                doc.$set.type='one-time';
                 return doc;
             }
         },
