@@ -38,12 +38,21 @@ Template.calendar.onRendered(function() {
         },
         events: function(start, end, timezone, callback) {
             var events=[];
-            var filter={
-                /*$and: [
-                 {executeOn: {$gt: start.toDate()}},
-                 {executeOn: {$lt: end.toDate()}}
-                 ]*/
+            var filter= {
+                $or: [
+                    {
+                        $and: [
+                            { type: 'one-time'},
+                            { executeOn: {$gt: start.toDate()}},
+                            { executeOn: {$lt: end.toDate()}}
+                        ]
+                    },
+                    {
+                        type: 'cron'
+                    }
+                ]
             };
+
             let today=new Date().getTime();
 
             function colorize(e) {
@@ -53,7 +62,6 @@ Template.calendar.onRendered(function() {
             }
 
             Collections.Schedules.find(filter).forEach(function(schedule) {
-                console.log(schedule);
                 if(schedule.executeOn) {
                     let i=events.length;
                     events[i]=
@@ -65,23 +73,24 @@ Template.calendar.onRendered(function() {
                     colorize(events[i]);
                 }
                 else if(schedule.cron) {
-
-                    for(let cron of schedule.cron) {
-                        console.log('cro:'+cron);
-                        let sched=later.schedule(later.parse.cron(CronExpression.getCronExpression(cron)));
-                        console.log(new Date(start));
-                        let dates=sched.nextRange(50, new Date(start), new Date(end));
-                        console.log(dates);
-                        for(let date of dates) {
-                            let i=events.length;
-                            events[i]=
-                            {
-                                id:'recurring_'+schedule._id+'_'+i,
-                                title: schedule.title,
-                                start: date[1]
-                            };
-                            events[i].color='#477343';
-                            colorize(events[i]);
+                    if(schedule.action!==undefined) {
+                        let action=Collections.Actions.findOne(schedule.action);
+                        if(action!==undefined && action.calendarDroppable) {
+                            for(let cron of schedule.cron) {
+                                let sched=later.schedule(later.parse.cron(CronExpression.getCronExpression(cron)));
+                                let dates=sched.nextRange(50, new Date(start), new Date(end));
+                                for(let date of dates) {
+                                    let i=events.length;
+                                    events[i]=
+                                    {
+                                        id:'recurring_'+schedule._id+'_'+i,
+                                        title: schedule.title,
+                                        start: date[1]
+                                    };
+                                    events[i].color='#477343';
+                                    colorize(events[i]);
+                                }
+                            }
                         }
                     }
                 }
