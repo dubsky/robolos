@@ -1,9 +1,10 @@
-var fs = Npm.require('fs');
+import fs from 'fs';
+import path from 'path';
 
 function getApplicationRoot() {
     var meteor_root = fs.realpathSync( process.cwd() + '/../' );
     var application_root = fs.realpathSync( meteor_root + '/../' );
-    if( Npm.require('path').basename( fs.realpathSync( meteor_root + '/../../../' ) ) == '.meteor' ) {
+    if( path.basename( fs.realpathSync( meteor_root + '/../../../' ) ) == '.meteor' ) {
         application_root = fs.realpathSync(meteor_root + '/../../../../');
     }
     return application_root+'/..';
@@ -18,7 +19,7 @@ function getResourceBase() {
     var application_root = fs.realpathSync( meteor_root + '/../' );
     // if running on dev mode
     var resourcesLocation;
-    if( Npm.require('path').basename( fs.realpathSync( meteor_root + '/../../../' ) ) == '.meteor' ){
+    if( path.basename( fs.realpathSync( meteor_root + '/../../../' ) ) == '.meteor' ){
         application_root =  fs.realpathSync( meteor_root + '/../../../../' );
         resourcesLocation='/public';
     }

@@ -1,3 +1,9 @@
+import Fiber from 'fibers';
+import path from 'path';
+import requestify from 'requestify';
+import net from 'net';
+import serialPort from 'serialport';
+
 NodeCollection = new Mongo.Collection("node");
 FirmwareCollection = new Mongo.Collection("firmware");
 
@@ -97,8 +103,6 @@ FirmwareCollection = new Mongo.Collection("firmware");
     const P_CUSTOM = 6;
 
     var fs = {};//Meteor.npmRequire('fs');
-    var path = Meteor.npmRequire('path');
-    var requestify = Meteor.npmRequire('requestify');
     var appendedString = "";
 
     function crcUpdate(old, value) {
@@ -258,13 +262,33 @@ FirmwareCollection = new Mongo.Collection("firmware");
     }
 
     function saveSensor(sender, sensor, type) {
-        NodeCollection.update({
-            'id': sender
-            }, {
-            $addToSet: {
-                sensors: { id: sensor, type: type }
+        let node = NodeCollection.findOne({id: sender});
+        if (node !== undefined) {
+            if (node.sensors === undefined) node.sensors = [];
+            let found = false;
+            for (let n of node.sensors) {
+                if (n.id == sensor) {
+                    if (n.type != type) {
+                        n.type = type;
+                        found = true;
+                    }
+                    else {
+                        return;
+                    }
+                }
             }
-        });
+
+            if (!found) {
+                node.sensors[node.sensors.length] = {id: sensor, type: type};
+            }
+            NodeCollection.update({
+                'id': sender
+            }, {
+                $set: {
+                    sensors: node.sensors
+                }
+            });
+        }
     }
 
 
@@ -648,7 +672,7 @@ FirmwareCollection = new Mongo.Collection("firmware");
     function openEthernetConnection(parameters) {
         if(!MySensorsConnected) {
             log.info('MySensors: Connecting to MySensors network (ethernet)');
-            gw = Meteor.npmRequire('net').Socket();
+            gw = net.Socket();
             gw.connect(parameters.gwPort, parameters.gwAddress);
             gw.setEncoding('ascii');
             gw.on('connect', function () {
@@ -672,8 +696,6 @@ FirmwareCollection = new Mongo.Collection("firmware");
         }
     }
 
-    Fiber = Npm.require('fibers');
-
     MySensorsConnected=false;
 
     function connectOverEthernet(parameters,open) {
@@ -686,7 +708,7 @@ FirmwareCollection = new Mongo.Collection("firmware");
     function openSerialConnection(parameters) {
         if(!MySensorsConnected) {
             log.info('MySensors: Connecting to MySensors network (serial)');
-            var SerialPort = Meteor.npmRequire('serialport').SerialPort;
+            var SerialPort = serialPort.SerialPort;
             gw = new SerialPort(parameters.gwSerialPort, {baudrate: parameters.gwBaud});
 
             gw.on('error', function (e) {
@@ -768,21 +790,25 @@ FirmwareCollection = new Mongo.Collection("firmware");
         }
 
         getSensors() {
+
+            log.debug('Reading sensors');
+
             var sensorTypes=this.getSensorTypes();
             var latestValues=this.getLatestValues();
 
             var devices=NodeCollection.find({}).fetch();
 
             var results=[];
-            for(var i in devices) {
-                var device=devices[i];
-                if((typeof device.drivenSensors)==='undefined') continue;
+            for(let i in devices) {
+                let device=devices[i];
+                log.debug('Processing device:',device);
+                if(device.sensors===undefined) continue;
 
-                for(var j=0; j<device.drivenSensors.length; j++) {
-                    var sensor=device.drivenSensors[j];
+                for(let j=0; j<device.sensors.length; j++) {
+                    let sensor=device.sensors[j];
 
-                    var type=sensorTypes[sensor.type];
-                    var result={
+                    let type=sensorTypes[sensor.type];
+                    let result={
                         driver : 'My Sensors',
                         deviceId:device.id,
                         sensorId: sensor.id,
@@ -790,13 +816,13 @@ FirmwareCollection = new Mongo.Collection("firmware");
                         //protocol:device.protocol,
                         //deviceType:device.sketchName
                     };
-                    if((typeof type.mappedToType)!=='undefined') result.type=type.mappedToType.id; else result.comment=type.comment;
+                    if(type.mappedToType!==undefined) result.type=type.mappedToType.id; else result.comment=type.comment;
 
-                    var nodeValues=latestValues[device.id];
-                    if((typeof nodeValues)!=='undefined')
+                    let nodeValues=latestValues[device.id];
+                    if(nodeValues!==undefined)
                     {
-                        var sensorValue=nodeValues[sensor.id];
-                        if((typeof sensorValue)!=='undefined') {
+                        let sensorValue=nodeValues[sensor.id];
+                        if(sensorValue!==undefined) {
                             result.timestamp=sensorValue.timestamp;
                             result.value=sensorValue.value;
                         }

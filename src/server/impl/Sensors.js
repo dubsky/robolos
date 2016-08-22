@@ -93,8 +93,8 @@ class SensorsClass {
         if(this.scanningStatus===undefined || this.scanningStatus.keys.length==this.scanningStatus.i) {
             this.scanningStatus={ i:0, keys: Object.keys(this.knownSensors) };
         }
-        let repeat=true;
         let beginning=new Date().getTime();
+        let numberOfScannedValues=0;
         do {
             let currentKey=this.scanningStatus.keys[this.scanningStatus.i++];
             if (this.knownSensors.hasOwnProperty(currentKey)) {
@@ -105,9 +105,10 @@ class SensorsClass {
                 if(this.scanningStatus.i>=this.scanningStatus.keys.length) break;
             }
             // don't spend more than 50ms here
-            if(new Date().getTime()-beginning>50) repeat=false;
+            if(new Date().getTime()-beginning>50) break;
+            if(numberOfScannedValues>5) break;
         }
-        while(repeat);
+        while(true);
     }
 
     /**
@@ -117,7 +118,7 @@ class SensorsClass {
         var self=this;
         var handle = setInterval(function () {
             self.scanForUnknownSensorStatusesOneIteration();
-        }, 500);
+        }, 1000);
     }
 
     getSensorStatus(driverInstance, device, sensor) {

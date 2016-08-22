@@ -16,6 +16,7 @@ class SensorsUIClass extends Observable {
         Sensors.forEachSensor(function(sensor) {
             if(sensor.driver==driverInstanceId && sensor.deviceId==deviceId) {
                 let sensorId=SHARED.getSensorID(sensor.driver,sensor.deviceId,sensor.sensorId);
+                log.debug('removing sensor on behalf of removed device:'+sensorId);
                 SensorMetadata.removeSensor(sensorId);
                 self.fireRemoveEvent(sensorId);
             }

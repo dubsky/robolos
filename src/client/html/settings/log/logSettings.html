@@ -12,6 +12,8 @@
                 {{> afQuickField name="logCapacity"}}
                 <p>By default logging of sensor changes and action execution is disabled:</p>
                 {{> afQuickField name="enableEventLogging"}}
+                <p>You may enable debug logging to troubleshoot drivers:</p>
+                {{> afQuickField name="debugLoggingEnabled"}}
                 <button class="ui primary button customSubmit" disabled="{{saveDisabled}}">Save</button>
                 <a href="{{pathFor 'log'}}" class="ui secondary button resetKeywords">
                     View Log Messages

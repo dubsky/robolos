@@ -1,7 +1,8 @@
+import serialPort from 'serialport';
+
 Meteor.methods({
 
     'mysensors-listSerialPorts' : function() {
-        var serialPort = Meteor.npmRequire('serialport');
         let results=[];
         let listSynchronously=Meteor.wrapAsync(serialPort.list);
 

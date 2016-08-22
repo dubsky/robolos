@@ -1,5 +1,6 @@
-var fs = Npm.require('fs');
-var readline = Npm.require('readline');
+import fs from 'fs';
+import readline from 'readline';
+import dgram from 'dgram';
 
 
 var REGISTER_SPACES = {
@@ -776,10 +777,15 @@ class CFoxInelsDriver extends AbstractDriver {
 
         self.initializeLookupTables();
 
-        var dgram = Meteor.npmRequire('dgram');
         var client = dgram.createSocket("udp4", function (result, err) {
-            var handler=incomingMessageHandler[result.readUInt16BE(0)];
-            if((typeof handler)!=='undefined') handler(result);
+            try {
+                var handler=incomingMessageHandler[result.readUInt16BE(0)];
+                if((typeof handler)!=='undefined') handler(result);
+            }
+            catch(e)
+            {
+                log.error('Uexpected error in CFox communication',e);
+            }
         });
 
         client.on('error', function (e) {
@@ -861,18 +867,21 @@ class CFoxInelsDriver extends AbstractDriver {
                 var self=this;
                 var onFinish=function () {
                     var sensorUpdateRecord=self.sensorsInUpdate[sensorId];
-                    sensorUpdateRecord.age=new Date().getTime();
-                    log.debug(sensorUpdateRecord);
-                    log.debug(sensorUpdateRecord.length);
-                    if(sensorUpdateRecord[0]===undefined) {
-                        delete self.sensorsInUpdate[sensorId];
-                    }
-                    else
+                    if (sensorUpdateRecord!==undefined)
                     {
-                        var r=sensorUpdateRecord[0];
-                        delete sensorUpdateRecord[0];
-                        log.debug('writing :'+r.params);
-                        self.writeFloat(r.space,r.index,r.params,onFinish);
+                        sensorUpdateRecord.age=new Date().getTime();
+                        log.debug(sensorUpdateRecord);
+                        log.debug(sensorUpdateRecord.length);
+                        if(sensorUpdateRecord[0]===undefined) {
+                            delete self.sensorsInUpdate[sensorId];
+                        }
+                        else
+                        {
+                            var r=sensorUpdateRecord[0];
+                            delete sensorUpdateRecord[0];
+                            log.debug('writing :'+r.params);
+                            self.writeFloat(r.space,r.index,r.params,onFinish);
+                        }
                     }
                 }
 

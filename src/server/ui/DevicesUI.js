@@ -85,6 +85,7 @@ Meteor.publish('devices', function(){
 
 Meteor.methods({
     deleteDevices : function(list) {
+        console.log('delete devices',list);
         DevicesUI.removeDevices(list);
     }
 });

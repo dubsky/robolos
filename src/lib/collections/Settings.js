@@ -10,6 +10,12 @@ Schemas.Settings=new SimpleSchema({
         defaultValue:true,
         type: Boolean
     },
+    debugLoggingEnabled:{
+        label:'Enable Debug Logging (affects performance)',
+        optional:true,
+        defaultValue:false,
+        type: Boolean
+    },
     logCapacity: {
         label:'Log Capacity (messages)',
         optional:true,

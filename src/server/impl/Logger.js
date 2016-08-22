@@ -94,7 +94,7 @@ class Logger extends Observable {
     }
 
     debug(text,object) {
-        this.logMessage('debug',text,object,true);
+        if(this.debugLoggingEnabled) this.logMessage('debug',text,object,true);
     }
 
     event(f,params) {
@@ -125,6 +125,7 @@ class Logger extends Observable {
 
     applySettings(settings) {
         this.logEventsEnabled=settings.enableEventLogging;
+        this.debugLoggingEnabled=settings.debugLoggingEnabled;
         if(this.maxMessages!=settings.logCapacity)
         {
             this.messages=[];

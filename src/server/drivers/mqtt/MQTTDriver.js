@@ -1,4 +1,4 @@
-var mosca = Meteor.npmRequire('mosca');
+import mosca from 'mosca';
 
 MQTTSensorCollection = new Mongo.Collection("mqttSensors");
 MQTTDeviceCollection = new Mongo.Collection("mqttDevices");

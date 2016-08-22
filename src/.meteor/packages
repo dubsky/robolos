@@ -7,7 +7,6 @@
 #insecure
 iron:router
 #aslagle:reactive-table
-meteorhacks:npm
 
 
 #grigio:babel
@@ -28,7 +27,6 @@ fabienb4:autoform-semantic-ui
 aaronthorp:mongo-direct
 
 
-npm-container
 meteor-base
 mobile-experience
 mongo

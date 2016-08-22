@@ -1,3 +1,6 @@
+import Fiber from 'fibers';
+
+
 class DevicesClass {
 
     constructor() {
@@ -22,6 +25,7 @@ class DevicesClass {
             let id=driverInstance.getId()+';'+result.id;
             result._id=id;
             result.driver=driverInstance.getId();
+            result.id=result.id+''; // enforce String type
             if(this.knownDevices[id]===undefined)
             {
                 //log.debug('discovered new device:'+id);
@@ -84,12 +88,12 @@ class DevicesClass {
         var driver=this.getDriverByInstanceID(driverInstanceId);
         driver.removeDevice(deviceId);
         Sensors.forEachSensor(function(sensor) {
-            if(sensor.deviceId===deviceId && sensor.driver==driverInstanceId) Sensors.removeSensorOnUserRequest(sensor._id);
+            if(sensor.deviceId==deviceId && sensor.driver==driverInstanceId) Sensors.removeSensorOnUserRequest(sensor._id);
         });
 
         var fullDeviceId=SHARED.getDeviceID(driverInstanceId,deviceId);
         delete this.knownDevices[fullDeviceId];
-        //log.debug('removing device:'+fullDeviceId);
+        // log.debug('removing device:'+fullDeviceId);
     }
 
     init() {
