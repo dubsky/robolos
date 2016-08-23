@@ -1,5 +1,5 @@
 
-SENSORS={
+MySensorsSensorTypes={
     0 : { type: 'S_DOOR', comment:'Door and window sensors', mappedToType: SensorTypes.S_DOOR },
     1 : { type: 'S_MOTION', comment:'Motion sensors',mappedToType: SensorTypes.S_MOTION },
     2 : { type: 'S_SMOKE', comment:'Smoke sensor',mappedToType: SensorTypes.S_SMOKE},
@@ -39,3 +39,60 @@ SENSORS={
    100 : { type: 'S_PH', comment:'pH sensor',mappedToType: SensorTypes.S_PH}
 
 };
+
+MySensorsVariableTypes=new Map();
+MySensorsVariableTypeToNumber=new Map();
+
+let mapVariable=function(variable,number) {
+    MySensorsVariableTypes.set(number,variable);
+    MySensorsVariableTypeToNumber.set(variable,number);
+};
+
+mapVariable('V_TEMP',0);
+mapVariable('V_HUM',1);
+mapVariable('V_LIGHT',2);
+mapVariable('V_STATUS',2);
+mapVariable('V_DIMMER',3);
+mapVariable('V_PRESSURE',4);
+mapVariable('V_FORECAST',5);
+mapVariable('V_RAIN',6);
+mapVariable('V_RAINRATE',7);
+mapVariable('V_WIND',8);
+mapVariable('V_GUST',9);
+mapVariable('V_DIRECTION',10);
+mapVariable('V_UV',11);
+mapVariable('V_WEIGHT',12);
+mapVariable('V_DISTANCE',13);
+mapVariable('V_IMPEDANCE',14);
+mapVariable('V_ARMED',15);
+mapVariable('V_TRIPPED',16);
+mapVariable('V_WATT',17);
+mapVariable('V_KWH',18);
+mapVariable('V_SCENE_ON',19);
+mapVariable('V_SCENE_OFF',20);
+mapVariable('V_HEATER',21);
+mapVariable('V_HEATER_SW',22);
+mapVariable('V_LIGHT_LEVEL',23);
+mapVariable('V_VAR1',24);
+mapVariable('V_VAR2',25);
+mapVariable('V_VAR3',26);
+mapVariable('V_VAR4',27);
+mapVariable('V_VAR5',28);
+mapVariable('V_UP',29);
+mapVariable('V_DOWN',30);
+mapVariable('V_STOP',31);
+mapVariable('V_IR_SEND',32);
+mapVariable('V_IR_RECEIVE',33);
+mapVariable('V_FLOW',34);
+mapVariable('V_VOLUME',35);
+mapVariable('V_LOCK_STATUS',36);
+mapVariable('V_LEVEL',37);
+mapVariable('V_VOLTAGE',38);
+mapVariable('V_CURRENT',39);
+mapVariable('V_RGB',40);
+mapVariable('V_RGBW',41);
+mapVariable('V_ID',42);
+mapVariable('V_UNIT_PREFIX',43);
+mapVariable('V_HVAC_SETPOINT_COOL',44);
+mapVariable('V_HVAC_SETPOINT_HEAT',45);
+mapVariable('V_HVAC_FLOW_MODE',46);

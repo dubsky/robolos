@@ -52,9 +52,10 @@ class SensorsClass {
                 if(result.value!=undefined) result.value = this.processIncomingSensorValueForSensorObject(driverInstance, result, result.value);
 
                 // ask for system state after boot
+                /*
                 if ((result.class === SensorClasses.ANALOG_OUTPUT || result.class === SensorClasses.BINARY_OUTPUT || result.class === SensorClasses.ANALOG_OUTPUT_0_100) && (typeof result.value) === 'undefined') {
                     driverInstance.getDriver().performAction(result.deviceId, result.sensorId, SENSOR_ACTIONS.GET_VALUE);
-                }
+                }*/
             }
         }
         catch (e) {
@@ -100,7 +101,9 @@ class SensorsClass {
             if (this.knownSensors.hasOwnProperty(currentKey)) {
                 let s = this.knownSensors[currentKey];
                 if ((s !== undefined) && (s.class === SensorClasses.ANALOG_OUTPUT || s.class === SensorClasses.BINARY_OUTPUT || s.class === SensorClasses.ANALOG_OUTPUT_0_100) && (typeof s.value) === 'undefined') {
-                    Devices.getDriverByInstanceID(s.driver).performAction(s.deviceId, s.sensorId, SENSOR_ACTIONS.GET_VALUE);
+                    // should be scanning for all variables !
+                    let variable=Sensors.getMainVariable(s.driver,s.deviceId,s.sensorId,);
+                    Devices.getDriverByInstanceID(s.driver).performAction(s.deviceId, s.sensorId, variable, SENSOR_ACTIONS.GET_VALUE);
                 }
                 if(this.scanningStatus.i>=this.scanningStatus.keys.length) break;
             }
@@ -122,21 +125,34 @@ class SensorsClass {
     }
 
     getSensorStatus(driverInstance, device, sensor) {
-        var fromCache = this.knownSensors[SHARED.getSensorID(driverInstance, device, sensor)];
-        if ((typeof fromCache) === 'undefined') return fromCache;
+        let fromCache = this.knownSensors[SHARED.getSensorID(driverInstance, device, sensor)];
+        if (fromCache === undefined) return fromCache;
+        /*
         if ((typeof fromCache.value) === 'undefined') {
             var driver = Devices.getDriverByInstanceID(driverInstance);
             if ((typeof driver) !== 'undefined')
                 driver.performAction(device, sensor, SENSOR_ACTIONS.GET_VALUE);
-        }
+        }*/
         return fromCache;
     }
 
 
-    performAction(driverInstanceId, deviceId, sensorId, action, parameters) {
+    getMainVariable(driverInstanceId, deviceId, sensorId) {
+        let status = this.getSensorStatus(driverInstanceId, deviceId, sensorId);
+        let type=SensorTypes[status.type];
+        if(type===undefined) throw 'Unknown sensor type:'+status.type;
+        return type.mainVariable;
+    }
+
+    performAction(driverInstanceId, deviceId, sensorId, variable, action, parameters) {
 
         var driver = Devices.getDriverByInstanceID(driverInstanceId);
         if (driver === undefined) return;
+
+        let chosenVariable=variable;
+        if(variable===null) {
+            chosenVariable=this.getMainVariable(driverInstanceId, deviceId, sensorId);
+        }
 
         if (action === SENSOR_ACTIONS.SWITCH_OVER) {
             var status = this.getSensorStatus(driverInstanceId, deviceId, sensorId);
@@ -145,10 +161,10 @@ class SensorsClass {
                 return;
             }
             if (status.value === 0) {
-                this.performAction(driverInstanceId, deviceId, sensorId, SENSOR_ACTIONS.SWITCH_ON);
+                this.performAction(driverInstanceId, deviceId, sensorId, chosenVariable, SENSOR_ACTIONS.SWITCH_ON);
             }
             else {
-                this.performAction(driverInstanceId, deviceId, sensorId, SENSOR_ACTIONS.SWITCH_OFF);
+                this.performAction(driverInstanceId, deviceId, sensorId, chosenVariable, SENSOR_ACTIONS.SWITCH_OFF);
             }
         }
         else {
@@ -172,24 +188,23 @@ class SensorsClass {
                 if (status.class === SensorClasses.BINARY_OUTPUT) {
                     if (this.shouldReverseLogic(driverInstanceId, deviceId, sensorId)) {
                         if (action === SENSOR_ACTIONS.SWITCH_ON)
-                            return driver.performAction(deviceId, sensorId, SENSOR_ACTIONS.SWITCH_OFF, parameters);
+                            return driver.performAction(deviceId, sensorId, chosenVariable, SENSOR_ACTIONS.SWITCH_OFF, parameters);
                         else
-                            return driver.performAction(deviceId, sensorId, SENSOR_ACTIONS.SWITCH_ON, parameters);
-
+                            return driver.performAction(deviceId, sensorId, chosenVariable, SENSOR_ACTIONS.SWITCH_ON, parameters);
                     }
                     else {
-                        return driver.performAction(deviceId, sensorId, action, parameters);
+                        return driver.performAction(deviceId, sensorId, chosenVariable, action, parameters);
                     }
                 }
                 if (status.class === SensorClasses.ANALOG_OUTPUT_0_100) {
                     if (action === SENSOR_ACTIONS.SWITCH_ON) {
                         var value = status.switchOffValue === undefined ? 100 : status.switchOffValue;
-                        return driver.performAction(deviceId, sensorId, SENSOR_ACTIONS.SET_VALUE, value);
+                        return driver.performAction(deviceId, sensorId, chosenVariable, SENSOR_ACTIONS.SET_VALUE, value);
 
                     }
                     else {
                         status.switchOffValue = status.value;
-                        return driver.performAction(deviceId, sensorId, SENSOR_ACTIONS.SET_VALUE, 0);
+                        return driver.performAction(deviceId, sensorId, chosenVariable, SENSOR_ACTIONS.SET_VALUE, 0);
                     }
                 }
             }
@@ -201,7 +216,7 @@ class SensorsClass {
                     },
                     status
                 );
-                return driver.performAction(deviceId, sensorId, action, parameters);
+                return driver.performAction(deviceId, sensorId, chosenVariable, action, parameters);
             }
         }
     }

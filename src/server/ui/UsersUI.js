@@ -18,7 +18,6 @@ Meteor.publish('userAccounts', function(filter,reactive) {
     cursor.forEach(
         function (user) {
             //if(user._id!=self.userId)
-            console.log(user);
             self.added("userAccounts", user._id, user);
         }
     );

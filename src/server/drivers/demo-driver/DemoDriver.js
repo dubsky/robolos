@@ -18,7 +18,7 @@ class DemoDriver extends AbstractDriver {
         this.handle=setInterval(function() {
                 // for demo purposes generate a temperature change event every 10 seconds
                 if ((typeof (self.onEventListener)!=='undefined'))
-                    self.onEventListener.onEvent(77,1,Math.random()+23);
+                    self.onEventListener.onEvent(77,1,self.buildVariableObject(SensorVariables.V_TEMP,Math.random()+23));
         } ,10000);
 
         log.info('Demo Driver: Driver Started');
@@ -44,7 +44,7 @@ class DemoDriver extends AbstractDriver {
                 sensorId:1,
                 keywords: ['Demo'],
                 type: SensorTypes.S_TEMP.id,
-                value:23.7,
+                value: this.buildVariableObject(SensorVariables.V_TEMP,23.7),
                 // time of the measurement
                 timestamp:new Date().getTime(),
                 // UI hint
@@ -57,7 +57,7 @@ class DemoDriver extends AbstractDriver {
                 sensorId:2,
                 keywords: ['Demo'],
                 type: SensorTypes.S_LIGHT.id,
-                value: this.demoRelayValue,
+                value: this.buildVariableObject(SensorVariables.V_STATUS,this.demoRelayValue),
                 // time of the measurement
                 timestamp:new Date().getTime(),
                 // UI hint
@@ -101,25 +101,26 @@ class DemoDriver extends AbstractDriver {
      * @param action @see SENSOR_ACTIONS
      * @param parameters @see SENSOR_ACTIONS
      */
-    performAction(deviceId,sensorId,action,parameters)
+    performAction(deviceId,sensorId,variable,action,parameters)
     {
         if(action===SENSOR_ACTIONS.SWITCH_OFF)
         {
             this.demoRelayValue=0;
             // report back the value set (this might be reported later on when the driver can confirm it successfuly switched the desd output)
-            this.onEventListener.onEvent(77,2,this.demoRelayValue);
+            this.onEventListener.onEvent(77,2,this.buildVariableObject(variable,this.demoRelayValue));
             log.debug('DEMO_RELAY_VALUE:',this.demoRelayValue);
         }
         if(action===SENSOR_ACTIONS.SWITCH_ON)
         {
             this.demoRelayValue=1;
             // report back the value set (this might be reported later on when the driver can confirm it successfuly switched the desd output)
-            this.onEventListener.onEvent(77,2,this.demoRelayValue);
+            this.onEventListener.onEvent(77,2,this.buildVariableObject(variable,this.demoRelayValue));
             log.debug('DEMO_RELAY_VALUE:',this.demoRelayValue);
         }
         if(action===SENSOR_ACTIONS.GET_VALUE)
         {
-            this.onEventListener.onEvent(77,2,this.demoRelayValue);
+            // server requested a sensor value
+            this.onEventListener.onEvent(77,2,this.buildVariableObject(variable,this.demoRelayValue));
         }
     }
 

@@ -118,12 +118,12 @@ Meteor.publish('sensors', function(filter, reactive){
 
 Meteor.methods({
     actionSwitchOver : function(driverInstanceId,deviceId,sensorId) {
-        Sensors.performAction(driverInstanceId,deviceId,sensorId,SENSOR_ACTIONS.SWITCH_OVER);
+        Sensors.performAction(driverInstanceId,deviceId,sensorId,null,SENSOR_ACTIONS.SWITCH_OVER);
     },
 
 
     actionSetValue : function(driverInstanceId,deviceId,sensorId,value) {
-        Sensors.performAction(driverInstanceId,deviceId,sensorId,SENSOR_ACTIONS.SET_VALUE,value);
+        Sensors.performAction(driverInstanceId,deviceId,sensorId,null,SENSOR_ACTIONS.SET_VALUE,value);
     }
 
 });

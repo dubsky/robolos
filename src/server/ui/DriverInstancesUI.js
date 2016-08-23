@@ -83,7 +83,6 @@ Meteor.methods({
     },
 
     deleteDriverInstance: function(driverInstanceId) {
-        console.log();
         DevicesUI.removeDevicesByFilterFunction(function(drvInstanceId,deviceId) {
             return driverInstanceId===drvInstanceId; });
         Drivers.stopDriverInstance(driverInstanceId);

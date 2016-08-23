@@ -56,7 +56,6 @@ class Notifications {
     sendNotification(severity,urgency,subject,body) {
         if(urgency===Collections.Notifications.Urgency.immediately) {
             let recipients=this.getRecipientList();
-            console.log('rep.',recipients);
             if(recipients.length>0) {
                 try {
                     Email.send({

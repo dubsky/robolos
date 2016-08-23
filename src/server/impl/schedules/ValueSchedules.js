@@ -94,7 +94,7 @@ class ValueSchedulesClass {
     setSensor(sensorId, value) {
         //log.debug('setting value:'+value);
         let id=Sensors.getSensorIdComponents(sensorId);
-        Sensors.performAction(id[0],id[1],id[2],SENSOR_ACTIONS.SET_VALUE,value);
+        Sensors.performAction(id[0],id[1],id[2],null,SENSOR_ACTIONS.SET_VALUE,value);
     }
 
     bindSensorToSchedule(scheduleId, sensorId) {

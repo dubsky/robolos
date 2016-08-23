@@ -146,17 +146,17 @@ class ActionContext {
     switchOutput(operation, sensorId, sensorName) {
         //log.debug('switchOutput '+operation);
         var id=Sensors.getSensorIdComponents(sensorId);
-        Sensors.performAction(id[0],id[1],id[2],operation);
+        Sensors.performAction(id[0],id[1],id[2],null,operation);
     }
 
     setValue(mode, sensorId, sensorName, value) {
         ValueSchedules.unbindSensorFromSchedules(sensorId);
         var id=Sensors.getSensorIdComponents(sensorId);
-        Sensors.performAction(id[0], id[1], id[2], SENSOR_ACTIONS.SET_VALUE, value);
+        Sensors.performAction(id[0], id[1], id[2], null, SENSOR_ACTIONS.SET_VALUE, value);
     }
 
     followSchedule(scheduleId, scheduleName, sensorId, sensorName) {
-        console.log('bind '+scheduleId+' : '+sensorId);
+        //console.log('bind '+scheduleId+' : '+sensorId);
         ValueSchedules.bindSensorToSchedule(scheduleId,sensorId);
     }
 

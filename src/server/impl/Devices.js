@@ -46,17 +46,36 @@ class DevicesClass {
         return instance.getDriver();
     }
 
+    calculateMainVariableValue(driverInstance, device,sensor,payload) {
+        let sensorData=Sensors.getSensorStatus(driverInstance.getId(),device,sensor);
+        if(sensorData===undefined) {
+            log.error('Unknown sensor:'+driverInstance._id+'/'+device+'/'+sensor);
+            return {};
+        }
+        let clazz=SensorTypes[sensorData.type];
+        if(clazz==undefined) { log.error('Unknown sensor type '+sensorData.type); return; }
+        let variable=clazz.mainVariable;
+        if(variable==undefined) { log.error('Main variable for '+sensorData.type+' not defined'); return; }
+        let variableValue=payload[variable.name];
+        if(variableValue==undefined) { log.error('Required sensor variable '+variable.name+' for '+driverInstance.getId()+';'+device+';'+sensor +' missing, got '+EJSON.stringify(payload)+' instead'); return {}; }
+
+        return variableValue;
+    }
+
     registerDriverListener(driverInstance) {
         var self=this;
         driverInstance.getDriver().registerEventListener(
             {
                 onEvent: function (device, sensor, value) {
+
+                    let mainValue=self.calculateMainVariableValue(driverInstance,device,sensor,value);
+
                     if(Fiber.current!==undefined) {
-                        Sensors.processIncomingSensorValue(driverInstance,device, sensor, value);
+                        Sensors.processIncomingSensorValue(driverInstance,device, sensor, mainValue);
                     }
                     else {
                         Fiber(function () {
-                            Sensors.processIncomingSensorValue(driverInstance,device, sensor, value);
+                            Sensors.processIncomingSensorValue(driverInstance,device, sensor, mainValue);
                         }).run();
                     }
                 },

@@ -11,9 +11,7 @@ Meteor.methods({
         ports.forEach(function(port) {
             results[results.length]=({ label: port.comName+' ['+port.manufacturer+']', value:port.comName});
         });
-
         return results;
     }
-
 });
 

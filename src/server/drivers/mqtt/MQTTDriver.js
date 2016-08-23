@@ -87,19 +87,9 @@ class MQTTDriver extends AbstractDriver {
                     let device=components[components.length-2];
 
                     let payload=JSON.parse(packet.payload);
-                    if ((typeof (this.onEventListener)!=='undefined')) {
-                        let sensorData=this.drivenSensors[device+'/'+sensor];
-                        if(sensorData==undefined) {
-                            log.error('Unknown sensor:'+device+'/'+sensor);
-                            break;
-                        }
-                        var clazz=SensorTypes[sensorData.type];
-                        if(clazz==undefined) { log.error('Unknown sensor type '+sensorData.type); return; }
-                        let variable=clazz.mainVariable;
-                        if(variable==undefined) { log.error('Main variable for '+sensorData.type+' not defined'); return; }
-                        let variableValue=payload[variable.name];
-                        if(variableValue==undefined) { log.error('Required sensor variable '+SensorClasses[sensorData.type].mainVariable+' missing'); return; }
-                        this.onEventListener.onEvent(device,sensor,variableValue);
+                    if (this.onEventListener!==undefined) {
+                        // do some validation...
+                        this.onEventListener.onEvent(device,sensor,payload);
                     }
             }
         }
@@ -221,7 +211,7 @@ class MQTTDriver extends AbstractDriver {
         this.drivenSensors=newSensors;
     }
 
-    performSetValueAction(deviceId ,sensorId, value) {
+    performSetValueAction(deviceId ,sensorId, variable, value) {
         let sensorData=this.drivenSensors[deviceId+'/'+sensorId];
         if(sensorData==undefined) {
             log.error('Sensor '+deviceId+'/'+sensorId+' does not exist anymore');
@@ -229,7 +219,8 @@ class MQTTDriver extends AbstractDriver {
         }
 
         let message={};
-        message[SensorTypes[sensorData.type].mainVariable.name]=value;
+        //message[SensorTypes[sensorData.type].mainVariable.name]=value;
+        message[variable.name]=value;
         this.server.ascoltatore.publish(sensorData.topic+'/set', JSON.stringify(message), {}, function() {});
     }
 
@@ -240,18 +231,18 @@ class MQTTDriver extends AbstractDriver {
      * @param action @see SENSOR_ACTIONS
      * @param parameters @see SENSOR_ACTIONS
      */
-    performAction(deviceId ,sensorId,action,parameters) {
+    performAction(deviceId ,sensorId, variable, action,parameters) {
         if (action == SENSOR_ACTIONS.SWITCH_ON) {
-            value = 1;
-            this.performSetValueAction(deviceId, sensorId, value);
+            let value = 1;
+            this.performSetValueAction(deviceId, sensorId, variable, value);
         }
         if (action == SENSOR_ACTIONS.SWITCH_OFF) {
-            value = 0;
-            this.performSetValueAction(deviceId, sensorId, value);
+            let value = 0;
+            this.performSetValueAction(deviceId, sensorId, variable, value);
         }
         if (action == SENSOR_ACTIONS.SET_VALUE) {
-            value = parameters.value;
-            this.performSetValueAction(deviceId, sensorId, value);
+            let value = parameters.value;
+            this.performSetValueAction(deviceId, sensorId, variable, value);
         }
         if (action == SENSOR_ACTIONS.GET_VALUE) {
             let sensorData=this.drivenSensors[deviceId+'/'+sensorId];

@@ -29,7 +29,7 @@ class DevicesUIClass extends Observable {
             var deviceId=idArray[1];
 
             this.removeDevicesByFilterFunction(function(driverInstanceId,id) {
-                return (driverId===driverInstanceId && deviceId===id);
+                return (driverId===driverInstanceId && deviceId==id);
             });
         }
     }
@@ -85,7 +85,7 @@ Meteor.publish('devices', function(){
 
 Meteor.methods({
     deleteDevices : function(list) {
-        console.log('delete devices',list);
+        log.debug('delete devices',list);
         DevicesUI.removeDevices(list);
     }
 });

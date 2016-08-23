@@ -11,6 +11,18 @@ class AbstractDriverClass {
     }
 
     /**
+     * A helper function building objects like { V_TEMP : 23.7} in a single statement
+     * @param variable one of the values of SensorVariables object
+     * @param value value for the variable
+     * @returns objects like { V_TEMP : 23.7}
+     */
+    buildVariableObject(variable,value) {
+        let r={};
+        r[variable.name]=value;
+        return r;
+    }
+
+    /**
      * Called by the controller to register a call back this driver will call on sensor status change
      * @param listener function with a onEvent function with parameters (deviceId,sensorId,value)
      */

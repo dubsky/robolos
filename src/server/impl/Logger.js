@@ -107,9 +107,14 @@ class Logger extends Observable {
     error(text,object) {
         var obj={ message: text, time: new Date(), level: 'error'};
         if(object!=undefined) {
-            console.log(object);
-            console.log('err:'+object.stack);
-            obj.stderr=object.stack;
+            if(object instanceof Error) {
+                obj.stderr=object.stack;
+                console.log('stack trace:'+object.stack);
+            }
+            else {
+                console.log(object);
+                obj.stderr=EJSON.stringify(object);
+            }
         }
         obj = _.extend(this.getCallerDetails(), obj);
         console.log(EJSON.stringify(obj));

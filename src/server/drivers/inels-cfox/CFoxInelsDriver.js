@@ -568,21 +568,28 @@ class CFoxInelsDriver extends AbstractDriver {
                         var sensor = map[indexOfChange];
                         if (typeof sensor === 'undefined') throw 'Unexpected mismatch in input data at address:' + indexOfChange + ' / ' + sensor + ' / ' + i+' / '+index;
 
+                        let variable;
+                        value = response.readFloatLE(indexOfChange + 6 + 7);
+                        sensor.value = value;
+
                         switch (sensor.type) {
                             case SensorTypes.S_TEMP.id :
+                                variable=self.buildVariableObject(SensorVariables.V_TEMP,value);
+                                break;
                             case SensorTypes.S_ANALOG_OUTPUT_0_100.id :
+                                variable=self.buildVariableObject(SensorVariables.V_PERCENTAGE,value);
+                                break;
                             case SensorTypes.S_ANALOG_OUTPUT.id :
-                                value = response.readFloatLE(indexOfChange + 6 + 7);
-                                sensor.value = value;
                                 // log.debug('fire:'+value+ ' i:'+indexOfChange+' sensor:'+sensor.sensorId);
-                                self.onEventListener.onEvent(sensor.deviceId, sensor.sensorId, value);
-                                return indexOfChange + 4;
+                                variable=self.buildVariableObject(SensorVariables.V_VAR1,value);
+                                break;
                             default:
                                 log.error('assertion failed: unknown sensor type to handle:' + sensor.type + ' of ' + sensor,sensor);
                                 return indexOfChange + 1;
                         }
-
-                    };
+                        self.onEventListener.onEvent(sensor.deviceId, sensor.sensorId, variable);
+                        return indexOfChange + 4;
+                    }
 
                     if ((typeof sensor) === 'number') {
                         var indexOfChange = i + sensor;
@@ -603,7 +610,7 @@ class CFoxInelsDriver extends AbstractDriver {
                                     //if(sensor[j].sensorId=='WSB2_20_Pracovna_2NP_Pracovna_Svetlo_2np_tl_DOWN_wsb2_20_')
                                     // log.debug('value:'+value+' bit:'+bit+' index:'+index);
                                     bitSensor.value = val;
-                                    self.onEventListener.onEvent(bitSensor.deviceId, bitSensor.sensorId, val);
+                                    self.onEventListener.onEvent(bitSensor.deviceId, bitSensor.sensorId, self.buildVariableObject(SensorVariables.V_STATUS,val));
                                     break;
                             }
                         }
@@ -834,7 +841,7 @@ class CFoxInelsDriver extends AbstractDriver {
      * @param action @see SENSOR_ACTIONS
      * @param parameters @see SENSOR_ACTIONS
      */
-    performAction(deviceId, sensorId, action, parameters) {
+    performAction(deviceId, sensorId, variable, action, parameters) {
         var sensor = this.drivenSensors[sensorId];
         if (action === SENSOR_ACTIONS.SWITCH_OFF) {
             if ((typeof sensor.bit) === 'undefined') return;
@@ -883,7 +890,7 @@ class CFoxInelsDriver extends AbstractDriver {
                             self.writeFloat(r.space,r.index,r.params,onFinish);
                         }
                     }
-                }
+                };
 
                 log.debug('writing :'+parameters);
                 this.writeFloat(sensor.registerSpace, sensor.index, parameters, onFinish);
