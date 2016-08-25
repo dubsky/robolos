@@ -46,19 +46,28 @@ class DevicesClass {
         return instance.getDriver();
     }
 
+    beTolerant(payload) {
+        if(payload instanceof Object) {
+            let keys=Object.keys(payload);
+            if(keys.length>0) return payload[keys[0]];
+        }
+        else {
+            return payload;
+        }
+    }
+
     calculateMainVariableValue(driverInstance, device,sensor,payload) {
         let sensorData=Sensors.getSensorStatus(driverInstance.getId(),device,sensor);
         if(sensorData===undefined) {
             log.error('Unknown sensor:'+driverInstance._id+'/'+device+'/'+sensor);
-            return {};
+            return this.beTolerant(payload);;
         }
         let clazz=SensorTypes[sensorData.type];
-        if(clazz==undefined) { log.error('Unknown sensor type '+sensorData.type); return; }
+        if(clazz==undefined) { log.error('Unknown sensor type of '+EJSON.stringify(sensorData)); return this.beTolerant(payload); }
         let variable=clazz.mainVariable;
-        if(variable==undefined) { log.error('Main variable for '+sensorData.type+' not defined'); return; }
+        if(variable==undefined) { log.error('Main variable for '+sensorData.type+' not defined'); return this.beTolerant(payload); }
         let variableValue=payload[variable.name];
-        if(variableValue==undefined) { log.error('Required sensor variable '+variable.name+' for '+driverInstance.getId()+';'+device+';'+sensor +' missing, got '+EJSON.stringify(payload)+' instead'); return {}; }
-
+        if(variableValue==undefined) { log.error('Required sensor variable '+variable.name+' for '+driverInstance.getId()+';'+device+';'+sensor +' missing, got '+EJSON.stringify(payload)+' instead'); return this.beTolerant(payload); }
         return variableValue;
     }
 
@@ -67,36 +76,50 @@ class DevicesClass {
         driverInstance.getDriver().registerEventListener(
             {
                 onEvent: function (device, sensor, value) {
+                    try {
+                        let mainValue=self.calculateMainVariableValue(driverInstance,device,sensor,value);
 
-                    let mainValue=self.calculateMainVariableValue(driverInstance,device,sensor,value);
-
-                    if(Fiber.current!==undefined) {
-                        Sensors.processIncomingSensorValue(driverInstance,device, sensor, mainValue);
-                    }
-                    else {
-                        Fiber(function () {
+                        if(Fiber.current!==undefined) {
                             Sensors.processIncomingSensorValue(driverInstance,device, sensor, mainValue);
-                        }).run();
+                        }
+                        else {
+                            Fiber(function () {
+                                Sensors.processIncomingSensorValue(driverInstance,device, sensor, mainValue);
+                            }).run();
+                        }
+                    }
+                    catch(e) {
+                        log.error('Error when processing event from '+device+';'+sensor+';'+EJSON.stringify(value),e)
                     }
                 },
                 onSensorDiscovery: function(sensors) {
-                    if(Fiber.current!==undefined) {
-                        Sensors.sensorsDiscovered(driverInstance,sensors);
-                    }
-                    else {
-                        Fiber(function () {
+                    try {
+                        if(Fiber.current!==undefined) {
                             Sensors.sensorsDiscovered(driverInstance,sensors);
-                        }).run();
+                        }
+                        else {
+                            Fiber(function () {
+                                Sensors.sensorsDiscovered(driverInstance,sensors);
+                            }).run();
+                        }
+                    }
+                    catch(e) {
+                        log.error('Error when processing newly discovered sensors '+EJSON.stringify(sensors),e);
                     }
                 },
                 onDeviceDiscovery: function(devices) {
-                    if(Fiber.current!==undefined) {
-                        self.devicesDiscovered(driverInstance,devices);
+                    try {
+                        if (Fiber.current !== undefined) {
+                            self.devicesDiscovered(driverInstance, devices);
+                        }
+                        else {
+                            Fiber(function () {
+                                self.devicesDiscovered(driverInstance, devices);
+                            }).run();
+                        }
                     }
-                    else {
-                        Fiber(function () {
-                            self.devicesDiscovered(driverInstance,devices);
-                        }).run();
+                    catch(e) {
+                        log.error('Error when processing newly discovered devices '+EJSON.stringify(devices),e);
                     }
                 }
             });

@@ -119,7 +119,7 @@ MyBlocks=function() {
     Blockly.JavaScript['set_value'] = function(block) {
         var text_value = Blockly.JavaScript.valueToCode(block, 'value', Blockly.JavaScript.ORDER_ATOMIC);
         var value=getSensorValue(block);
-        var dropdown_operation = null;//deprecated: block.getFieldValue('operation');
+        var dropdown_operation = 'unused';//deprecated: block.getFieldValue('operation');
         // TODO: Assemble JavaScript into code variable.
         var code = 'context.setValue(\"'+dropdown_operation+'\",'+getParam(value.id)+','+getParam(value.name)+','+text_value+');\n';
         return code;

@@ -41,6 +41,7 @@ DevicesUI=new DevicesUIClass();
 
 
 Meteor.publish('devices', function(){
+    Accounts.checkAdminAccess(this);
     // safe reference to this session
     var self = this;
     // insert a record for the first time
@@ -85,6 +86,7 @@ Meteor.publish('devices', function(){
 
 Meteor.methods({
     deleteDevices : function(list) {
+        Accounts.checkAdminAccess(this);
         log.debug('delete devices',list);
         DevicesUI.removeDevices(list);
     }

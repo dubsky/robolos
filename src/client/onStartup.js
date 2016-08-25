@@ -33,7 +33,7 @@ var settingsReady=function() {
         routesConfigured=true;
     }
 
-    let softPages=settings.anonymousAccessToDashboards ? ['/','homepage', 'render.dashboard.redirect', 'render.dashboard','calendar']: [];
+    let softPages=settings.anonymousAccessToDashboards ? ['/','homepage', 'render.dashboard.redirect', 'render.dashboard','calendar','render.schedule']: [];
     let allSoftPages=_.pluck(AccountsTemplates.routes, 'name').concat(softPages);
     Router.plugin('ensureSignedIn', {
         except: allSoftPages

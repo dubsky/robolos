@@ -6,6 +6,7 @@ DriverInstancesUI=new DriverInstancesUIClass();
 
 
 Meteor.publish('driverInstances', function(filter,reactive){
+    Accounts.checkAdminAccess(this);
 
     var self = this;
     var cursor;
@@ -45,7 +46,8 @@ Meteor.publish('driverInstances', function(filter,reactive){
 });
 
 
-Meteor.publish('drivers', function(){
+Meteor.publish('drivers', function() {
+    Accounts.checkAdminAccess(this);
     var self = this;
     Drivers.getDrivers().forEach(
         function(driver) {
@@ -65,6 +67,7 @@ Meteor.publish('drivers', function(){
 
 Meteor.methods({
     createDriverInstance: function(driverInstance) {
+        Accounts.checkAdminAccess(this);
         //log.debug('data',driverInstance);
         var idNumber=0;
         var id=driverInstance.$set.driver.replace('/','-');
@@ -83,6 +86,7 @@ Meteor.methods({
     },
 
     deleteDriverInstance: function(driverInstanceId) {
+        Accounts.checkAdminAccess(this);
         DevicesUI.removeDevicesByFilterFunction(function(drvInstanceId,deviceId) {
             return driverInstanceId===drvInstanceId; });
         Drivers.stopDriverInstance(driverInstanceId);
@@ -91,6 +95,7 @@ Meteor.methods({
     },
 
     updateDriverInstance: function(driverInstance,driverInstanceId) {
+        Accounts.checkAdminAccess(this);
         Collections.DriverInstances.update(driverInstanceId,driverInstance);
         var updatedDriverInstance=Collections.DriverInstances.findOne(driverInstanceId);
         Drivers.stopDriverInstance(driverInstanceId);

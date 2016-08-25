@@ -44,6 +44,7 @@ Meteor.publish('userAccounts', function(filter,reactive) {
 
 Meteor.methods({
     addUser : function(doc) {
+        Accounts.checkAdminAccess(this);
         try {
             let selector={ 'emails.address': doc.email};
             if (Meteor.users.findOne(selector)!=null) throw 'User with the given email address already exists';
@@ -67,6 +68,7 @@ Meteor.methods({
     },
 
     updateUser : function(doc) {
+        if(doc._id!==this.userId) Accounts.checkAdminAccess(this); else delete doc.role;
         let id=doc._id;
         var modifier={$set : {}};
         if(doc.role!=undefined) modifier.$set.role=doc.role;
@@ -84,6 +86,7 @@ Meteor.methods({
     },
 
     deleteUsers : function(list) {
+        Accounts.checkAdminAccess(this);
         "use strict";
         for(let i in list)
         {
@@ -92,6 +95,38 @@ Meteor.methods({
         }
     }
 });
+
+
+Accounts.checkAdminAccess=function(context) {
+    /*
+    if(context.userId===null) throw new Meteor.Error('not-authorized');
+    let user=Meteor.users.findOne(context.userId);
+    if (user===null || Collections.Users.RoleKeys.administrator !== user.role) {
+        log.debug('access denied');
+        throw new Meteor.Error('not-authorized');
+    }*/
+}
+
+Accounts.checkDashboardAccess=function(context) {
+
+    /*
+    let settings=Settings.get();
+    if(context.userId===null) {
+        if(settings.anonymousAccessToDashboards) {
+            if(!isLocalAccess(settings,context)) {
+                log.debug('access denied');
+                throw new Meteor.Error('not-authorized');
+            }
+        }
+        else {
+            log.debug('access denied');
+            throw new Meteor.Error('not-authorized');
+        }
+    }
+    else {
+        // even observer can see dashboards
+    }*/
+}
 
 Accounts.onCreateUser(function(options, user) {
     if (options.role)

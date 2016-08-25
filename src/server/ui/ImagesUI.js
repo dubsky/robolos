@@ -37,6 +37,7 @@ class Uploads extends Observable {
         super();
         Meteor.publish(collection, function(){
 
+            Accounts.checkDashboardAccess(this);
             var self = this;
 
             function processDirectory(path,idPrefix,decorator) {
@@ -98,8 +99,7 @@ UploadedIconsInstance=new Uploads("builtinWidgetIcons");
 
 Meteor.methods({
     deleteFile: function (file) {
-
-
+        Accounts.checkAdminAccess(this);
         if(file==null) return;
         if(file._id.indexOf('/')>=0||file._id.indexOf('\\')>=0) return;
         if(file.icon) {

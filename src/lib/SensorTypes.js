@@ -48,7 +48,17 @@ SensorVariablesList={
     V_HVAC_SETPOINT_COOL : SensorClasses.ANALOG_OUTPUT,
     V_HVAC_SETPOINT_HEAT : SensorClasses.ANALOG_OUTPUT,
     V_HVAC_FLOW_MODE : SensorClasses.STRING,
-    V_HVAC_SPEED : SensorClasses.ANALOG_INPUT
+    V_HVAC_SPEED : SensorClasses.ANALOG_INPUT,
+    V_TEXT: SensorClasses.STRING,
+    V_CUSTOM: SensorClasses.UNKNOWN,
+    V_POSITION: SensorClasses.STRING,
+    V_IR_RECORD: SensorClasses.STRING,
+    V_PH: SensorClasses.ANALOG_INPUT,
+    V_ORP: SensorClasses.ANALOG_INPUT,
+    V_EC: SensorClasses.ANALOG_INPUT,
+    V_VAR: SensorClasses.ANALOG_INPUT,
+    V_VA: SensorClasses.ANALOG_INPUT,
+    V_POWER_FACTOR: SensorClasses.ANALOG_INPUT
 };
 
 SensorVariables={};
@@ -95,6 +105,13 @@ SensorTypes={
     S_SOUND: { id:'S_SOUND', comment:'Sound sensor', mainVariable: SensorVariables.V_LEVEL, variables: [ SensorVariables.V_LEVEL,SensorVariables.V_TRIPPED,SensorVariables. V_ARMED ]},
     S_VIBRATION: { id:'S_VIBRATION', comment:'Vibration sensor', mainVariable: SensorVariables.V_LEVEL, variables: [ SensorVariables.V_LEVEL,SensorVariables.V_TRIPPED,SensorVariables.V_ARMED ]},
     S_MOISTURE: { id:'S_MOISTURE', comment:'Moisture sensor', mainVariable: SensorVariables.V_LEVEL, variables: [ SensorVariables.V_LEVEL, SensorVariables. V_TRIPPED,SensorVariables. V_ARMED ]},
+
+    S_INFO: { id:'S_INFO', comment:'LCD text device',class: SensorClasses.STRING,mainVariable: SensorVariables.V_TEXT, variables: [ SensorVariables.V_TEXT] },
+    S_GAS: { id:'S_GAS', comment:'Gas meter',class: SensorClasses.ANALOG_INPUT,mainVariable: SensorVariables.V_VOLUME, variables: [ SensorVariables.V_VOLUME, SensorVariables.V_FLOW] },
+    S_GPS: { id:'S_GPS', comment:'GPS Sensor',class: SensorClasses.ANALOG_INPUT,mainVariable: SensorVariables.V_POSITION, variables: [ SensorVariables.V_POSITION] },
+    S_WATER_QUALITY: { id:'S_WATER_QUALITY', comment:'	Water quality sensor',class: SensorClasses.ANALOG_INPUT,mainVariable: SensorVariables.V_PH, variables: [ SensorVariables.V_PH, SensorVariables.V_EC,SensorVariables.V_ORP,SensorVariables.V_TEMP,SensorVariables.V_STATUS] },
+
+    /** Deprecated */
     S_PH: { id:'S_PH', comment:'Water pH',class: SensorClasses.ANALOG_INPUT,mainVariable: SensorVariables.V_LEVEL, variables: [ SensorVariables.V_LEVEL] },
     S_ANALOG_INPUT: { id:'S_ANALOG_INPUT', comment: 'Unspecified analog input',class: SensorClasses.ANALOG_INPUT,mainVariable: SensorVariables.V_LEVEL, variables: [ SensorVariables.V_LEVEL] },
     S_ANALOG_OUTPUT: { id:'S_ANALOG_OUTPUT', comment: 'Unspecified analog output',class: SensorClasses.ANALOG_OUTPUT,mainVariable: SensorVariables.V_LEVEL, variables: [ SensorVariables.V_LEVEL] },

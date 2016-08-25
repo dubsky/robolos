@@ -1,4 +1,5 @@
 Meteor.publish('log', function(settings){
+    Accounts.checkAdminAccess(this);
     var self = this;
     log.forEach(function(d) {
         self.added("log", d._id, d);

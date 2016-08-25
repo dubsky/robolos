@@ -3,6 +3,7 @@ import serialPort from 'serialport';
 Meteor.methods({
 
     'mysensors-listSerialPorts' : function() {
+        Accounts.checkAdminAccess(this);
         let results=[];
         let listSynchronously=Meteor.wrapAsync(serialPort.list);
 

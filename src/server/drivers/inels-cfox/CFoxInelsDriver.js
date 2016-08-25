@@ -16,7 +16,6 @@ var SD2 = 0x68;
 var SD4 = 0xdc;
 var ED = 0x16;
 var SAC = 0xe5;
-var DASA = 0x00ee;
 
 var incomingMessageHandler=[];
 
@@ -50,6 +49,8 @@ class CFoxInelsDriver extends AbstractDriver {
         this.drivenSensors={};
         this.addresses={};
         this.sensorsInUpdate={};
+        this.DASA = Math.floor(Math.random()*126+1); //0x00ee;
+
     }
 
     printBuffer(data, msg) {
@@ -101,7 +102,7 @@ class CFoxInelsDriver extends AbstractDriver {
         message.writeUInt8(SD2, 0);
         message.writeUInt16BE(0x0808, 1);
         message.writeUInt8(SD2, 3);
-        message.writeUInt16BE(DASA, 4);
+        message.writeUInt16BE(this.DASA, 4);
         message.writeUInt8(0x63, 6);
         message.writeUInt8(0x10, 7);
         message.writeUInt8(register, 8);
@@ -140,7 +141,7 @@ class CFoxInelsDriver extends AbstractDriver {
         message.writeUInt8(0x08 + 4, 1);
         message.writeUInt8(0x08 + 4, 2);
         message.writeUInt8(SD2, 3);
-        message.writeUInt16BE(DASA, 4);
+        message.writeUInt16BE(this.DASA, 4);
 
 
         message.writeUInt8(0x63, 6);
@@ -177,7 +178,7 @@ class CFoxInelsDriver extends AbstractDriver {
         message.writeUInt8(SD2, 0);
         message.writeUInt16BE(0x0808, 1);
         message.writeUInt8(SD2, 3);
-        message.writeUInt16BE(DASA, 4);
+        message.writeUInt16BE(this.DASA, 4);
         message.writeUInt8(0x6C, 6);
         message.writeUInt8(0x0B, 7);
         message.writeUInt8(register, 8);
@@ -209,7 +210,7 @@ class CFoxInelsDriver extends AbstractDriver {
         message.writeUInt8(SD2, 0);
         message.writeUInt16BE(0x0404, 1);
         message.writeUInt8(SD2, 3);
-        message.writeUInt16BE(DASA, 4);
+        message.writeUInt16BE(this.DASA, 4);
         message.writeUInt8('l'.charCodeAt(0), 6);
         message.writeUInt8(0x0A, 7);
         message.writeUInt8(this.checksum(message, 4, 8), 8);
@@ -243,7 +244,7 @@ class CFoxInelsDriver extends AbstractDriver {
     ident() {
         var message = new Buffer(6);
         message.writeUInt8(SD1, 0);
-        message.writeUInt16BE(DASA, 1);
+        message.writeUInt16BE(this.DASA, 1);
         message.writeUInt8('n'.charCodeAt(0), 3);
         message.writeUInt8(this.checksum(message, 1, 4), 4);
         message.writeUInt8(ED, 5);
@@ -278,7 +279,7 @@ class CFoxInelsDriver extends AbstractDriver {
     connect() {
         var message = new Buffer(6);
         message.writeUInt8(SD1, 0);
-        message.writeUInt16BE(DASA, 1);
+        message.writeUInt16BE(this.DASA, 1);
         message.writeUInt8(0x69, 3);
         message.writeUInt8(this.checksum(message, 1, 4), 4);
         message.writeUInt8(ED, 5);
@@ -530,7 +531,7 @@ class CFoxInelsDriver extends AbstractDriver {
         message.writeUInt8(LE, 1);
         message.writeUInt8(LE, 2);
         message.writeUInt8(SD2, 3);
-        message.writeUInt16BE(DASA, 4);
+        message.writeUInt16BE(this.DASA, 4);
         message.writeUInt8(0x6C, 6);
         message.writeUInt8(0x0B, 7);
 

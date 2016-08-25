@@ -87,7 +87,7 @@ class ValueSchedulesClass {
     }
 
     stopSchedule(scheduleId) {
-        if(this.runningSchedules[scheduleId].handle!=null)
+        if(this.runningSchedules[scheduleId]!=undefined && this.runningSchedules[scheduleId].handle!=null)
             Meteor.clearTimeout(this.runningSchedules[scheduleId].handle);
     }
 

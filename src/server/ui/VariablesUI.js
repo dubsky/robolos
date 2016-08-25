@@ -7,6 +7,7 @@ VariablesUI=new VariablesUIClass();
 
 
 Meteor.publish('variables', function(filter,reactive){
+    Accounts.checkAdminAccess(this);
     // safe reference to this session
     var self = this;
     // insert a record for the first time
@@ -49,21 +50,38 @@ Meteor.publish('variables', function(filter,reactive){
 });
 
 
+function nonDashboardVariablesModification(variable) {
+
+    function checkKeys(keys) {
+        for(let key of keys) {
+            if(!Collections.Variables.DashboardAccessibleFields[key]) return true;
+        }
+    }
+    for(let key of Object.keys(variable)) {
+        checkKeys(Object.keys(variable[key]));
+
+    }
+    return false;
+}
 
 Meteor.methods({
     createVariable: function(variable) {
+        Accounts.checkAdminAccess(this);
         VariablesInstance.createVariable(variable);
     },
 
     deleteVariable: function(variableId) {
+        Accounts.checkAdminAccess(this);
         VariablesInstance.removeVariable(variableId);
     },
 
     updateVariable: function(variable,variableId) {
+        if(nonDashboardVariablesModification(variable)) Accounts.checkAdminAccess(this); else Accounts.checkDashboardAccess(this);
         VariablesInstance.updateVariable(variable,variableId);
     },
 
     setBooleanVariable: function(variableId,value) {
+        Accounts.checkDashboardAccess(this);
         VariablesInstance.setValue(variableId,value);
     }
 });

@@ -6,7 +6,8 @@ class SchedulesUIClass extends Observable {
 SchedulesUI=new SchedulesUIClass();
 
 
-Meteor.publish('schedules', function(filter,reactive){
+Meteor.publish('schedules', function(filter,reactive) {
+    Accounts.checkDashboardAccess(this);
     // safe reference to this session
     var self = this;
     // insert a record for the first time
@@ -53,9 +54,9 @@ Meteor.publish('schedules', function(filter,reactive){
 });
 
 
-
 Meteor.methods({
     createSchedule: function(schedule) {
+        Accounts.checkDashboardAccess(this);
         var id=Collections.Schedules.upsert('',schedule).insertedId;
         var updatedSchedule=Collections.Schedules.findOne(id);
         SchedulesInstance.startSchedule(updatedSchedule);
@@ -63,12 +64,14 @@ Meteor.methods({
     },
 
     deleteSchedule: function(scheduleId) {
+        Accounts.checkDashboardAccess(this);
         SchedulesInstance.stopSchedule(scheduleId);
         Collections.Schedules.remove({_id:scheduleId});
         SchedulesUI.fireRemoveEvent(scheduleId);
     },
 
     updateSchedule: function(schedule,scheduleId) {
+        Accounts.checkDashboardAccess(this);
         Collections.Schedules.update(scheduleId,schedule);
         var updatedSchedule=Collections.Schedules.findOne(scheduleId);
         SchedulesInstance.stopSchedule(scheduleId);

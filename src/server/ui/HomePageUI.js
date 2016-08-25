@@ -1,4 +1,5 @@
 Meteor.publish("systemStatistics", function(){
+    Accounts.checkDashboardAccess(this);
     // safe reference to this session
     var self = this;
     // insert a record for the first time

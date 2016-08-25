@@ -49,7 +49,7 @@ class Schedules {
                     name: taskId,
                     schedule: function(parser) {
                         var e=schedule.executeOn;
-                        return {schedules: [{Y: [e.getFullYear()], M: [e.getMonth()+1], D: [e.getDate()], h: [e.getHours()], m: [e.getMinutes()], s:[e.getSeconds()]}]};
+                        return parser.recur().on(e).fullDate();
                     },
                     job: function() {
                         log.event(
@@ -61,7 +61,9 @@ class Schedules {
                         log.info('Executing calendar task:'+schedule.title);
                         delete self.runningTasks[schedule._id];
                         var action=ActionsInstance.getAction(schedule.action);
-                        if ((typeof action)!=='undefined') ActionsInstance.startAction(action);
+                        if (typeof action!==undefined) {
+                            ActionsInstance.startAction(action);
+                        }
                     }
                 });
                 this.runningTasks[schedule._id]=[];

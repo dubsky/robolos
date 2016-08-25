@@ -1,4 +1,5 @@
 import mosca from 'mosca';
+import Fiber from 'fibers';
 
 MQTTSensorCollection = new Mongo.Collection("mqttSensors");
 MQTTDeviceCollection = new Mongo.Collection("mqttDevices");
@@ -53,6 +54,7 @@ class MQTTDriver extends AbstractDriver {
             sensorData._id=device+'/'+sensor;
 
             this.drivenSensors[device+'/'+sensor]=sensorData;
+            log.debug('MQTT Sensor discovered',sensorData);
             this.onEventListener.onSensorDiscovery([sensorData]);
     }
 
@@ -85,6 +87,7 @@ class MQTTDriver extends AbstractDriver {
                     }
                     let sensor=components[components.length-1];
                     let device=components[components.length-2];
+                    log.debug('Message received',payload);
 
                     let payload=JSON.parse(packet.payload);
                     if (this.onEventListener!==undefined) {

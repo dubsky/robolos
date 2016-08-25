@@ -35,8 +35,13 @@ class ActionsUIClass extends Observable {
 
 ActionsUI=new ActionsUIClass();
 
+Meteor.publish('calendarActions', function(){
+    Accounts.checkDashboardAccess(this);
+    return Collections.Actions.find({calendarDroppable:true}, {fields: {title: 1,description: 1,keywords: 1,calendarDroppable: 1}});
+});
 
 Meteor.publish('actions', function(filter,reactive){
+    Accounts.checkAdminAccess(this);
     try {
         // safe reference to this session
         var self = this;
@@ -88,19 +93,24 @@ function performOperationOnAction(actionId,f) {
 
 Meteor.methods({
     startAction: function(actionId) {
+        Accounts.checkDashboardAccess(this);
         performOperationOnAction(actionId,(action)=> {ActionsInstance.startAction(action)});
     },
     stopAction: function(actionId) {
+        Accounts.checkDashboardAccess(this);
         performOperationOnAction(actionId,(action)=> {ActionsInstance.stopAction(action)});
     },
     pauseAction: function(actionId) {
+        Accounts.checkDashboardAccess(this);
         performOperationOnAction(actionId,(action)=> {ActionsInstance.pauseAction(action)});
     },
     continueAction: function(actionId) {
+        Accounts.checkDashboardAccess(this);
         performOperationOnAction(actionId,(action)=> {ActionsInstance.continueAction(action)});
     },
 
     createAction: function(action) {
+        Accounts.checkAdminAccess(this);
         var id=Collections.Actions.upsert('',action).insertedId;
         var updatedAction=Collections.Actions.findOne(id);
         ActionsInstance.upsertAction(updatedAction);
@@ -109,12 +119,14 @@ Meteor.methods({
     },
 
     deleteAction: function(actionId) {
+        Accounts.checkAdminAccess(this);
         Collections.Actions.remove({_id:actionId});
         ActionsInstance.removeAction(actionId);
         ActionsUI.fireRemoveEvent(actionId);
     },
 
     updateAction: function(action,actionId) {
+        Accounts.checkAdminAccess(this);
         Collections.Actions.update(actionId,action);
         var updatedAction=Collections.Actions.findOne(actionId);
         ActionsInstance.upsertAction(updatedAction);

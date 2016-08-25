@@ -1,5 +1,6 @@
 
 Meteor.publish('dashboards', function(filter,reactive){
+    Accounts.checkDashboardAccess(this);
     return Collections.Dashboards.find();
 });
 
@@ -55,6 +56,7 @@ function collectWidgetStatuses(subscription, widgets,dashboardCollection,dashboa
 }
 
 Meteor.publish('sensorStatusCollection', function(parameters){
+    Accounts.checkDashboardAccess(this);
     try {
         var dashboardCollection="sensorStatusCollection";
         var self = this;
@@ -105,14 +107,17 @@ Meteor.publish('sensorStatusCollection', function(parameters){
 
 Meteor.methods({
     createDashboard: function(dashboard) {
+        Accounts.checkAdminAccess(this);
         var id=Collections.Dashboards.upsert('',dashboard).insertedId;
     },
 
     deleteDashboard: function(dashboardId) {
+        Accounts.checkAdminAccess(this);
         Collections.Dashboards.remove({_id:dashboardId});
     },
 
     updateDashboard: function(dashboard,dashboardId) {
+        Accounts.checkAdminAccess(this);
         Collections.Dashboards.update(dashboardId,dashboard);
     }
 

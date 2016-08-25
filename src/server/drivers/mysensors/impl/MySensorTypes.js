@@ -36,7 +36,10 @@ MySensorsSensorTypes={
     33 : { type: 'S_SOUND', comment:'Sound sensor'},
     34 : { type: 'S_VIBRATION', comment:'Vibration sensor'},
     35 : { type: 'S_MOISTURE', comment:'Moisture sensor'},
-   100 : { type: 'S_PH', comment:'pH sensor',mappedToType: SensorTypes.S_PH}
+    36 : { type: 'S_INFO', comment:'LCD text device'},
+    37 : { type: 'S_GAS', comment:'	Gas meter'},
+    38 : { type: 'S_GPS', comment:'GPS Sensor'},
+    39 : { type: 'S_WATER_QUALITY', comment:'Water quality sensor',mappedToType: SensorTypes.S_PH}
 
 };
 
@@ -53,6 +56,7 @@ mapVariable('V_HUM',1);
 mapVariable('V_LIGHT',2);
 mapVariable('V_STATUS',2);
 mapVariable('V_DIMMER',3);
+mapVariable('V_PERCENTAGE',3);
 mapVariable('V_PRESSURE',4);
 mapVariable('V_FORECAST',5);
 mapVariable('V_RAIN',6);
@@ -96,3 +100,14 @@ mapVariable('V_UNIT_PREFIX',43);
 mapVariable('V_HVAC_SETPOINT_COOL',44);
 mapVariable('V_HVAC_SETPOINT_HEAT',45);
 mapVariable('V_HVAC_FLOW_MODE',46);
+mapVariable('V_TEXT',47);
+mapVariable('V_CUSTOM',48);
+mapVariable('V_POSITION',49);
+mapVariable('V_IR_RECORD',50);
+mapVariable('V_PH',51);
+mapVariable('V_ORP',52);
+mapVariable('V_EC',53);
+mapVariable('V_VAR',54);
+mapVariable('V_VA',55);
+mapVariable('V_POWER_FACTOR',56);
+

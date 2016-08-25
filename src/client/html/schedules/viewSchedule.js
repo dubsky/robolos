@@ -61,6 +61,16 @@ Template.viewSchedule.events({
         EditContext.setContext(undefined);
         calculateReturnRoute();
         return false;
+    },
+
+    'click .delete' :function(event) {
+        console.log(this);
+        Meteor.call('deleteSchedule',this.schedule._id,function() {
+            Session.set(CURRENT_GRAPH_SESSION_KEY,undefined);
+            EditContext.setContext(undefined);
+            calculateReturnRoute();
+            return false;
+        });
     }
 
 });

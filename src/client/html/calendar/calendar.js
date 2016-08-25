@@ -129,7 +129,7 @@ Router.route('calendar',
     {
         name: 'calendar',
         waitOn: function() {
-            return [App.subscribe('schedules'),App.subscribe('actions') ];
+            return [App.subscribe('schedules'),App.subscribe('calendarActions') ];
         }
     }
 );

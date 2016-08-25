@@ -80,15 +80,21 @@ if(Meteor.isServer) {
                 catch(e)
                 {
                     failed=true;
-                    console.log('Error when starting driver',e);
+                    log.error('Error when starting driver',e);
                 }
                 // register on fail so that configuration can be updated by the user
                 let driverInstance=new DriverInstance(driverInstanceConfig,classInstance);
                 this.driverInstances.push(driverInstance);
                 if(!failed) {
                     Devices.registerDriverListener(driverInstance);
-                    classInstance.reloadDevices();
-                    classInstance.reloadSensors();
+                    try {
+                        classInstance.reloadDevices();
+                        classInstance.reloadSensors();
+                    }
+                    catch(e)
+                    {
+                        console.log('Error loading initial data from a driver',e);
+                    }
                 }
             }
         }
@@ -96,7 +102,13 @@ if(Meteor.isServer) {
         stopDriverInstance(driverInstanceId) {
             var instance=this.removeDriverInstance(driverInstanceId);
             if(instance!==undefined) {
-                if(instance.getDriver().stop!==undefined) instance.getDriver().stop(instance.getConfiguration().properties);
+                try {
+                    if(instance.getDriver().stop!==undefined) instance.getDriver().stop(instance.getConfiguration().properties);
+                }
+                catch(e)
+                {
+                    log.error('Error when stopping driver',e);
+                }
             }
         }
 
@@ -110,31 +122,4 @@ if(Meteor.isServer) {
     }
 
     Drivers=new DriversClass();
-/*
-    startDrivers=function() {
-
-        DemoDriver.start();
-
-        var mySensorsConfiguration = {
-            gwType: 'ethernet',
-            //
-            //
-            // gwType: 'serial',
-            serialParameters: {
-                gwPort: 'COM6',
-                //gwPort : '/dev/ttyAMA0',
-                gwBaud: 115200
-            },
-            ethernetParameters: {
-                gwAddress: '192.168.1.219',
-                gwPort: 5003
-            }
-        };
-        MySensors.start(mySensorsConfiguration);
-
-        DemoDriver.start();
-
-        CFoxInelsDriver.start({ip:'192.168.1.1', exportPub:'C:\\Files\\doc\\dum\\miluska.pub', exportExp:'C:\\Files\\doc\\dum\\miluska.exp'});
-
-    }*/
 }

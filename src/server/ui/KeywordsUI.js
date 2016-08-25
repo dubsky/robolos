@@ -56,7 +56,8 @@ class KeywordsUIClass extends Observable {
 KeywordsUI=new KeywordsUIClass();
 
 
-Meteor.publish("keywords", function(){
+Meteor.publish("keywords", function() {
+    Accounts.checkDashboardAccess(this);
     // safe reference to this session
     var self = this;
     // insert a record for the first time
@@ -79,10 +80,12 @@ Meteor.publish("keywords", function(){
 
 Meteor.methods({
     addKeywords: function(keywords) {
+        Accounts.checkAdminAccess(this);
         KeywordsUI.addKeywords(keywords);
     },
 
     resetKeywords: function(keywords) {
+        Accounts.checkAdminAccess(this);
         KeywordsUI.resetKeywords();
     }
 

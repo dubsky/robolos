@@ -14,7 +14,6 @@ manuelschoebel:wait-on-lib
 fortawesome:fontawesome
 aldeed:autoform
 aldeed:collection2
-percolatestudio:synced-cron
 peerlibrary:stacktrace
 reactive-var
 cfs:standard-packages

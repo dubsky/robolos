@@ -823,18 +823,22 @@ class MySensors extends AbstractDriver {
                     //protocol:device.protocol,
                     //deviceType:device.sketchName
                 };
-                if(type.mappedToType!==undefined) result.type=type.mappedToType.id; else result.comment=type.comment;
-
-                /*let nodeValues=latestValues[device.id];
-                if(nodeValues!==undefined)
-                {
-                    let sensorValue=nodeValues[sensor.id];
-                    if(sensorValue!==undefined) {
-                        result.timestamp=sensorValue.timestamp;
-                        result.value=sensorValue.value;
-                    }
-                }*/
-                results.push(result);
+                if(type===undefined) {
+                    log.error('Sensor '+device.id+';'+sensor.id+' does not have type property defined');
+                }
+                else {
+                    if(type.mappedToType!==undefined) result.type=type.mappedToType.id; else result.comment=type.comment;
+                    /*let nodeValues=latestValues[device.id];
+                     if(nodeValues!==undefined)
+                     {
+                     let sensorValue=nodeValues[sensor.id];
+                     if(sensorValue!==undefined) {
+                     result.timestamp=sensorValue.timestamp;
+                     result.value=sensorValue.value;
+                     }
+                     }*/
+                    results.push(result);
+                }
             }
         }
         return results;

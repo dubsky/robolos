@@ -38,15 +38,17 @@ Template.renderDashboard.helpers({
           return results;
       },
 
-      widgetType : function(type) {
+      widgetType(type) {
           return this.widget.type===type;
       },
 
-      isInEditMode : function() {
+      isInEditMode() {
           return (true===Session.get(DASHBOARD_EDIT_MODE));
+      },
+
+      isEditPermitted() {
+          return Session.get(USER_ROLE)!==Collections.Users.RoleKeys.observer;
       }
-
-
 });
 
 

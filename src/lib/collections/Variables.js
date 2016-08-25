@@ -119,4 +119,6 @@ Collections.Variables.ModifiedBy=[
     {label: "Both the user and automatic action(s)", value: 'both'}
 ];
 
+Collections.Variables.DashboardAccessibleFields={'allowAutomaticControl':true,'stringValue':true,'booleanValue':true,'numberValue':true,'dateValue':true};
+
 Collections.Variables.attachSchema(Schemas.Variable);

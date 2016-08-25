@@ -4,6 +4,7 @@ Meteor.publish('allSensorMetadata', function(){
 
 Meteor.methods({
     updateSensorMeta: function(meta,documentId) {
+        Accounts.checkAdminAccess(this);
         //log.debug('update sensor meta',meta);
         SensorMetadata.updateSensorMeta(documentId,meta);
     }
@@ -27,6 +28,7 @@ class SensorsUIClass extends Observable {
 SensorsUI=new SensorsUIClass();
 
 Meteor.publish('sensors', function(filter, reactive){
+    Accounts.checkDashboardAccess(this);
     var self = this;
     let subscribedSensors={};
     Sensors.forEachSensor(function(sensor) {
@@ -118,11 +120,13 @@ Meteor.publish('sensors', function(filter, reactive){
 
 Meteor.methods({
     actionSwitchOver : function(driverInstanceId,deviceId,sensorId) {
+        Accounts.checkDashboardAccess(this);
         Sensors.performAction(driverInstanceId,deviceId,sensorId,null,SENSOR_ACTIONS.SWITCH_OVER);
     },
 
 
     actionSetValue : function(driverInstanceId,deviceId,sensorId,value) {
+        Accounts.checkDashboardAccess(this);
         Sensors.performAction(driverInstanceId,deviceId,sensorId,null,SENSOR_ACTIONS.SET_VALUE,value);
     }
 
