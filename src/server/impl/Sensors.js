@@ -1,3 +1,5 @@
+import Fiber from 'fibers';
+
 class SensorsClass {
 
     constructor() {
@@ -334,7 +336,7 @@ class SensorsClass {
                 this.processIncomingSensorValue(driverInstance,device, sensor, mainValue);
             }
             else {
-                Fiber(function () {
+                Fiber(() =>{
                     this.processIncomingSensorValue(driverInstance,device, sensor, mainValue);
                 }).run();
             }

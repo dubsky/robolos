@@ -854,47 +854,50 @@ class CFoxInelsDriver extends AbstractDriver {
             this.writeb(sensor.registerSpace, sensor.index, sensor.bit, true, function () {});
         }
         if (action === SENSOR_ACTIONS.SET_VALUE) {
+
             var updateRecord=this.sensorsInUpdate[sensorId];
 
             // do not send requests on change to the same sensor in parallel
 
             if(updateRecord!==undefined) {
-                log.debug('just changing/adding  update record');
+                log.debug('just changing/adding  update record to '+parameters);
                 if (new Date().getTime()-updateRecord.age > 1000) {
                     log.debug(' but it was too old !');
                     delete this.sensorsInUpdate[sensorId];
+                    updateRecord=undefined;
                 }
-                updateRecord[0]={space: sensor.registerSpace, index: sensor.index, params: parameters };
+                else {
+                    updateRecord[0]={space: sensor.registerSpace, index: sensor.index, params: parameters };
+                }
             }
 
             if(updateRecord===undefined) {
-                log.debug('no update record');
                 var updateRecord=[];
                 this.sensorsInUpdate[sensorId]=updateRecord;
                 updateRecord.age=new Date().getTime();
                 var self=this;
                 var onFinish=function () {
                     var sensorUpdateRecord=self.sensorsInUpdate[sensorId];
+
                     if (sensorUpdateRecord!==undefined)
                     {
                         sensorUpdateRecord.age=new Date().getTime();
-                        log.debug(sensorUpdateRecord);
-                        log.debug(sensorUpdateRecord.length);
                         if(sensorUpdateRecord[0]===undefined) {
                             delete self.sensorsInUpdate[sensorId];
                         }
                         else
                         {
+                            clearTimeout(updateRecord.timeoutHandle);
                             var r=sensorUpdateRecord[0];
                             delete sensorUpdateRecord[0];
-                            log.debug('writing :'+r.params);
                             self.writeFloat(r.space,r.index,r.params,onFinish);
+                            updateRecord.timeoutHandle=setTimeout(onFinish,200);
                         }
                     }
                 };
 
-                log.debug('writing :'+parameters);
                 this.writeFloat(sensor.registerSpace, sensor.index, parameters, onFinish);
+                updateRecord.timeoutHandle=setTimeout(onFinish,200);
             }
         }
 

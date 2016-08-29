@@ -275,6 +275,9 @@
         return [min, hour, day, month, dow].join(" ");
     }
 
+    function minutesString(min) {
+        if(min<10) return '0'+min.toString(); else return min;
+    }
 
     function getText(c) {
         var b = c.data("block");
@@ -293,27 +296,27 @@
                 return "Every minute";
             case "hour":
                 min = b["mins"].find("select").val();
-                return "Every hour at "+min+" minutes past the hour";
+                return "Every hour at "+min+(min===1 ? " minute":" minutes")+" past the hour";
             case "day":
                 min  = b["time"].find("select.cron-time-min").val();
                 hour = b["time"].find("select.cron-time-hour").val();
-                return "Every day at "+hour+":"+min;
+                return "Every day at "+hour+":"+minutesString(min);
             case "week":
                 min  = b["time"].find("select.cron-time-min").val();
                 hour = b["time"].find("select.cron-time-hour").val();
                 dow  =  b["dow"].find("select").val();
-                return "Every week on "+days[dow]+" at "+hour+":"+min;
+                return "Every week on "+days[dow]+" at "+hour+":"+minutesString(min);
             case "month":
                 min  = b["time"].find("select.cron-time-min").val();
                 hour = b["time"].find("select.cron-time-hour").val();
                 day  = b["dom"].find("select").val();
-                return "Every month on the "+day+dayText(day)+" at "+hour+":"+min;
+                return "Every month on the "+day+dayText(day)+" at "+hour+":"+minutesString(min);
             case "year":
                 min  = b["time"].find("select.cron-time-min").val();
                 hour = b["time"].find("select.cron-time-hour").val();
                 day  = b["dom"].find("select").val();
                 month = b["month"].find("select").val();
-                return "On the "+day+dayText(day)+" of "+months[month]+" at "+hour+":"+min;
+                return "On the "+day+dayText(day)+" of "+months[month]+" at "+hour+":"+minutesString(min);
 
         }
 

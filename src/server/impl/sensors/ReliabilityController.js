@@ -6,7 +6,7 @@ class ReliabilityControllerClass {
 
     setupTimeout(changeRecord) {
         Meteor.setTimeout(()=>{
-            if (changeRecord.waitRound<6) changeRecord.waitRound++;
+            if (changeRecord.waitRound<7) changeRecord.waitRound++;
             this.setupTimeout(changeRecord);
             try {
                 changeRecord.driverInstance.getDriver().performAction(changeRecord.deviceId,changeRecord.sensorId,changeRecord.chosenVariable,changeRecord.action,changeRecord.value);
@@ -15,7 +15,7 @@ class ReliabilityControllerClass {
             {
                 log.error('Error when retrying to perform an action '+changeRecord.action+' on '+changeRecord.driverInstance.getId()+' '+changeRecord.deviceId+';'+changeRecord.sensorId+';'+changeRecord.choosenVariable+' with value'+EJSON.stringify(parameters),e);
             }
-        },(1<<changeRecord.waitRound)*500);
+        },(1<<changeRecord.waitRound)*100);
     }
 
     onPerformAction(driverInstance,deviceId,sensorId,chosenVariable, action, parameters) {
@@ -36,7 +36,7 @@ class ReliabilityControllerClass {
                 throw 'Assertion failed; unknown action';
         }
 
-        let key=driverInstance.getId()+deviceId+sensorId+choosenVariable;
+        let key=driverInstance.getId()+deviceId+sensorId+chosenVariable;
         let existingRecord=this.runningChanges.get(key);
         if (existingRecord!==undefined) {
             existingRecord.action=action;
