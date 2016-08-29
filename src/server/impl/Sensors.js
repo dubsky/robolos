@@ -6,6 +6,7 @@ class SensorsClass {
             listenerObjects: [],
             idGenerator: 0
         };
+        this.reliabilityController=new ReliabilityController();
         this.count=0;
     }
 
@@ -147,6 +148,8 @@ class SensorsClass {
     performAction(driverInstanceId, deviceId, sensorId, variable, action, parameters) {
         try {
             var driver = Devices.getDriverByInstanceID(driverInstanceId);
+            var driverInstance=Drivers.getDriverInstance(driverInstanceId);
+
             if (driver === undefined) return;
 
             let chosenVariable=variable;
@@ -174,7 +177,7 @@ class SensorsClass {
                     log.error('sensor ' + SHARED.getSensorID(driverInstanceId, deviceId, sensorId) + ' is not available to the runtime right now');
                     return;
                 }
-
+                
                 if (action === SENSOR_ACTIONS.SWITCH_ON || action === SENSOR_ACTIONS.SWITCH_OFF) {
 
                     log.event(
@@ -184,27 +187,35 @@ class SensorsClass {
                         },
                         status
                     );
-
+                    
                     if (status.class === SensorClasses.BINARY_OUTPUT) {
                         if (this.shouldReverseLogic(driverInstanceId, deviceId, sensorId)) {
-                            if (action === SENSOR_ACTIONS.SWITCH_ON)
+                            if (action === SENSOR_ACTIONS.SWITCH_ON) {
+                                this.reliabilityController.onPerformAction(driverInstance,deviceId, sensorId, chosenVariable, SENSOR_ACTIONS.SWITCH_OFF, parameters);
                                 return driver.performAction(deviceId, sensorId, chosenVariable, SENSOR_ACTIONS.SWITCH_OFF, parameters);
+                            }
                             else
+                            {
+                                this.reliabilityController.onPerformAction(driverInstance,deviceId, sensorId, chosenVariable, SENSOR_ACTIONS.SWITCH_ON, parameters);
                                 return driver.performAction(deviceId, sensorId, chosenVariable, SENSOR_ACTIONS.SWITCH_ON, parameters);
+                            }
                         }
                         else {
+                            this.reliabilityController.onPerformAction(driverInstance,deviceId, sensorId, chosenVariable, action, parameters);
                             return driver.performAction(deviceId, sensorId, chosenVariable, action, parameters);
                         }
                     }
                     if (status.class === SensorClasses.ANALOG_OUTPUT_0_100) {
                         if (action === SENSOR_ACTIONS.SWITCH_ON) {
-                            var value = status.switchOffValue === undefined ? 100 : status.switchOffValue;
+                            let value=100;
+                            this.reliabilityController.onPerformAction(driverInstance,deviceId, sensorId, chosenVariable, SENSOR_ACTIONS.SET_VALUE, value);
                             return driver.performAction(deviceId, sensorId, chosenVariable, SENSOR_ACTIONS.SET_VALUE, value);
 
                         }
                         else {
-                            status.switchOffValue = status.value;
-                            return driver.performAction(deviceId, sensorId, chosenVariable, SENSOR_ACTIONS.SET_VALUE, 0);
+                            let value=0;
+                            this.reliabilityController.onPerformAction(driverInstance,deviceId, sensorId, chosenVariable, SENSOR_ACTIONS.SET_VALUE,value);
+                            return driver.performAction(deviceId, sensorId, chosenVariable, SENSOR_ACTIONS.SET_VALUE, value);
                         }
                     }
                 }
@@ -216,6 +227,7 @@ class SensorsClass {
                         },
                         status
                     );
+                    this.reliabilityController.onPerformAction(driverInstance,deviceId, sensorId, chosenVariable, action, parameters);
                     return driver.performAction(deviceId, sensorId, chosenVariable, action, parameters);
                 }
             }
@@ -286,6 +298,50 @@ class SensorsClass {
             [fromCache,value]
         );
         this.processIncomingSensorValueForSensorObject(driverInstance, fromCache, value);
+    }
+
+    beTolerant(payload) {
+        if(payload instanceof Object) {
+            let keys=Object.keys(payload);
+            if(keys.length>0) return payload[keys[0]];
+        }
+        else {
+            return payload;
+        }
+    }
+
+    calculateMainVariableValue(driverInstance, device,sensor,payload) {
+        let sensorData=Sensors.getSensorStatus(driverInstance.getId(),device,sensor);
+        if(sensorData===undefined) {
+            log.error('Unknown sensor:'+driverInstance._id+'/'+device+'/'+sensor);
+            return this.beTolerant(payload);;
+        }
+        let clazz=SensorTypes[sensorData.type];
+        if(clazz==undefined) { log.error('Unknown sensor type of '+EJSON.stringify(sensorData)); return this.beTolerant(payload); }
+        let variable=clazz.mainVariable;
+        if(variable==undefined) { log.error('Main variable for '+sensorData.type+' not defined'); return this.beTolerant(payload); }
+        let variableValue=payload[variable.name];
+        if(variableValue==undefined) { log.error('Required sensor variable '+variable.name+' for '+driverInstance.getId()+';'+device+';'+sensor +' missing, got '+EJSON.stringify(payload)+' instead'); return this.beTolerant(payload); }
+        return variableValue;
+    }
+
+    /* called by the driver on sensor change */
+    onEvent(driverInstance,device, sensor, value) {
+        try {
+            this.reliabilityController.onReceivedSensorInformation(driverInstance,device,sensor,value);
+            let mainValue=this.calculateMainVariableValue(driverInstance,device,sensor,value);
+            if(Fiber.current!==undefined) {
+                this.processIncomingSensorValue(driverInstance,device, sensor, mainValue);
+            }
+            else {
+                Fiber(function () {
+                    this.processIncomingSensorValue(driverInstance,device, sensor, mainValue);
+                }).run();
+            }
+        }
+        catch(e) {
+            log.error('Error when processing event from '+device+';'+sensor+';'+EJSON.stringify(value),e)
+        }
     }
 
     addSensorValueEventListener(listener) {
