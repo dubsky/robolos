@@ -9,6 +9,7 @@ class ReliabilityControllerClass {
             if (changeRecord.waitRound<7) changeRecord.waitRound++;
             this.setupTimeout(changeRecord);
             try {
+                log.debug("Haven't received confirmation about change to "+changeRecord.driverInstance.getId()+' '+changeRecord.deviceId+';'+changeRecord.sensorId+",resending");
                 changeRecord.driverInstance.getDriver().performAction(changeRecord.deviceId,changeRecord.sensorId,changeRecord.chosenVariable,changeRecord.action,changeRecord.value);
             }
             catch(e)

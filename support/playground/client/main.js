@@ -3,7 +3,7 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import './main.html';
 
 Template.hello.onRendered(function helloOnCreated() {
-  var ChartNatural=new SplineChart('chart_natural', 'X', 'F(x)', '#0f0', -100, 100, function(xs, ys) {
+  var ChartNatural=new SplineChart('chart_natural', 'X', 'F(x)', '#0f0', -100, 100,0,100, function(xs, ys) {
     return new CubicSpline(xs, ys);
   });
   ChartNatural.point(new Question().answer(0),  0.5);

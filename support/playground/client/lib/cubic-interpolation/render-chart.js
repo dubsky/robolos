@@ -18,7 +18,7 @@ class QuestionClass  {
 Question=QuestionClass;
 
 class SplineChartClass {
-    constructor(div_id, xAxisLabel, yAxisLabel, color, xMin, xMax, splineFunc) {
+    constructor(div_id, xAxisLabel, yAxisLabel, color, xMin, xMax, yMin,yMax, splineFunc) {
         this.div_id = div_id;
         this.iOS = !! window.navigator.appVersion.match(/\biP(ad|od|hone)\b/);
         this.xAxisLabel = xAxisLabel;
@@ -26,6 +26,8 @@ class SplineChartClass {
         this.color = color;
         this.xMin = xMin;
         this.xMax = xMax;
+        this.yMin = yMin;
+        this.yMax = yMax;
         this.splineFunc = splineFunc;
 
         this.questions = [];
@@ -44,6 +46,26 @@ class SplineChartClass {
             if(j>max) max=j;
         }
         return [min,max];
+    }
+
+    toTime(x) {
+        let t = 60 * x;
+
+        function doubleDigits(d) {
+            if (d < 10) return '0' + d.toFixed(0); else return d.toFixed(0);
+        }
+
+        let s = doubleDigits(Math.floor(t / 60)) + ':' + doubleDigits(t % 60);
+        if (s == '24:00') s = '00:00';
+        return s;
+    }
+
+    toYLabel(y) {
+        let range=(this.yMax-this.yMin);
+        let v=this.yMin+range*y;
+        if(range>90) return v.toFixed(0);
+        if(range<=10) return v.toPrecision(2);
+        return v.toPrecision(1);
     }
 
     draw(firstTime,rebuild) {
@@ -114,7 +136,7 @@ class SplineChartClass {
         }
 
         if (firstTime) {
-            div.on('dblclick',function(e) {  me.addPoint(e); } );
+            canvas.on('dblclick',function(e) {  me.addPoint(e,canvas.offset().left,canvas.offset().top); } );
         }
 
         // general iterator
@@ -148,7 +170,8 @@ class SplineChartClass {
             } else {
                 xLab = me.xLabs[i];
             }
-            xLab.html(x);
+
+            xLab.html(me.toTime(x));
 
             xLab.css({
                 left: (pxX - 75) + 'px',
@@ -160,12 +183,18 @@ class SplineChartClass {
             ctx.lineTo(width, height-pxY);
 
             // y labels
+            var yLab;
             if (firstTime || rebuild) {
-                yLab = $('<div/>', {'class': 'cubic_spline_ylabel'}).html(y);
+                yLab = $('<div/>', {'class': 'cubic_spline_ylabel'});
                 me.yLabs[i] = yLab;
-                yLab.css({ top:((height - pxY) - 10) + 'px'});
                 div.append(yLab);
             }
+            else {
+                yLab=me.yLabs[i];
+            }
+            yLab.css({ top:((height - pxY) - 10) + 'px'});
+            yLab.html(me.toYLabel(y));
+
         });
         ctx.stroke();
         ctx.closePath();
@@ -269,18 +298,28 @@ class SplineChartClass {
         }
     }
 
-    addPoint(e) {
+    addPoint(e,left,top) {
         e.stopPropagation();
         let me=this;
-        var newX = e.clientX / me.xfactor;
-        var newY = e.clientY / me.yfactor;
+
+        console.log('client x',e.clientX-left);
+        console.log('client y',e.clientY-top);
+
+
+        var newX = (e.clientX-left) / me.xfactor;
+        var newY = 1-(e.clientY-top) / me.yfactor;
 
         console.log('x',newX);
         console.log('y',newY);
         let j=0;
-        while(newX<parseFloat(this.questions[j].answer()) && j<this.questions.length-1) j++;
+        while(newX>this.questions[j].answer() && j<this.questions.length-1) j++;
+
+        console.log('j:',j);
+
         this.ys.splice(j,0,newY);
-        this.questions.splice(j,0,new Question(newX));
+        this.questions.splice(j,0,new Question().answer(newX));
+
+        console.log(this.questions)
 
         this.draw(false,true);
     }
