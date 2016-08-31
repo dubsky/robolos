@@ -53,11 +53,12 @@ Template.renderSensorValue.events({
             var location=$(parent);
             var id=Template.renderSensorValue.IdGenerator++;
             var self=this;
+            let buttons='<div style="margin-left:20px; position:relative;top:16px" class="ui small basic vertical icon buttons"><button class="ui compact button"><i class="power tiny icon"></i></button></div>';
             location.popup({
                     hoverable: true,
                     on:'click',
                     position : 'left center',
-                    html  : "<div style='width:315px;height:70px'> <div style='width:240px;height:100px;'><input style='display:none' id='rangeSlide"+id+"' type='text' name='nrangeSlide"+id+"' value='' /></div></div>",
+                    html  : "<div style='width:335px;height:70px'><table><tr><td><div style='width:240px;height:100px;'><input style='display:none' id='rangeSlide"+id+"' type='text' name='nrangeSlide"+id+"' value='' /></div></td><td style='vertical-align: top'>"+buttons+"</td></tr></table></div>",
                     delay: {
                         show: 300,
                         hide: 800
