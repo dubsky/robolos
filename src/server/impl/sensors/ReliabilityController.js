@@ -5,7 +5,7 @@ class ReliabilityControllerClass {
     }
 
     setupTimeout(changeRecord) {
-        Meteor.setTimeout(()=>{
+        changeRecord.waitHandle=Meteor.setTimeout(()=>{
             if (changeRecord.waitRound<7) changeRecord.waitRound++;
             this.setupTimeout(changeRecord);
             try {
@@ -14,7 +14,9 @@ class ReliabilityControllerClass {
             }
             catch(e)
             {
-                log.error('Error when retrying to perform an action '+changeRecord.action+' on '+changeRecord.driverInstance.getId()+' '+changeRecord.deviceId+';'+changeRecord.sensorId+';'+changeRecord.choosenVariable+' with value'+EJSON.stringify(parameters),e);
+                log.error('Error when retrying to perform an action '+changeRecord.action+' on '+changeRecord.driverInstance.getId()+' '+changeRecord.deviceId+';'+changeRecord.sensorId+';'+changeRecord.chosenVariable+
+                    ' with value'+EJSON.stringify(changeRecord.value),e);
+                console.log(e);
             }
         },(1<<changeRecord.waitRound)*100);
     }
@@ -37,7 +39,7 @@ class ReliabilityControllerClass {
                 throw 'Assertion failed; unknown action';
         }
 
-        let key=driverInstance.getId()+deviceId+sensorId+chosenVariable;
+        let key=driverInstance.getId()+deviceId+sensorId+chosenVariable.name;
         let existingRecord=this.runningChanges.get(key);
         if (existingRecord!==undefined) {
             existingRecord.action=action;
@@ -50,7 +52,7 @@ class ReliabilityControllerClass {
                 driverInstance:driverInstance,
                 deviceId:deviceId,
                 sensorId:sensorId,
-                choosenVariable:chosenVariable,
+                chosenVariable:chosenVariable,
                 action:action,
                 value:desiredValue,
                 waitRound:0
@@ -67,7 +69,7 @@ class ReliabilityControllerClass {
                 let key=driverInstance.getId()+deviceId+sensorId+variable;
                 let existingRecord=this.runningChanges.get(key);
                 if (existingRecord!==undefined) {
-                    if(existingRecord.value===value[variable])
+                    if(existingRecord.value==value[variable])
                     {
                         Meteor.clearTimeout(existingRecord.waitHandle);
                         this.runningChanges.delete(key);

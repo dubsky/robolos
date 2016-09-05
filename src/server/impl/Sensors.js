@@ -94,6 +94,7 @@ class SensorsClass {
     }
 
     scanForUnknownSensorStatusesOneIteration() {
+        //log.debug('scan started');
         if(this.scanningStatus===undefined || this.scanningStatus.keys.length==this.scanningStatus.i) {
             this.scanningStatus={ i:0, keys: Object.keys(this.knownSensors) };
         }
@@ -104,15 +105,17 @@ class SensorsClass {
             if (this.knownSensors.hasOwnProperty(currentKey)) {
                 let s = this.knownSensors[currentKey];
                 if ((s !== undefined) && (s.class === SensorClasses.ANALOG_OUTPUT || s.class === SensorClasses.BINARY_OUTPUT || s.class === SensorClasses.ANALOG_OUTPUT_0_100) && (typeof s.value) === 'undefined') {
+                    //log.debug('scan started '+s.driver+' '+s.deviceId+' '+s.sensorId);
                     // should be scanning for all variables !
                     let variable=Sensors.getMainVariable(s.driver,s.deviceId,s.sensorId,);
+                    //log.debug('get value '+s.driver+' '+s.deviceId+' '+s.sensorId);
                     Devices.getDriverByInstanceID(s.driver).performAction(s.deviceId, s.sensorId, variable, SENSOR_ACTIONS.GET_VALUE);
                 }
                 if(this.scanningStatus.i>=this.scanningStatus.keys.length) break;
             }
             // don't spend more than 50ms here
             if(new Date().getTime()-beginning>50) break;
-            if(numberOfScannedValues>5) break;
+            if(numberOfScannedValues++>5) break;
         }
         while(true);
     }
@@ -122,7 +125,7 @@ class SensorsClass {
      */
     scanForUnknownSensorStatuses() {
         var self=this;
-        var handle = setInterval(function () {
+        var handle = Meteor.setInterval(function () {
             self.scanForUnknownSensorStatusesOneIteration();
         }, 1000);
     }
