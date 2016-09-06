@@ -2,51 +2,79 @@
     <div id="main-header" class="ui fixed inverted menu managementMenu">
 
         {{#if renderHeader}}
-            <div class="ui container">
-                <div href="#" class="header item" onclick="$('#sidebarMenu').sidebar('toggle');">
-                    <i class="sidebar icon"></i>
-                    Dashboards
+            {{#if isWide}}
+                <div class="ui container">
+                    <div href="#" class="header item" onclick="$('#sidebarMenu').sidebar('toggle');">
+                        <i class="sidebar icon"></i>
+                        Dashboards
+                    </div>
+                    <a href="{{ pathFor 'homepage' }}" class="item">Home</a>
+                    <a href="{{ pathFor 'calendar' }}" class="item">Calendar</a>
+                    {{#if isAdministrator}}
+                        <a href="#" class="ui simple dropdown item">
+                            Manage <i class="dropdown icon"></i>
+                            <div class="menu">
+                               {{> headerMgmtMenu}}
+                            </div>
+                        </a>
+                    {{/if}}
                 </div>
-                <a href="{{ pathFor 'homepage' }}" class="item">Home</a>
-                <a href="{{ pathFor 'calendar' }}" class="item">Calendar</a>
-                {{#if isAdministrator}}
-                    <a href="#" class="ui simple dropdown item">
-                        Manage <i class="dropdown icon"></i>
+            {{else}}
+                    <a href="#" class="ui simple dropdown item mainDrop">
+                        <i class="sidebar icon"></i>
                         <div class="menu">
-                            <a class="item" href="{{ pathFor 'driverInstances' }}">Hardware Connections</a>
-                            <a class="item" href="{{ pathFor 'devices' }}">Devices</a>
-                            <a class="item" href="{{ pathFor 'sensors' }}">Sensors</a>
-                            <div class="divider"></div>
-                            <a class="item" href="{{ pathFor 'actions' }}">Automation Actions</a>
-                            <a class="item" href="{{ pathFor 'schedules' }}">Schedules</a>
-                            <a class="item" href="{{ pathFor 'variables' }}">State Variables</a>
-                            <div class="divider"></div>
-                            <a class="item" href="{{ pathFor 'dashboards' }}">Dashboards</a>
-                            <a class="item" href="{{ pathFor 'settings' }}">System &amp; Settings</a>
+                            <a class="item closeOnClk" href="{{ pathFor 'dashboards' }}">Dashboards</a>
+                            <a class="item closeOnClk" href="{{ pathFor 'calendar' }}">Calendar</a>
+                            {{#if isAdministrator}}
+                                <div class="divider"></div>
+                                <div class="ui dropdown item">
+                                    Hardware
+                                    <i class="dropdown icon"></i>
+                                    <div class="menu">
+                                        <a class="item closeOnClk" href="{{ pathFor 'driverInstances' }}">Connections</a>
+                                        <a class="item closeOnClk" href="{{ pathFor 'devices' }}">Devices</a>
+                                        <a class="item closeOnClk" href="{{ pathFor 'sensors' }}">Sensors</a>
+                                    </div>
+                                </div>
+                                <div class="ui dropdown item">
+                                    Automation
+                                    <i class="dropdown icon"></i>
+                                    <div class="menu">
+                                        <a class="item closeOnClk" href="{{ pathFor 'actions' }}">Automation Actions</a>
+                                        <a class="item closeOnClk" href="{{ pathFor 'schedules' }}">Schedules</a>
+                                        <a class="item closeOnClk" href="{{ pathFor 'variables' }}">State Variables</a>
+                                    </div>
+                                </div>
+                                <div class="divider"></div>
+                                <a class="item closeOnClk" href="{{ pathFor 'dashboards' }}">Dashboard Management</a>
+                                <a class="item closeOnClk" href="{{ pathFor 'settings' }}">System &amp; Settings</a>
+                            {{/if}}
                         </div>
                     </a>
-                {{/if}}
-            </div>
+                    <a href="{{ pathFor 'homepage' }}" class="item">Home</a>
+            {{/if}}
+
+
+            {{#if currentUser}}
+                <div class="right menu">
+                    <a class="item signOut">
+                        <i class="user icon"></i>Sign Out
+                    </a>
+                </div>
+            {{else}}
+                <div class="right menu">
+                    <a class="item signIn">
+                        <i class="user icon"></i>Sign In
+                    </a>
+                </div>
+            {{/if}}
+
         {{else}}
             <div class="ui container">
                 <div href="#" class="header item">
                     <i class="sidebar icon"></i>
                     Robolos
                 </div>
-            </div>
-        {{/if}}
-
-        {{#if currentUser}}
-        <div class="right menu">
-            <a class="item signOut">
-                <i class="user icon"></i>Sign Out
-            </a>
-        </div>
-        {{else}}
-            <div class="right menu">
-                <a class="item signIn">
-                    <i class="user icon"></i>Sign In
-                </a>
             </div>
         {{/if}}
     </div>

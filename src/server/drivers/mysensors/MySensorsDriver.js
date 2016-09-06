@@ -860,7 +860,7 @@ class MySensors extends AbstractDriver {
 
     performAction(deviceId,sensorId,variable,action,parameters)
     {
-        //log.debug('my sensors: perform action: '+action+' on '+deviceId+';'+sensorId);
+        //log.debug('my sensors: perform action: '+action+' on '+deviceId+';'+sensorId+';'+variable.name);
         var sensor = sensorId;
         var command = C_SET;
         var acknowledge = 0;
@@ -896,7 +896,7 @@ class MySensors extends AbstractDriver {
         var destination = deviceId;
 
         var td = encode(destination, sensor, command, acknowledge, type, payload);
-        //log.debug('MySensors: sending req. for value -> ' + td.toString()+"    "+gw);
+        //log.debug('MySensors: sending req. for value -> ' + td.toString());
         if(this.gw!=null) this.gw.write(td);
     }
 
