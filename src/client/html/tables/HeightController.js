@@ -15,7 +15,7 @@ HeightController= {
             console.log('missing area or divs with id contentHeader/contentWrapper/ or wrapper does not have height set');
             return;
         }
-        var areaElement = areaElement = self.area.get(0);;
+        var areaElement = areaElement = self.area.get(0);
         var getYPos = function (element) {
             var y = 0;
             do {

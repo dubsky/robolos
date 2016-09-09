@@ -5,7 +5,7 @@
             {{#if isWide}}
                 <div class="ui container">
                     <div href="#" class="header item" onclick="$('#sidebarMenu').sidebar('toggle');">
-                        <i class="sidebar icon"></i>
+                        <i class="block layout icon"></i>
                         Dashboards
                     </div>
                     <a href="{{ pathFor 'homepage' }}" class="item">Home</a>
@@ -23,7 +23,21 @@
                     <a href="#" class="ui simple dropdown item mainDrop">
                         <i class="sidebar icon"></i>
                         <div class="menu">
-                            <a class="item closeOnClk" href="{{ pathFor 'dashboards' }}">Dashboards</a>
+                            <div class="ui dropdown item">
+                                Dashboards
+                                <i class="dropdown icon"></i>
+                                <div class="menu">
+                                    {{#each dashboards}}
+                                        {{#if isActive}}
+                                            <a class="active item closeOnClk" href="/dashboard/{{_id}}">{{title}}</a>
+                                        {{else}}
+                                            <a class="item closeOnClk" href="/dashboard/{{_id}}">{{title}}</a>
+                                        {{/if}}
+                                    {{/each}}
+                                </div>
+                            </div>
+
+
                             <a class="item closeOnClk" href="{{ pathFor 'calendar' }}">Calendar</a>
                             {{#if isAdministrator}}
                                 <div class="divider"></div>

@@ -11,7 +11,6 @@ Template.header.events({
     "click .closeOnClk":function(e) {
         $('.mainDrop').dropdown('hide');
     }
-
 });
 
 
@@ -27,9 +26,19 @@ Template.header.helpers({
         return isWide()
     },
 
-
     isAdministrator : function() {
         return Session.get(USER_ROLE)===Collections.Users.RoleKeys.administrator;
+    },
+
+    isActive: function () {
+        if(this._id===undefined) return false;
+        if(Router.current().route.getName()==='render.dashboard')
+            return this._id===Session.get(CURRENT_DASHBOARD_ID);
+        else
+            return false;
+    },
+    dashboards: function () {
+        return Collections.Dashboards.find({},{sort: ["menuPositionNumber","asc"]});
     }
 
 });

@@ -3,10 +3,25 @@ later.date.localTime();
 let LAST_CALENDAR_DATE='LAST_CALENDAR_DATE';
 
 
+let setupLayout=function() {
+    let contentWrapper = document.getElementById('content-wrapper');
+    contentWrapper.style.paddingLeft=contentWrapper.style.paddingRight='0';
+    console.log(contentWrapper.clientHeight);
+    console.log(contentWrapper.clientWidth);
+    let calendarPanel = $('#calendar');
+    console.log(calendarPanel);
+    calendarPanel.css('min-width',contentWrapper.clientWidth < 590 ? 590 : calendarPanel.get(0).clientWidth);
+    let c=contentWrapper.clientHeight-55;
+    if($('#calendar').get(0).clientHeight<c) $('#calendar').fullCalendar('option', 'height', c); else $('#calendar').fullCalendar('option', 'height', 'auto');
+};
+
+
+
 Template.calendar.onRendered(function() {
     var calendarElement=$('#calendar');
     let configuration={
         firstDay:1,
+        height: 'auto',
         header: {
             left: 'prev,next today',
             center: 'title',
@@ -102,22 +117,16 @@ Template.calendar.onRendered(function() {
     if(lastDate!==undefined) configuration.defaultDate=moment(lastDate);
     calendarElement.fullCalendar(configuration);
 
-    /*
-    if(!TOUCH_DEVICE) {
-        var scrollBarParams = {
-            theme: "dark-thick",
-            axis: 'yx',
-            autoHideScrollbar: true,
-            scrollbarPosition: 'outside',
-            scrollButtons: {enable: true}
-        };
-        calendarElement.mCustomScrollbar(scrollBarParams);
-    }*/
+    setupLayout();
+    $(window).resize(setupLayout);
+
 });
 
 
 Template.calendar.onDestroyed(function() {
     Session.set(LAST_CALENDAR_DATE,$('#calendar').fullCalendar('getDate').toDate());
+    $(window).off('resize',setupLayout);
+
 });
 
 
