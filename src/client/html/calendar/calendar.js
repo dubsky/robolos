@@ -5,11 +5,8 @@ let LAST_CALENDAR_DATE='LAST_CALENDAR_DATE';
 
 let setupLayout=function() {
     let contentWrapper = document.getElementById('content-wrapper');
-    contentWrapper.style.paddingLeft=contentWrapper.style.paddingRight='0';
-    console.log(contentWrapper.clientHeight);
-    console.log(contentWrapper.clientWidth);
+    //contentWrapper.style.paddingLeft=contentWrapper.style.paddingRight='0';
     let calendarPanel = $('#calendar');
-    console.log(calendarPanel);
     calendarPanel.css('min-width',contentWrapper.clientWidth < 590 ? 590 : calendarPanel.get(0).clientWidth);
     let c=contentWrapper.clientHeight-55;
     if($('#calendar').get(0).clientHeight<c) $('#calendar').fullCalendar('option', 'height', c); else $('#calendar').fullCalendar('option', 'height', 'auto');
