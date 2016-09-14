@@ -81,7 +81,14 @@ class Logger extends Observable {
     logMessage(level,text,object,consoleOutput) {
         var obj={ message: text+(object==undefined ? '': ' '+EJSON.stringify(object)), time: new Date(), level: level};
         obj = _.extend(this.getCallerDetails(), obj);
-        if(consoleOutput) console.log(EJSON.stringify(obj));
+        if(consoleOutput) {
+            if (Meteor.isDevelopment) {
+                console.log(EJSON.stringify(obj));
+            }
+            else {
+                console.log(obj.time.toISOString()+' '+obj.level+' '+obj.file+':'+obj.line+' '+obj.message);
+            }
+        }
         obj.data=object;
         obj._id=''+this.idGenerator++;
         obj.message=text;

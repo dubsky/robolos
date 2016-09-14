@@ -44,6 +44,11 @@ Template.renderSensorValue.helpers({
 
 Template.renderSensorValue.IdGenerator=0;
 
+Template.renderSensorValue.switchOver=function(id,driver,deviceId,sensorId) {
+    Meteor.call('actionSwitchOver',driver,deviceId,sensorId);
+    console.log($('#'+id));
+    $('#'+id).popup('destroy');
+};
 
 Template.renderSensorValue.events({
     'click .popupSlider': function(e) {
@@ -53,7 +58,9 @@ Template.renderSensorValue.events({
             var location=$(parent);
             var id=Template.renderSensorValue.IdGenerator++;
             var self=this;
-            let buttons='<div style="margin-left:20px; position:relative;top:16px" class="ui small basic vertical icon buttons"><button class="ui compact button"><i class="power tiny icon"></i></button></div>';
+            location.get(0).setAttribute('id','popSld'+id);
+            console.log('created id:'+'popSld'+id);
+            let buttons='<div style="margin-left:20px; position:relative;top:16px" class="ui small basic vertical icon buttons"><button onclick="Template.renderSensorValue.switchOver(\'popSld'+id+'\',\''+self.driver+'\',\''+self.deviceId+'\',\''+self.sensorId+'\')" class="ui compact button"><i class="power tiny icon"></i></button></div>';
             location.popup({
                     hoverable: true,
                     on:'click',

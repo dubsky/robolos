@@ -77,7 +77,7 @@ SensorTypes={
     S_COVER: { id:'S_COVER', comment:'Window covers or shades',class: SensorClasses.BINARY_OUTPUT,mainVariable: SensorVariables.V_PERCENTAGE, variables:[ SensorVariables.V_UP,  SensorVariables.V_DOWN,  SensorVariables.V_STOP,  SensorVariables.V_PERCENTAGE]},
     S_TEMP: { id:'S_TEMP', comment:'Temperature sensor', class: SensorClasses.ANALOG_INPUT,mainVariable: SensorVariables.V_TEMP, variables: [ SensorVariables.V_TEMP, SensorVariables.V_ID ]},
     S_HUM: { id:'S_HUM', comment:'Humidity sensor', class: SensorClasses.ANALOG_INPUT,mainVariable: SensorVariables.V_HUM, variables: [ SensorVariables.V_HUM ]},
-    S_BARO: { id:'S_BARO', comment:'Barometer sensor (Pressure)', class: SensorClasses.ANALOG_INPUT},mainVariable: SensorVariables.V_PRESSURE, variables: [ SensorVariables.V_PRESSURE,SensorVariables.V_FORECAST ],
+    S_BARO: { id:'S_BARO', comment:'Barometer sensor (Pressure)', class: SensorClasses.ANALOG_INPUT,mainVariable: SensorVariables.V_PRESSURE, variables: [ SensorVariables.V_PRESSURE,SensorVariables.V_FORECAST ]},
     S_WIND: { id:'S_WIND', comment:'Wind sensor', class: SensorClasses.ANALOG_INPUT,mainVariable: SensorVariables.V_WIND, variables: [ SensorVariables.V_WIND,SensorVariables.V_GUST ]},
     S_RAIN: { id:'S_RAIN', comment:'Rain sensor', class: SensorClasses.ANALOG_INPUT,mainVariable: SensorVariables.V_RAIN, variables: [ SensorVariables.V_RAIN,SensorVariables.V_RAINRATE ]},
     S_UV: { id:'S_UV', comment:'UV sensor', class: SensorClasses.ANALOG_INPUT, mainVariable: SensorVariables.V_UV, variables: [ SensorVariables.V_UV ]},

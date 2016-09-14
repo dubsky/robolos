@@ -318,8 +318,8 @@ class SensorsClass {
     calculateMainVariableValue(driverInstance, device,sensor,payload) {
         let sensorData=Sensors.getSensorStatus(driverInstance.getId(),device,sensor);
         if(sensorData===undefined) {
-            log.error('Unknown sensor:'+driverInstance._id+'/'+device+'/'+sensor);
-            return this.beTolerant(payload);;
+            log.error('Unknown sensor:'+driverInstance.getId()+'/'+device+'/'+sensor);
+            return this.beTolerant(payload);
         }
         let clazz=SensorTypes[sensorData.type];
         if(clazz==undefined) { log.error('Unknown sensor type of '+EJSON.stringify(sensorData)); return this.beTolerant(payload); }

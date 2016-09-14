@@ -27,7 +27,7 @@ class MQTTDriver extends AbstractDriver {
             let sensor=components[components.length-2];
             let device=components[components.length-3];
             let keywords=components.slice(0,components.length-3);
-            let payload=JSON.parse(packet.payload);
+            let payload=EJSON.parse(packet.payload.toString('utf-8'));
             let type=SensorTypes[payload.type];
             if(type==undefined) {
                 log.error('unknown type presented:'+payload.type);
@@ -67,7 +67,7 @@ class MQTTDriver extends AbstractDriver {
             for(let i=0;i<p.length;i++) {
                 result+=String.fromCharCode(p[i]);
             }
-            //log.debug('MQTT: Message received', result);
+            log.debug('MQTT: Message received', result);
 
             let components=packet.topic.split('/');
             switch(components[components.length-1]) {
@@ -87,9 +87,8 @@ class MQTTDriver extends AbstractDriver {
                     }
                     let sensor=components[components.length-1];
                     let device=components[components.length-2];
-                    log.debug('Message received',payload);
-
                     let payload=JSON.parse(packet.payload);
+                    log.debug('Message received',payload);
                     if (this.onEventListener!==undefined) {
                         // do some validation...
                         this.onEventListener.onEvent(device,sensor,payload);
@@ -203,8 +202,8 @@ class MQTTDriver extends AbstractDriver {
      * @param id device id
      */
     removeDevice(id) {
-        MQTTSensorCollection.delete({deviceId: id});
-        MQTTDeviceCollection.delete({_id: id});
+        MQTTSensorCollection.remove({deviceId: id});
+        MQTTDeviceCollection.remove({_id: id});
         let newSensors=[];
         for(let i in this.drivenSensors) {
             if(this.drivenSensors[i].deviceId!=id) {
