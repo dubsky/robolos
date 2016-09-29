@@ -1,0 +1,33 @@
+<template name="header">
+    <div style="background-color: black;color: white; width:100%">
+        <img style="display:block;margin:auto" src="/img/header.png"/>
+    </div>
+
+    <div class="ui borderless main menu">
+        <div class="ui text container">
+            <div href="{{pathFor 'about'}}" class="header item">
+                <a href="{{pathFor 'about'}}"><img class="logo" src="/img/logo.png"></a>
+                <a href="{{pathFor 'about'}}" style="color:black">Robolos</a>
+            </div>
+            <a href="{{pathFor 'gettingStarted'}}" class="item">Getting started</a>
+            <a class="item" href="{{pathFor 'downloads'}}">Downloads</a>
+            <a href="#" class="ui right floated dropdown item">
+                Cookbook <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div class="item">
+                        <i class="dropdown icon"></i>
+                        How to use ESP8266
+                        <div class="menu">
+                            <div class="item">Building a sensor device</div>
+                            <div class="item">Building an actor/relay</div>
+                        </div>
+                    </div>
+                    <div class="item">Working with My Sensors</div>
+                    <div class="divider"></div>
+                    <div class="item">How do I develop a new driver ?</div>
+                    <div class="item">How do I complain if something does not work ?</div>
+                </div>
+            </a>
+        </div>
+    </div>
+</template>
