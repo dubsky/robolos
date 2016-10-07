@@ -1,6 +1,10 @@
 import fs from 'fs';
 import readline from 'readline';
 import dgram from 'dgram';
+import mongo from 'mongodb';
+
+
+const GridStore=mongo.GridStore;
 
 
 var REGISTER_SPACES = {
@@ -716,51 +720,90 @@ class CFoxInelsDriver extends AbstractDriver {
         }
     }
 
+
     readKeywordsFromExp(exportExp, whenDone) {
         this.sensorComments={};
-        let raw=fs.createReadStream(exportExp);
-        raw.on('error', function(err) {
-            log.error('error reading file:'+exportExp,err);
-            return;
-        });
-        var rd = readline.createInterface({
-            input: raw,
-            output: process.stdout,
-            terminal: false
-        });
+        if(Collections.Uploads.uploadToFilesystem) {
+            let raw=fs.createReadStream(exportExp);
+            raw.on('error', function(err) {
+                log.error('error reading file:'+exportExp,err);
+                return;
+            });
+            var rd = readline.createInterface({
+                input: raw,
+                output: process.stdout,
+                terminal: false
+            });
 
-        var self = this;
-        rd.on('line', function (line) {
-            var r=/\(\*(.*)\*\)/;
-            self.analyzeExpLine(line,r);
-        });
-
-        rd.on('close', function () {
-            whenDone();
-        });
+            var self = this;
+            rd.on('line', function (line) {
+                var r=/\(\*(.*)\*\)/;
+                self.analyzeExpLine(line,r);
+            });
+            rd.on('close', function () {
+                whenDone();
+            });
+        }
+        else {
+            let gridStore;
+            let name='cfox/cfox.exp';
+            gridStore = new GridStore(Collections.Uploads.rawDatabase(), name, 'r');
+            GridStore.exist(Collections.Uploads.rawDatabase(), name, (err, result) => {
+                if(!result) {
+                    callback('uploads/cfox.exp is missing');
+                    return;
+                }
+                gridStore.open(()=> {
+                    gridStore.readlines('\n',(err,lines) => {
+                        var r=/\(\*(.*)\*\)/;
+                        for(let line of lines) this.analyzeExpLine(line,r);
+                        whenDone();
+                    });
+                });
+            });
+        }
     }
 
     readConfiguration(exportPub, whenDone) {
+        if(Collections.Uploads.uploadToFilesystem) {
+            let raw=fs.createReadStream(exportPub);
+            raw.on('error', function(err) {
+                log.error('error reading file:'+exportPub,err);
+                return;
+            });
+            var rd = readline.createInterface({
+                input: raw,
+                output: process.stdout,
+                terminal: false
+            });
 
-        let raw=fs.createReadStream(exportPub);
-        raw.on('error', function(err) {
-            log.error('error reading file:'+exportPub,err);
-            return;
-        });
-        var rd = readline.createInterface({
-            input: raw,
-            output: process.stdout,
-            terminal: false
-        });
+            var self = this;
+            rd.on('line', function (line) {
+                self.analyzePubLine(line);
+            });
 
-        var self = this;
-        rd.on('line', function (line) {
-            self.analyzePubLine(line);
-        });
-
-        rd.on('close', function () {
-            whenDone();
-        });
+            rd.on('close', function () {
+                whenDone();
+            });
+        }
+        else {
+            let gridStore;
+            let name='cfox/cfox.pub';
+            gridStore = new GridStore(Collections.Uploads.rawDatabase(), name, 'r');
+            GridStore.exist(Collections.Uploads.rawDatabase(), name, (err, result) => {
+                if(!result) {
+                    callback('uploads/cfox.pub is missing');
+                    return;
+                }
+                gridStore.open(()=> {
+                    gridStore.readlines('\n',(err,lines) => {
+                        var r=/\(\*(.*)\*\)/;
+                        for(let line of lines) this.analyzePubLine(line,r);
+                        whenDone();
+                    });
+                });
+            });
+        }
     }
 
 

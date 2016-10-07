@@ -1,5 +1,17 @@
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
+import mongo from 'mongodb';
+
+const GridStore=mongo.GridStore;
+
+let uploadToFilesystem=Collections.Uploads.uploadToFilesystem;
+
+let CFOX_FOLDER='cfox/';
+let ICON_FOLDER='icons/';
+let FLOOR_PLAN_FOLDER='floorPlans/';
+let UPLOAD_FOLDER='/uploads/';
+
 
 function getApplicationRoot() {
     var meteor_root = fs.realpathSync( process.cwd() + '/../' );
@@ -9,6 +21,10 @@ function getApplicationRoot() {
     }
     return application_root+'/..';
 }
+
+LOCAL_ICON_DIRECTORY=getApplicationRoot()+'/uploads/icons';
+LOCAL_FLOORPLAN_DIRECTORY=getApplicationRoot()+'/uploads/floorPlans';
+
 
 getUploadRoot=function getUploadRoot() {
     return getApplicationRoot() + '/uploads'
@@ -29,8 +45,6 @@ function getResourceBase() {
     return application_root+resourcesLocation;
 }
 
-ICON_DIRECTORY=getApplicationRoot()+'/uploads/icons';
-FLOORPLAN_DIRECTORY=getApplicationRoot()+'/uploads/floorPlans';
 
 class Uploads extends Observable {
     constructor(collection) {
@@ -40,6 +54,9 @@ class Uploads extends Observable {
             Accounts.checkDashboardAccess(this);
             var self = this;
 
+            function isImage(f) {
+                return f.toLowerCase().endsWith('.jpg')||f.toLowerCase().endsWith('.png');
+            }
             function processDirectory(path,idPrefix,decorator) {
                 var files=fs.readdirSync(path);
                 for(var file in files) {
@@ -47,20 +64,32 @@ class Uploads extends Observable {
                     var id=idPrefix+'-'+f;
                     let object={ _id: id, name: f };
                     decorator(object);
-                    if (f.toLowerCase().endsWith('.jpg')||f.toLowerCase().endsWith('.png')) self.added(collection, id, object);
+                    if (isImage(f)) self.added(collection, id, object);
                 }
             }
 
             processDirectory(getResourceBase()+'/sensors','built-in-icon',function(o) { o.icon=true; });
             processDirectory(getResourceBase()+'/floorPlans','built-in-floor-plan',function(o) { o.floorPlan=true; });
 
-            try {
-                processDirectory(ICON_DIRECTORY,'icon',function(o) { o.icon=true; o.custom=true; });
-                processDirectory(FLOORPLAN_DIRECTORY,'floor-plan',function(o) { o.floorPlan=true; o.custom=true; });
+            if(uploadToFilesystem) {
+                try {
+                    processDirectory(LOCAL_ICON_DIRECTORY,'icon',function(o) { o.icon=true; o.custom=true; });
+                    processDirectory(LOCAL_FLOORPLAN_DIRECTORY,'floor-plan',function(o) { o.floorPlan=true; o.custom=true; });
+                }
+                catch(e)
+                {
+                    log.error('error processing icon images',e);
+                }
             }
-            catch(e)
-            {
-                log.error('error processing icon images',e);
+            else {
+                Collections.Uploads.find().forEach(function(f) {
+                    if(isImage(f.name)) {
+                        let idPrefix='floor-plan';
+                        if (f.folder===ICON_FOLDER) idPrefix='icon';
+                        let id=idPrefix+'-'+f.name;
+                        self.added(collection,id,{_id:id, name: f.name, custom:true, icon:f.folder===ICON_FOLDER,floorPlan:f.folder===FLOOR_PLAN_FOLDER});
+                    }
+                });
             }
 
             self.ready();
@@ -75,12 +104,12 @@ class Uploads extends Observable {
 
                 onCreate : function(path) {
                     if(path.startsWith('icons')) {
-                        let name=path.substring('icons/'.length+1);
+                        let name=path.substring(ICON_FOLDER.length+1);
                         let id='icon-'+name;
                         self.added(collection,id, { _id : id, name: name, custom : true, icon:true });
                     }
                     if(path.startsWith('floorPlans')) {
-                        let name=path.substring('floorPlans/'.length+1);
+                        let name=path.substring(FLOOR_PLAN_FOLDER.length+1);
                         let id='floor-plan-'+name;
                         self.added(collection,id, { _id : id, name: name,custom : true, floorPlan:true });
                     }
@@ -102,13 +131,27 @@ Meteor.methods({
         Accounts.checkAdminAccess(this);
         if(file==null) return;
         if(file._id.indexOf('/')>=0||file._id.indexOf('\\')>=0) return;
-        if(file.icon) {
-            fs.unlinkSync(ICON_DIRECTORY+'/'+file.name);
+        if(uploadToFilesystem) {
+            if(file.icon) {
+                fs.unlinkSync(LOCAL_ICON_DIRECTORY+'/'+file.name);
+            }
+            else {
+                fs.unlinkSync(LOCAL_FLOORPLAN_DIRECTORY+'/'+file.name);
+            }
+            UploadedIconsInstance.fireRemoveEvent(file._id);
         }
         else {
-            fs.unlinkSync(FLOORPLAN_DIRECTORY+'/'+file.name);
+            let fileId=(file.icon ? ICON_FOLDER : FLOOR_PLAN_FOLDER)+ file.name
+            GridStore.unlink(Collections.Uploads.rawDatabase(), fileId, function(err, result) {
+                if(err==null) {
+                    UploadedIconsInstance.fireRemoveEvent(file._id);
+                }
+                else {
+                    log.error(err);
+                }
+            });
+            Collections.Uploads.remove(fileId);
         }
-        UploadedIconsInstance.fireRemoveEvent(file._id);
     }
 });
 
@@ -129,52 +172,77 @@ Router.map(function() {
                     response.end();
                 };
 
-                //log.debug('fname:'+fs.realpathSync(basedir+pathParam + path));
-                var file = fs.realpathSync(basedir+'/'+pathParam + path);
-                var stat = null;
-                try {
-                    stat = fs.statSync(file);
-                } catch (_error) {
-                    return fail(this.response);
+                function sendHeaders(response,size) {
+                    var contentType='image/png';
+                    if(path.endsWith('jpg')) contentType='image/jpeg';
+                    var headers = {
+                        'Content-type': contentType,
+                        'Content-Disposition': "attachment; filename=" + path
+                    };
+                    if(size!==undefined) headers['Content-Length']=size;
+                    response.writeHead(200, headers);
                 }
 
-                var contentType='image/png';
-                if(path.endsWith('jpg')) contentType='image/jpeg';
-                var headers = {
-                    'Content-type': contentType,
-                    'Content-Length': stat.size,
-                    'Content-Disposition': "attachment; filename=" + path
-                };
-
-                this.response.writeHead(200, headers);
-                fs.createReadStream(file).pipe(this.response);
+                if(uploadToFilesystem)
+                {
+                    //log.debug('fname:'+fs.realpathSync(basedir+pathParam + path));
+                    var file = fs.realpathSync(basedir+'/'+pathParam + path);
+                    var stat = null;
+                    try {
+                        stat = fs.statSync(file);
+                    } catch (_error) {
+                        return fail(this.response);
+                    }
+                    sendHeaders(this.response,stat.size);
+                    fs.createReadStream(file).pipe(this.response);
+                }
+                else {
+                    let fileId=pathParam.substring(UPLOAD_FOLDER.length-1)+path;
+                    var gridStore = new GridStore(Collections.Uploads.rawDatabase(), fileId, 'r');
+                    GridStore.exist(Collections.Uploads.rawDatabase(), fileId, (err, result) => {
+                        if(!result) {
+                            return fail(this.response);
+                        }
+                        gridStore.open((err, gs) => {
+                            var stream = gs.stream(true);
+                            sendHeaders(this.response);
+                            stream.pipe(this.response);
+                        });
+                    });
+                }
             }
         });
     }
-    routeDirectory('uploads/icons/');
-    routeDirectory('uploads/floorPlans/');
+    routeDirectory('uploads/'+ICON_FOLDER);
+    routeDirectory('uploads/'+FLOOR_PLAN_FOLDER);
 });
 
 
 UploadsInitialization=function () {
-    UploadServer.init({
-        tmpDir: getApplicationRoot() + '/uploads/tmp',
+    let uploadDir=getUploadRoot();
+    if(uploadToFilesystem) fs.mkdirSync(uploadDir);
+    let tmpDir=os.tmpdir();
+    // node issue workaround
+    if(tmpDir.charAt(1)==':') tmpDir='C'+tmpDir.substring(1);
+    MongoUploadServer.init({
+        tmpDir:  tmpDir,
         uploadDir: getUploadRoot(),
         checkCreateDirectories: true, //create the directories for you
-        maxFileSize: 4000000,
+        maxFileSize: 2000000,
         maxPostSize: 4000000,
         overwrite:true,
+        uploadToFileSystem: uploadToFilesystem,
         getDirectory: function(fileInfo, formData) {
             // create a sub-directory in the uploadDir based on the content type (e.g. 'images')
-            if (formData.type==='cfoxPubFile') return 'cfox/';
-            if (formData.type==='cfoxExpFile') return 'cfox/';
-            if(formData!==undefined && formData.type==='icon') return 'icons/';
-            return 'floorPlans/';
+            if (formData.type==='cfoxPubFile') return CFOX_FOLDER;
+            if (formData.type==='cfoxExpFile') return CFOX_FOLDER;
+            if(formData!==undefined && formData.type==='icon') return ICON_FOLDER;
+            return FLOOR_PLAN_FOLDER;
         },
         getFileName: function(fileInfo, formData) {
             if (formData.type==='cfoxPubFile') return 'cfox.pub';
             if (formData.type==='cfoxExpFile') return 'cfox.exp';
-            return new Date().getTime()+'-'+fileInfo.name;
+            return /*new Date().getTime()+'-'+*/fileInfo.name;
         },
         finished: function(fileInfo, formFields) {
             UploadedIconsInstance.fireCreateEvent(fileInfo.path);
