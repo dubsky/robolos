@@ -1,5 +1,6 @@
+pwd
 cd ../src
-meteor npm install
+/usr/local/bin/meteor npm install
 cd install
 cd electrify
 sh <electrify.sh
