@@ -1,6 +1,7 @@
+#!/usr/bin/env bash
 RUSER=robolos
-
-apt-get install make g++ build-essential libssl-dev libkrb5-dev libzmq-dev mongodb-server
+RVERSION=1.0
+apt-get install wget make g++ build-essential libssl-dev libkrb5-dev libzmq-dev mongodb-server
 adduser --disabled-login $RUSER
 DIR=$( getent passwd "$RUSER" | cut -d: -f6 )
 cd $DIR
@@ -11,8 +12,8 @@ tar xzf node-v0.10.46-linux-x64.tar.gz.
 ln -s node-v0.10.46-linux-x64 node
 
 # download and prepare robolos
-cp /home/ubuntu/robolos-linux-intel-1.0.tar.gz . #wget robolos-linux-intel-1.0.tar.gz
-tar xzf robolos-linux-intel-1.0.tar.gz
+wget https://bitbucket.org/dubsky/robolos-builds/downloads/robolos-linux-intel-$VERSION.tar.gz
+tar xzf robolos-linux-intel-$VERSION.tar.gz
 chown -R $RUSER:$RUSER node bundle
 (cd bundle/programs/server && su robolos -c '../../../node/bin/npm install')
 
