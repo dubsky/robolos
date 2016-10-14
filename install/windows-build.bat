@@ -1,5 +1,5 @@
 cd ..
-meteor npm install
+call meteor npm install
 cd install
 cd electrify
 call electrify.bat
