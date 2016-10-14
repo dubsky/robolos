@@ -1,6 +1,6 @@
-cd src
-meteor npm install
 cd ..
+meteor npm install
+cd install
 cd electrify
 call electrify.bat
 cd ..
