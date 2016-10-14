@@ -1,5 +1,6 @@
-cd ..
+cd ..\src
 call meteor npm install
+cd ..
 cd install
 cd electrify
 echo ELECTRIFY
