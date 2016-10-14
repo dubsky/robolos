@@ -8,4 +8,4 @@ SET SRC=../src
 SET WIX="C:\Program Files (x86)\Windows Installer XML v3.5"
 %WIX%\bin\heat.exe dir %SRC% -srd -dr INSTALLDIR -cg MainComponentGroup -out directory.wxs -ke -sfrag -gg -var var.SourceDir -sreg -scom
 %WIX%\bin\candle -dSourceDir=%SRC% -dDbSourceDir=%SRC%/resources/app/db ../robolos.wxs directory.wxs
-%WIX%\bin\light -cultures:en-US *.wixobj -o robolos-1.0.msi
+%WIX%\bin\light -cultures:en-US *.wixobj -o robolos-desktop-1.0.msi
