@@ -1,3 +1,5 @@
+echo PREPARE FOR WIX
+
 rm -rf src/*
 cp -r ../../src/.electrify/.dist/robolos-win32-ia32/* src
 

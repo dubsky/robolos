@@ -1,3 +1,5 @@
+echo WIX
+
 rm -rf out
 mkdir out
 cd out
