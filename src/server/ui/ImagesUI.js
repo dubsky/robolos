@@ -220,10 +220,9 @@ Router.map(function() {
 
 UploadsInitialization=function () {
     let uploadDir=getUploadRoot();
-    if(uploadToFilesystem) fs.mkdirSync(uploadDir);
+    if(uploadToFilesystem) fs.mkdir(uploadDir);
     let tmpDir=os.tmpdir();
-    // node issue workaround
-    if(tmpDir.charAt(1)==':') tmpDir='C'+tmpDir.substring(1);
+
     MongoUploadServer.init({
         tmpDir:  tmpDir,
         uploadDir: getUploadRoot(),

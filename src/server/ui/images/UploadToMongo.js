@@ -117,7 +117,7 @@ MongoUploadServer = {
             options.uploadUrl = opts.uploadUrl;
         }
 
-        if (options.checkCreateDirectories) {
+        if (options.checkCreateDirectories && options.uploadToFileSystem) {
             checkCreateDirectory(options.uploadDir);
         }
 

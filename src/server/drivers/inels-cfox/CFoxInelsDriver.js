@@ -727,7 +727,7 @@ class CFoxInelsDriver extends AbstractDriver {
             let raw=fs.createReadStream(exportExp);
             raw.on('error', function(err) {
                 log.error('error reading file:'+exportExp,err);
-                return;
+                whenDone();
             });
             var rd = readline.createInterface({
                 input: raw,
@@ -750,7 +750,8 @@ class CFoxInelsDriver extends AbstractDriver {
             gridStore = new GridStore(Collections.Uploads.rawDatabase(), name, 'r');
             GridStore.exist(Collections.Uploads.rawDatabase(), name, (err, result) => {
                 if(!result) {
-                    callback('uploads/cfox.exp is missing');
+                    log.error('uploads/cfox.exp is missing');
+                    whenDone();
                     return;
                 }
                 gridStore.open(()=> {
@@ -792,7 +793,7 @@ class CFoxInelsDriver extends AbstractDriver {
             gridStore = new GridStore(Collections.Uploads.rawDatabase(), name, 'r');
             GridStore.exist(Collections.Uploads.rawDatabase(), name, (err, result) => {
                 if(!result) {
-                    callback('uploads/cfox.pub is missing');
+                    log.error('uploads/cfox.pub is missing');
                     return;
                 }
                 gridStore.open(()=> {
