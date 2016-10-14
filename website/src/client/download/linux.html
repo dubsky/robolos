@@ -1,0 +1,79 @@
+<template name="downloadArmLinuxServer">
+
+    <div class="ui text container">
+        <h2 class="ui dividing header">ARM (Raspbian, Armbian)</h2>
+        <p>
+            Follow this installation on Debian based Linux distributions like Armbian or Raspbian.
+        </p>
+        <p>
+            To install open terminal and execute the command highlighted below:
+        </p>
+
+            <div class="ui message">
+                <div class="content">
+                    <p align="center">curl https://www.robolos.com/arm | sh</p>
+                </div>
+            </div>
+        <br/>
+
+        <p>
+            It will create new 'robolos' user account and will install required packages and a node.js distribution into its home directory.
+            It will also install new service 'robolos'that will be automatically launched on server start.
+        </p>
+
+
+        <p>
+            To access Robolos open the following URL in your browser:
+        </p>
+
+            <div class="ui message">
+                <div class="content">
+                    <p align="center">http://SERVER_NAME:3000</p>
+                </div>
+            </div>
+        <br/>
+
+        <p>You can further customize settings like changing the port number inside <i>/etc/robolos.conf</i></p>
+    </div>
+</template>
+
+<template name="downloadIntelLinuxServer">
+
+    <div class="ui text container">
+        <h2 class="ui dividing header">Intel (Ubuntu)</h2>
+
+        <p>
+            Follow this installation on Ubuntu based Linux distributions that utilize <a href="http://upstart.ubuntu.com/">Upstart for task and services management.</a>
+        </p>
+        <p>
+            To install open terminal and execute the command highlighted below:
+        </p>
+
+        <div class="ui message">
+            <div class="content">
+                <p align="center">curl https://www.robolos.com/intel</p>
+            </div>
+        </div>
+
+        <br/>
+        <p>
+            It will create new 'robolos' user account and will install required packages and a node.js distribution into its home directory.
+            It will also install new service 'robolos'that will be automatically launched on server start.
+        </p>
+
+        <p>
+            To access Robolos open the following URL in your browser:
+        </p>
+
+            <div class="ui message">
+                <div class="content">
+                    <p align="center">http://SERVER_NAME:3000</p>
+                </div>
+            </div>
+        <br/>
+
+        <p>You can further customize settings like changing the port number inside <i>/etc/robolos.conf</i></p>
+
+    </div>
+
+</template>

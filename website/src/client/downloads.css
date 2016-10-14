@@ -1,0 +1,14 @@
+.expanded {
+    width: 100%;
+    height: 100%;
+}
+
+.centered {
+    margin: 0 auto;
+    width: 60%;
+    display: table;
+}
+
+
+.table-centered { display: table-cell;margin: 0 auto;vertical-align: middle;text-align: center }
+.table-centered-container {background-color: grey;height: 50%;width:100%;font-size:32px;display:table }
