@@ -7,5 +7,5 @@ call electrify package
 echo Electrify done
 cd ../install/electrify
 echo CWD: %cd%
-echo TO: %cd%/../../src/.electrify/.dist/package/robolos-win32-ia32
-cp -R resources ../../src/.electrify/.dist/package/robolos-win32-ia32
+echo TO: %cd%/../../src/.electrify/.dist/robolos-win32-ia32
+cp -R resources ../../src/.electrify/.dist/robolos-win32-ia32
