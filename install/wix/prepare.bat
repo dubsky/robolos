@@ -3,7 +3,7 @@ echo PREPARE FOR WIX
 rm -rf src
 mkdir src
 
-cp -r ../../src/.electrify/.dist/package/robolos-win32-ia32/* src
+cp -r ../../src/.electrify/.dist/robolos-win32-ia32/* src
 
 
 SET BASE=src
