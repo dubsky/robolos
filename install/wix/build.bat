@@ -5,7 +5,7 @@ mkdir out
 cd out
 
 #SET SRC=C:\Files\robolos\src\.electrify\.dist\robolos-win32-ia32
-SET SRC=../src
+SET SRC=\Temp\rbsrc
 #SET WIX="C:\Program Files (x86)\WiX Toolset v3.11\bin"
 SET WIX="C:\Program Files (x86)\Windows Installer XML v3.5"
 %WIX%\bin\heat.exe dir %SRC% -srd -dr INSTALLDIR -cg MainComponentGroup -out directory.wxs -ke -sfrag -gg -var var.SourceDir -sreg -scom
