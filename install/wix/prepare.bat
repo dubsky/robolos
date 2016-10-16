@@ -2,10 +2,10 @@ echo PREPARE FOR WIX
 
 SET BASE=/cygdrive/f/Temp/rbsrc
 
-#rm -rf %BASE%
+rm -rf %BASE%
 mkdir %BASE%
 
-#cp -r ../../src/.electrify/.dist/robolos-win32-ia32/* %BASE%
+cp -r ../../src/.electrify/.dist/robolos-win32-ia32/* %BASE%
 
 
 SET DEST=%BASE%/resources/app/app/programs/server/node_modules
