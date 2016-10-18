@@ -1,5 +1,5 @@
 cd ../../src
-rm -rf .electrify/.dist
+rm -rf .electrify/.dist .electrify/app .electrify/bin .electrify/node-modules
 
 rm -rf /cygdrive/c/Users/Vlada/AppData/Local/Temp/electron-packager
 rm -rf /cygdrive/c/Users/Vlada/AppData/Local/Temp/electrify
