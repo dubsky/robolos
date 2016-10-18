@@ -1,6 +1,6 @@
 cd ../../src
 rm -rf .electrify/.dist
-SET TEMP=F:\Temp
+rem SET TEMP=F:\Temp
 echo Temp location: %TEMP%
 echo CWD: %cd%
 call electrify package

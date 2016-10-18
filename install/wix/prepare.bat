@@ -1,9 +1,9 @@
 echo PREPARE FOR WIX
 
-SET BASE=/cygdrive/f/Temp/rbsrc
+SET BASE=/cygdrive/c/Temp/rbsrc
 
 rm -rf %BASE%
-mkdir f:\Temp\rbsrc
+mkdir c:\Temp\rbsrc
 
 cp -r ../../src/.electrify/.dist/robolos-win32-ia32/* %BASE%
 
