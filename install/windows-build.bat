@@ -1,5 +1,6 @@
 cd ..\src
-call meteor npm install
+rem call meteor npm install
+call meteor build ../out --server localhost:3000
 cd ..
 cd install
 cd electrify
