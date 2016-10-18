@@ -1,5 +1,9 @@
 cd ../../src
 rm -rf .electrify/.dist
+
+rm -rf /cygdrive/c/Users/Vlada/AppData/Local/Temp/electron-packager
+rm -rf /cygdrive/c/Users/Vlada/AppData/Local/Temp/electrify
+
 rem SET TEMP=F:\Temp
 echo Temp location: %TEMP%
 echo CWD: %cd%
