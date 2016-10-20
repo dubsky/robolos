@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+echo Performing Electrify
 cd ../../src
 electrify package -- --icon=public\favicon\favicon-96x96.icns
 cd ../install/electrify
