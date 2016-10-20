@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 pwd
 cd ../src
 export PATH=$PATH:/usr/local/bin
