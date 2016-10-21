@@ -9,7 +9,6 @@ echo Build finished
 mv ../output/src.tar.gz ../output/robolos-$OS-$ARCH-$VERSION.tar.gz
 cd ../output/android/project
 echo Starting Gradle
-gradle wrapper --gradle-version 2.0
-./gradlew
+gradle build
 echo Gradle finished
 mv build/outputs/android-debug.apk ../../robolos-$VERSION.apk
