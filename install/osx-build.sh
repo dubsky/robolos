@@ -8,8 +8,10 @@ cd ../install
 cd electrify
 #sh <electrify.sh
 cd ../../src
-echo Adding ios in `pwd`
+echo Adding ios
+pwd
 meteor add-platform ios
-echo Building in `pwd`
-meteor build ../output --server http://ec2-52-39-102-127.us-west-2.compute.amazonaws.com:3000
+echo Building
+pwd
+meteor build ../output --server 'http://ec2-52-39-102-127.us-west-2.compute.amazonaws.com:3000'
 echo Build finished
