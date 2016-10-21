@@ -6,7 +6,7 @@ meteor npm install
 echo Electrify
 cd ../install
 cd electrify
-sh <electrify.sh
+#sh <electrify.sh
 cd ../../src
 echo Adding ios
 meteor add-platform ios
