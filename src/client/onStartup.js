@@ -33,12 +33,14 @@ var settingsReady=function() {
         routesConfigured=true;
     }
 
-    let softPages=settings.anonymousAccessToDashboards ? ['/','homepage', 'render.dashboard.redirect', 'render.dashboard','calendar','render.schedule']: [];
-    let allSoftPages=_.pluck(AccountsTemplates.routes, 'name').concat(softPages);
-    Router.plugin('ensureSignedIn', {
-        except: allSoftPages
-    });
-
+    if(settings.requireUserLogin)
+    {
+        let softPages=settings.anonymousAccessToDashboards ? ['/','homepage', 'render.dashboard.redirect', 'render.dashboard','calendar','render.schedule']: [];
+        let allSoftPages=_.pluck(AccountsTemplates.routes, 'name').concat(softPages);
+        Router.plugin('ensureSignedIn', {
+            except: allSoftPages
+        });
+    }
 };
 
 let ApplicationController = RouteController.extend({

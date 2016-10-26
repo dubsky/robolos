@@ -10,7 +10,7 @@
                     </div>
                     <a href="{{ pathFor 'homepage' }}" class="item">Home</a>
                     <a href="{{ pathFor 'calendar' }}" class="item">Calendar</a>
-                    {{#if isAdministrator}}
+                    {{#if allowManagement}}
                         <a href="#" class="ui simple dropdown item">
                             Manage <i class="dropdown icon"></i>
                             <div class="menu">
@@ -39,7 +39,7 @@
 
 
                             <a class="item closeOnClk" href="{{ pathFor 'calendar' }}">Calendar</a>
-                            {{#if isAdministrator}}
+                            {{#if allowManagement}}
                                 <div class="divider"></div>
                                 <div class="ui dropdown item">
                                     Hardware
@@ -77,9 +77,11 @@
                 </div>
             {{else}}
                 <div class="right menu">
+                    {{#if allowSignIn}}
                     <a class="item signIn">
                         <i class="user icon"></i>Sign In
                     </a>
+                    {{/if}}
                 </div>
             {{/if}}
 

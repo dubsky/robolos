@@ -21,6 +21,7 @@ Template.editVariableWidgetProperties.events({
                 type: 'variable',
                 variable: selection
             });
+            EditWidgetProperties.preselectNewFloorPlanWidget(widgets[widgets.length-1].id);
         }
         else
         {

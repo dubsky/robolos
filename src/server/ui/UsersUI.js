@@ -98,21 +98,24 @@ Meteor.methods({
 
 
 Accounts.checkAdminAccess=function(context) {
-    /*
+    let settings=Settings.get();
+    if(context.userId===null) {
+        if((settings.requireUserLogin===undefined || !settings.requireUserLogin) && isLocalAccess(settings,context)) return;
+    }
+
     if(context.userId===null) throw new Meteor.Error('not-authorized');
     let user=Meteor.users.findOne(context.userId);
     if (user===null || Collections.Users.RoleKeys.administrator !== user.role) {
         log.debug('access denied');
         throw new Meteor.Error('not-authorized');
-    }*/
+    }
 }
 
 Accounts.checkDashboardAccess=function(context) {
 
-    /*
     let settings=Settings.get();
     if(context.userId===null) {
-        if(settings.anonymousAccessToDashboards) {
+        if(settings.anonymousAccessToDashboards || (settings.requireUserLogin===undefined || !settings.requireUserLogin)) {
             if(!isLocalAccess(settings,context)) {
                 log.debug('access denied');
                 throw new Meteor.Error('not-authorized');
@@ -125,7 +128,7 @@ Accounts.checkDashboardAccess=function(context) {
     }
     else {
         // even observer can see dashboards
-    }*/
+    }
 }
 
 Accounts.onCreateUser(function(options, user) {

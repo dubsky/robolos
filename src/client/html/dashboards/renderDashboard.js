@@ -47,7 +47,7 @@ Template.renderDashboard.helpers({
       },
 
       isEditPermitted() {
-          return Session.get(USER_ROLE)!==Collections.Users.RoleKeys.observer;
+          return Session.get(USER_ROLE)!==Collections.Users.RoleKeys.observer || !requireUserLogin();
       }
 });
 

@@ -13,7 +13,16 @@ Template.securitySettings.helpers({
 
     saveDisabled: function() {
         return Session.get(SESSION_KEY);
+    },
+
+    disableAuthFields: function() {
+        if (!AutoForm.getFieldValue('requireUserLogin')) return 'disabled';
+    },
+
+    disableChangePassword: function() {
+        if (Meteor.user()==null) return 'disabled';
     }
+
 });
 
 Template.securitySettings.onCreated(function() {
@@ -41,6 +50,7 @@ Template.securitySettings.events({
         }
         return false;
     }
+
 });
 
 

@@ -51,11 +51,22 @@ Template.floorPlanWidget.SELECTION='floorPlanWidget.SELECTION_';
 
 Template.floorPlanWidget.getSelection=function(floorPlanId) {
     return Session.get(Template.floorPlanWidget.SELECTION+floorPlanId);
-}
+};
 
 Template.floorPlanWidget.setSelection=function(floorPlanId, selection) {
     Session.set(Template.floorPlanWidget.SELECTION+floorPlanId,selection);
-}
+};
+
+Template.floorPlanWidget.selectWidget=function (floorPlanId,widgetId) {
+    console.log('Hello !!!! '+floorPlanId+' '+widgetId);
+    var currentSelection=Template.floorPlanWidget.getSelection(floorPlanId);
+    if(currentSelection!==undefined) {
+        Template.floorPlanWidgetControls.setControlsState(currentSelection,false);
+    }
+    Template.floorPlanWidget.setSelection(floorPlanId,[widgetId]);
+    Template.floorPlanWidgetControls.setControlsState(widgetId,true);
+};
+
 
 Template.floorPlanWidget.events({
     "click .addFPWidget" : function () {
@@ -113,3 +124,4 @@ Template.floorPlanWidget.events({
     }
 
 });
+

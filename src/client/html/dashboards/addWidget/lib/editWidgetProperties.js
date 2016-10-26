@@ -33,7 +33,7 @@ EditWidgetProperties={
                 return;
             }
         }
-        console.log('not found !');
+        console.log('not found ! '+dashboard+' '+id);
     },
 
     getWidgetsCollection: function(dashboard) {
@@ -61,6 +61,14 @@ EditWidgetProperties={
         Meteor.call('updateDashboard',{$set : { widgets : dashboard.widgets}},dashboard._id);
         Router.go('render.dashboard',{_id: dashboard._id});
         Session.set(Template.floorPlanWidget.ADD_TO,undefined);
+    },
+
+    preselectNewFloorPlanWidget: function(widgetId) {
+        if(Session.get(Template.addWidgetSelectWidgetType.FLOOR_PLAN_MODE)) {
+            Template.floorPlanWidget.selectWidget(Session.get(Template.floorPlanWidget.ADD_TO).id,widgetId);
+        }
     }
+
+
 
 };

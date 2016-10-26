@@ -21,7 +21,6 @@ Meteor.publish("settings", function(){
 
 
 isLocalAccess=function(settings,context) {
-    let anonymousAccessToDashboards=settings.anonymousAccessToDashboards;
     if(settings.privateAddressPattern!==undefined) {
         let re=new RegExp(settings.privateAddressPattern);
         return re.test(context.connection.clientAddress);
@@ -40,11 +39,14 @@ Meteor.publish("userSettings", function(){
 
         result.selfRegistration=settings.selfRegistration;
         result.anonymousAccessToDashboards=settings.anonymousAccessToDashboards;
+        result.requireUserLogin=settings.requireUserLogin === undefined ?  false : settings.requireUserLogin;
 
         if (!isLocalAccess(settings,self))
         {
+            // strictly deny anonymous access for non local addresses
             result.selfRegistration=false;
             result.anonymousAccessToDashboards=false;
+            result.requireUserLogin=true;
         }
 
         let userDoc=Meteor.users.findOne(self.userId);

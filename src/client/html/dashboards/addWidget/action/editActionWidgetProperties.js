@@ -4,7 +4,6 @@ Template.editActionWidgetProperties.helpers({
     }
 });
 Template.editActionWidgetProperties.events({
-
     'click .updateProperties': function(event, instance) {
 
         $('#editWidgetProperties').modal('hide');
@@ -14,13 +13,15 @@ Template.editActionWidgetProperties.events({
 
         if(this.create)
         {
+            let id=(new Mongo.ObjectID()).toHexString();
             widgets.push({
-                id : (new Mongo.ObjectID()).toHexString(),
+                id : id,
                 title: document.forms['editProperties'].elements['title'].value,
                 icon: document.forms['editProperties'].elements['icon'].value,
                 type: 'action',
                 action: selection
             });
+            EditWidgetProperties.preselectNewFloorPlanWidget(widgets[widgets.length-1].id);
         }
         else
         {

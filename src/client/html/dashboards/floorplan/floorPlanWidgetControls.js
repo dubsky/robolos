@@ -15,16 +15,19 @@ Template.floorPlanWidgetControls.setControlsState=function(widgetId,enabled) {
     }
 };
 
-/*                                                                            
 Template.floorPlanWidgetControls.onRendered(function() {
     if (Session.get(DASHBOARD_EDIT_MODE))
     {
-        var id=this.data.widget.id;
-        var selector=$('#'+id);
-        selector.draggable( "option", "disabled", false );
-        selector.resizable( "option", "disabled", false );
-        // this is due to a defect in jquery draggable - shows  handles when disabled
-        $('div.ui-resizable-handle').show();
+        let selection=Template.floorPlanWidget.getSelection(this.data.floorPlan.id);
+        if(selection!==undefined)
+            for(let s of selection)
+            {
+                if(s===this.data.widget.id)
+                {
+                    Template.floorPlanWidgetControls.setControlsState(s,true);
+                }
+            }
     }
 });
-  */
+
+

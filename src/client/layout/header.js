@@ -16,18 +16,28 @@ Template.header.events({
 
 isWide=function() { return $(window).width()> 700;};
 
+requireUserLogin=function () {
+    let settings=Collections.Settings.findOne(Collections.Settings.USER_SETTINGS_DOCUMENT_ID);
+    if(settings==undefined) return true;
+    return settings.requireUserLogin!==undefined && settings.requireUserLogin;
+};
+
 Template.header.helpers({
     renderHeader:function() {
         let settings=Collections.Settings.findOne(Collections.Settings.USER_SETTINGS_DOCUMENT_ID);
-        return Meteor.user()!=null || (settings!=undefined && settings.anonymousAccessToDashboards);
+        return settings!=undefined && (Meteor.user()!=null || (settings.requireUserLogin===undefined || !settings.requireUserLogin) || (settings!=undefined && settings.anonymousAccessToDashboards));
     },
 
     isWide:function() {
         return isWide()
     },
 
-    isAdministrator : function() {
-        return Session.get(USER_ROLE)===Collections.Users.RoleKeys.administrator;
+    allowManagement : function() {
+        return !requireUserLogin() || Session.get(USER_ROLE)===Collections.Users.RoleKeys.administrator;
+    },
+
+    allowSignIn : function() {
+        return requireUserLogin();
     },
 
     isActive: function () {

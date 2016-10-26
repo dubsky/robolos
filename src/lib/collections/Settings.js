@@ -62,14 +62,22 @@ Schemas.Settings=new SimpleSchema({
         type: String
     },
     /* security */
+    requireUserLogin: {
+        label:'Require user login (Should be checked for production systems)',
+        defaultValue:false,
+        optional:true,
+        type: Boolean
+    },
     anonymousAccessToDashboards: {
         label:'Allow Anonymous Access to Dashboards',
         defaultValue:true,
+        optional:true,
         type: Boolean
     },
     selfRegistration: {
         label:'Allow Self-Registration (users may create an account on their own)',
         defaultValue:true,
+        optional:true,
         type: Boolean
     },
     /* email */

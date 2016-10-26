@@ -24,6 +24,7 @@ Template.editSensorWidgetProperties.events({
                 device: sensor[1],
                 sensor: sensor[2]
             });
+            EditWidgetProperties.preselectNewFloorPlanWidget(widgets[widgets.length-1].id);
         }
         else
         {

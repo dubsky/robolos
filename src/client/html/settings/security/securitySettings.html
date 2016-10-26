@@ -9,16 +9,22 @@
 
         <div>
             {{#autoForm id="securitySettingsForm" type="method-update" validation="keyup" meteormethod="updateSettings" collection=collection doc=settings schema=schema}}
-                <div class="two fields">
-                    {{> afQuickField name="selfRegistration"}}
+                <div class="anonymousAccessSw">
+                    {{> afQuickField name="requireUserLogin"}}
+                </div>
+
+
+                <div class="two {{disableAuthFields}} fields">
+                    {{> afQuickField name="selfRegistration" class="field"}}
                     {{> afQuickField name="anonymousAccessToDashboards"}}
                 </div>
+
                 {{> afQuickField name="privateAddressPattern"}}
                 <button class="ui primary button customSubmit" disabled="{{saveDisabled}}">Save</button>
                 <a href="{{pathFor 'users'}}" class="ui secondary button manage Accounts">
                     Manage Accounts
                 </a>
-                <a href="{{pathFor 'atChangePwd'}}" class="ui button">
+                <a href="{{pathFor 'atChangePwd'}}" class="ui {{disableChangePassword}} button">
                     Change Password
                 </a>
             {{/autoForm}}
