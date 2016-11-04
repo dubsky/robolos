@@ -101,6 +101,31 @@
 
         </div>
 
+        <br/>
+        <br/>
+        <br/>
+
+        {{#unless demoInvisible}}
+            <div>
+                <div id="demo-block" style="position:absolute;width:100%">
+                    <p style="text-align: center;font-style:italic;">
+                        New to Robolos ?<br/> You may want to install demo content to play with.
+                    </p>
+                    <div>
+                        <button class="ui primary button importDemoData" disabled="{{demoDisabled}}">Import Demo Data</button>
+                    </div>
+                </div>
+                <div id="demo-dashboard" style="visibility:hidden; position:absolute;width:100%">
+                    <p style="text-align: center;font-style:italic">
+                        New to Robolos ?<br/> Now it is time to open the demo dashboard.
+                    </p>
+                    <div>
+                        <a href="/dashboards/bidjjX9JCBqfe2cF9" class="ui secondary button">Open demo dashboard</a>
+                    </div>
+                </div>
+            </div>
+        {{/unless}}
+
     </div>
 
 </template>

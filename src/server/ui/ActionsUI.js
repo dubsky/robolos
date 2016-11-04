@@ -31,6 +31,19 @@ class ActionsUIClass extends Observable {
         }
         return mergeTarget;
     }
+
+    upsertAction(id,action) {
+        let insertedId=Collections.Actions.upsert(id,action).insertedId;
+        let updatedAction=Collections.Actions.findOne(id);
+        ActionsInstance.upsertAction(updatedAction);
+        if(insertedId===undefined) {
+            ActionsUI.fireUpdateEvent(updatedAction);
+        }
+        else {
+            ActionsUI.fireCreateEvent(updatedAction);
+        }
+        return insertedId;
+    }
 }
 
 ActionsUI=new ActionsUIClass();
@@ -111,10 +124,7 @@ Meteor.methods({
 
     createAction: function(action) {
         Accounts.checkAdminAccess(this);
-        var id=Collections.Actions.upsert('',action).insertedId;
-        var updatedAction=Collections.Actions.findOne(id);
-        ActionsInstance.upsertAction(updatedAction);
-        ActionsUI.fireCreateEvent(updatedAction);
+        let id=ActionsUI.upsertAction('',action);
         return id;
     },
 

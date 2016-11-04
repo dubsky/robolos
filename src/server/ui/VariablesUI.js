@@ -1,6 +1,14 @@
 
 class VariablesUIClass {
-
+    upsertVariable(id, variable) {
+        let v=VariablesInstance.getVariable(id);
+        if(v===undefined) {
+            VariablesInstance.createVariable(variable,id);
+        }
+        else {
+            VariablesInstance.updateVariable(variable,id);
+        }
+    }
 }
 
 VariablesUI=new VariablesUIClass();

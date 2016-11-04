@@ -1,5 +1,19 @@
 class DriverInstancesUIClass extends Observable {
 
+    upsertDriverInstance(id,driverInstance) {
+        var insertedId=Collections.DriverInstances.upsert(id,driverInstance).insertedId;
+        var updatedDriverInstance=Collections.DriverInstances.findOne(id);
+        if(insertedId===undefined) {
+            Drivers.stopDriverInstance(id);
+            Drivers.startDriverInstance(updatedDriverInstance);
+            DriverInstancesUI.fireUpdateEvent(updatedDriverInstance);
+        }
+        else {
+            Drivers.startDriverInstance(updatedDriverInstance);
+            DriverInstancesUI.fireCreateEvent(updatedDriverInstance);
+        }
+        return insertedId;
+    }
 }
 
 DriverInstancesUI=new DriverInstancesUIClass();
@@ -78,11 +92,7 @@ Meteor.methods({
         }
         while(Collections.DriverInstances.findOne(id)!=null);
         driverInstance.$set._id=id;
-
-        var insertedId=Collections.DriverInstances.upsert(id,driverInstance).insertedId;
-        var updatedDriverInstance=Collections.DriverInstances.findOne(id);
-        Drivers.startDriverInstance(updatedDriverInstance);
-        DriverInstancesUI.fireCreateEvent(updatedDriverInstance);
+        DriverInstancesUI.upsertDriverInstance(id,driverInstance);
     },
 
     deleteDriverInstance: function(driverInstanceId) {

@@ -5,10 +5,11 @@ class Variables  extends Observable {
         this.cache={};
     }
 
-    createVariable(variable) {
-        var id=Collections.Variables.upsert('',variable).insertedId;
-        var updatedVariable=Collections.Variables.findOne(id);
-        this.cache[id]=updatedVariable;
+    createVariable(variable,id) {
+        let selector=(id===undefined) ? '' : id;
+        var insertedId=Collections.Variables.upsert(selector,variable).insertedId;
+        var updatedVariable=Collections.Variables.findOne(insertedId);
+        this.cache[insertedId]=updatedVariable;
         this.fireCreateEvent(updatedVariable);
         return updatedVariable;
     }

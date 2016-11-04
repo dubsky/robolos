@@ -28,9 +28,10 @@
         </div>
 
         <div id="content-footer">
-            <form name="dashboardForm" class="remove form-horizontal" novalidate>
+            <form name="dashboardForm" class="form-horizontal" novalidate>
                 <div style="margin-left:0px" class="form-group">
-                    <input type="button" class="btn btn-default" value="Remove Selected" title="Remove Selected"  disabled={{emptySelection}}>
+                    <input type="button" class="ui secondary button remove" value="Remove Selected" title="Remove Selected"  disabled={{emptySelection}}>
+                    <input type="button" class="ui button export" value="Export" title="Export"  disabled={{emptySelection}}>
                 </div>
             </form>
         </div>

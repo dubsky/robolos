@@ -15,6 +15,7 @@ Template.dashboards.helpers({
         ],
         filters: ['table-text-search']
     },
+
     emptySelection : function() {
         var selection=Session.get('selectedDashboards');
         return (typeof selection==='undefined') || selection.length===0;
@@ -29,14 +30,33 @@ Template.dashboards.events({
 
     'click .remove': function(event, instance) {
         var selection=Session.get('selectedDashboards');
-        if((typeof selection)!=='undefined') {
+        if(selection!==undefined) {
             for(var i=0;i<selection.length;i++) {
                 Meteor.call('deleteDashboard',selection[i]);
-                //Collections.Dashboards.remove(selection[i]);
             }
         }
         Session.set('selectedDashboards',[]);
+    },
+
+    'click .export': function(event, instance) {
+        var selection=Session.get('selectedDashboards');
+        if(selection!=='undefined') {
+            Meteor.call('exportDashboards',selection,function(err,result) {
+                let blob = new Blob([result], {type: "octet/stream"});
+                let a = document.createElement("a");
+                a.style.display = 'none';
+                document.body.append(a);
+                let url = window.URL.createObjectURL(blob);
+                a.href = url;
+                a.download = "export.robolos";
+                a.click();
+                window.URL.revokeObjectURL(url);
+                console.log(result);
+            });
+        }
     }
+
+
 });
 
 Template.dashboards.onRendered(function() {

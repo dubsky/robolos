@@ -1,14 +1,3 @@
-Meteor.publish('allSensorMetadata', function(){
-    return Collections.SensorsMetadata.find();
-});
-
-Meteor.methods({
-    updateSensorMeta: function(meta,documentId) {
-        Accounts.checkAdminAccess(this);
-        //log.debug('update sensor meta',meta);
-        SensorMetadata.updateSensorMeta(documentId,meta);
-    }
-});
 
 class SensorsUIClass extends Observable {
 
@@ -23,9 +12,25 @@ class SensorsUIClass extends Observable {
             }
         });
     }
+
+    upsertSensorMeta(id,meta) {
+        SensorMetadata.updateSensorMeta(id,meta);
+    }
 }
 
 SensorsUI=new SensorsUIClass();
+
+Meteor.publish('allSensorMetadata', function(){
+    return Collections.SensorsMetadata.find();
+});
+
+Meteor.methods({
+    updateSensorMeta: function(meta,documentId) {
+        Accounts.checkAdminAccess(this);
+        //log.debug('update sensor meta',meta);
+        SensorsUI.upsertSensorMeta(documentId,meta);
+    }
+});
 
 Meteor.publish('sensors', function(filter, reactive){
     Accounts.checkDashboardAccess(this);

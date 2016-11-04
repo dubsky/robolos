@@ -58,7 +58,6 @@ Template.floorPlanWidget.setSelection=function(floorPlanId, selection) {
 };
 
 Template.floorPlanWidget.selectWidget=function (floorPlanId,widgetId) {
-    console.log('Hello !!!! '+floorPlanId+' '+widgetId);
     var currentSelection=Template.floorPlanWidget.getSelection(floorPlanId);
     if(currentSelection!==undefined) {
         Template.floorPlanWidgetControls.setControlsState(currentSelection,false);

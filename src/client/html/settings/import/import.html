@@ -1,0 +1,17 @@
+<template name="import">
+
+
+    <div class="ui padded segment">
+        <h2 class="ui header">Import configuration / dashboard</h2>
+        <p>
+            It is possible to export a dashboard with all depending actions, variables, sensor information etc.
+            (Just visit <a href="{{pathFor 'dashboards'}}">dashboards management.</a>) Here you can import any dashboard exported this way.
+        </p>
+
+        <div>
+            <button class="ui primary button importDemoData" disabled="{{demoDisabled}}">Import demo data</button>
+        </div>
+
+    </div>
+
+</template>

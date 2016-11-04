@@ -1,0 +1,128 @@
+{
+  "dashboards": {
+    "bidjjX9JCBqfe2cF9": {
+      "_id": "bidjjX9JCBqfe2cF9",
+      "title": "Test",
+      "widgets": [
+        {
+          "id": "3467c9ecd51aabb131bc9964",
+          "title": "Irrigation Full Cycle",
+          "icon": "built-in-icon-iri2.jpg",
+          "type": "action",
+          "action": "4ckfxvMvQgBycXJkH"
+        },
+        {
+          "id": "55a7aeb1e07fd5e6df50fb4c",
+          "title": "Auto Irrigation",
+          "icon": "built-in-icon-iri2.jpg",
+          "type": "variable",
+          "variable": "4X6hoD3HwhPGa4sC3"
+        },
+        {
+          "id": "10d573134624eeeddd3b0a66",
+          "title": "Temp",
+          "icon": "built-in-icon-S_TEMP.low.png",
+          "type": "sensor",
+          "driver": "Demo Driver",
+          "device": "77",
+          "sensor": "2"
+        }
+      ],
+      "geometry": [
+        {
+          "id": "3467c9ecd51aabb131bc9964",
+          "col": 1,
+          "row": 1,
+          "size_x": 1,
+          "size_y": 1
+        },
+        {
+          "id": "55a7aeb1e07fd5e6df50fb4c",
+          "col": 1,
+          "row": 2,
+          "size_x": 1,
+          "size_y": 1
+        }
+      ]
+    }
+  },
+  "actions": {
+    "4ckfxvMvQgBycXJkH": {
+      "_id": "4ckfxvMvQgBycXJkH",
+      "title": "Full Irrigation Cycle",
+      "description": "Regular watring cycle for the whole garden",
+      "calendarDroppable": true,
+      "xml": "<xml xmlns=\"http://www.w3.org/1999/xhtml\"><block type=\"action\" id=\"17\" deletable=\"false\" x=\"160\" y=\"50\"><statement name=\"NAME\"><block type=\"controls_if\" id=\"18\"><value name=\"IF0\"><block type=\"get_control_variable\" id=\"19\"><field name=\"selectedVariable\">{\"id\":\"4X6hoD3HwhPGa4sC3\",\"name\":\"Automatic Irrigation\"}</field></block></value><statement name=\"DO0\"><block type=\"switch\" id=\"20\"><field name=\"operation\">switchOn</field><field name=\"selectedSensor\">{\"id\":\"INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_1_1np_bin_\",\"name\":\"Irrigation - Valve 1\"}</field><next><block type=\"action_status\" id=\"21\"><field name=\"status\">Frontal Area...</field><next><block type=\"after\" id=\"22\"><mutation haspause=\"false\" hascontinue=\"false\" hascancel=\"true\"></mutation><field name=\"unit\">MINUTES</field><value name=\"delay\"><block type=\"math_number\" id=\"23\"><field name=\"NUM\">20</field></block></value><statement name=\"statements\"><block type=\"switch\" id=\"24\"><field name=\"operation\">switchOff</field><field name=\"selectedSensor\">{\"id\":\"INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_1_1np_bin_\",\"name\":\"Irrigation - Valve 1\"}</field><next><block type=\"switch\" id=\"25\"><field name=\"operation\">switchOn</field><field name=\"selectedSensor\">{\"id\":\"INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_2_1np_bin_\",\"name\":\"Irrigation - Valve 2\"}</field><next><block type=\"action_status\" id=\"26\"><field name=\"status\">Backyard...</field><next><block type=\"after\" id=\"27\"><mutation haspause=\"false\" hascontinue=\"false\" hascancel=\"false\"></mutation><field name=\"unit\">MINUTES</field><value name=\"delay\"><block type=\"math_number\" id=\"28\"><field name=\"NUM\">15</field></block></value><statement name=\"statements\"><block type=\"switch\" id=\"29\"><field name=\"operation\">switchOff</field><field name=\"selectedSensor\">{\"id\":\"INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_2_1np_bin_\",\"name\":\"Irrigation - Valve 2\"}</field></block></statement></block></next></block></next></block></next></block></statement><statement name=\"cancel_statement\"><block type=\"switch\" id=\"30\"><field name=\"operation\">switchOff</field><field name=\"selectedSensor\">{\"id\":\"INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_2_1np_bin_\",\"name\":\"Irrigation - Valve 2\"}</field></block></statement></block></next></block></next></block></statement></block></statement></block></xml>",
+      "code": "function(context,whenDone) {\n  var callCompletion=true;\n  if (context.getVariableValue(\"4X6hoD3HwhPGa4sC3\",\"Automatic Irrigation\")) {\n    context.switchOutput(SENSOR_ACTIONS.SWITCH_ON,\"INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_1_1np_bin_\",\"Irrigation - Valve 1\");\n    context.status=\"Frontal Area...\";\n    callCompletion=false;\n    context.setTimeout( (20)*60000,function(context, whenDone) {\n          var callCompletion=true;\n        context.switchOutput(SENSOR_ACTIONS.SWITCH_OFF,\"INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_1_1np_bin_\",\"Irrigation - Valve 1\");\n      context.switchOutput(SENSOR_ACTIONS.SWITCH_ON,\"INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_2_1np_bin_\",\"Irrigation - Valve 2\");\n      context.status=\"Backyard...\";\n      callCompletion=false;\n      context.setTimeout( (15)*60000,function(context, whenDone) {\n            var callCompletion=true;\n          context.switchOutput(SENSOR_ACTIONS.SWITCH_OFF,\"INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_2_1np_bin_\",\"Irrigation - Valve 2\");\n          if (callCompletion) whenDone(context);\n         },\n      undefined,\n      undefined,\n      undefined, whenDone);\n        if (callCompletion) whenDone(context);\n       },\n    undefined,\n    undefined,\n       function(context,whenDone) {\n          var callCompletion=true;\n      context.switchOutput(SENSOR_ACTIONS.SWITCH_OFF,\"INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_2_1np_bin_\",\"Irrigation - Valve 2\");\n          if (callCompletion) whenDone(context);\n       },\n       whenDone);}\n\n  if (callCompletion) whenDone(context);\n}",
+      "executeOnStartup": false,
+      "disabled": true
+    }
+  },
+  "variables": {
+    "4X6hoD3HwhPGa4sC3": {
+      "_id": "4X6hoD3HwhPGa4sC3",
+      "title": "Automatic Irrigation",
+      "modifiedBy": "both",
+      "type": "boolean",
+      "booleanValue": true,
+      "trueValueLabel": "Enabled",
+      "falseValueLabel": "Disabled",
+      "description": "Allow the user to switch off automatic watering",
+      "keywords": [
+        "Irrigation"
+      ]
+    }
+  },
+  "sensors": {
+    "INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_1_1np_bin_": {
+      "meta": {
+        "_id": "INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_1_1np_bin_",
+        "name": "Irrigation - Valve 1",
+        "keywords": [
+          "1np",
+          "binary",
+          "c-hm-1113m",
+          "garaz"
+        ],
+        "reversedLogic": false
+      },
+      "_id": "INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_1_1np_bin_",
+      "class": "BINARY_OUTPUT",
+      "type": "BINARY_OUTPUT"
+    },
+    "INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_2_1np_bin_": {
+      "meta": {
+        "_id": "INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_2_1np_bin_",
+        "name": "Irrigation - Valve 2",
+        "keywords": [
+          "1np",
+          "binary",
+          "c-hm-1113m",
+          "garaz"
+        ],
+        "reversedLogic": false
+      },
+      "_id": "INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_2_1np_bin_",
+      "class": "BINARY_OUTPUT",
+      "type": "BINARY_OUTPUT"
+    }
+  },
+  "driverInstances": {
+    "INELS2-CFox": {
+      "_id": "INELS2-CFox",
+      "title": "CFox",
+      "description": "My Home Network",
+      "properties": {
+        "address": "192.168.1.1",
+        "port": 61682
+      },
+      "driver": "INELS2/CFox"
+    },
+    "Demo Driver": {
+      "_id": "Demo Driver",
+      "title": "Driver 1",
+      "driver": "Demo Driver",
+      "description": "Used to test Robolos system"
+    }
+  }
+}

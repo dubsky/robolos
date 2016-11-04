@@ -53,7 +53,7 @@ Meteor.publish("userSettings", function(){
         result.role=userDoc==null ? Collections.Users.RoleKeys.observer : userDoc.role;
         if(result.role==null) result.role=Collections.Users.RoleKeys.administrator;
         return result;
-    }
+    };
 
     self.added("settings",Collections.Settings.USER_SETTINGS_DOCUMENT_ID, filter(Settings.get()));
     self.ready();

@@ -25,6 +25,8 @@ function getApplicationRoot() {
 LOCAL_ICON_DIRECTORY=getApplicationRoot()+'/uploads/icons';
 LOCAL_FLOORPLAN_DIRECTORY=getApplicationRoot()+'/uploads/floorPlans';
 
+BUILT_IN_PREFIX="built-in-";
+
 
 getUploadRoot=function getUploadRoot() {
     return getApplicationRoot() + '/uploads'
@@ -68,8 +70,8 @@ class Uploads extends Observable {
                 }
             }
 
-            processDirectory(getResourceBase()+'/sensors','built-in-icon',function(o) { o.icon=true; });
-            processDirectory(getResourceBase()+'/floorPlans','built-in-floor-plan',function(o) { o.floorPlan=true; });
+            processDirectory(getResourceBase()+'/sensors',BUILT_IN_PREFIX+'icon',function(o) { o.icon=true; });
+            processDirectory(getResourceBase()+'/floorPlans',BUILT_IN_PREFIX+'plan',function(o) { o.floorPlan=true; });
 
             if(uploadToFilesystem) {
                 try {

@@ -1,9 +1,16 @@
 
+class DashboardsUIClass {
+    upsertDashboard(id,dashboard) {
+        return Collections.Dashboards.upsert(id,dashboard);
+    }
+}
+
+DashboardsUI=new DashboardsUIClass();
+
 Meteor.publish('dashboards', function(filter,reactive){
     Accounts.checkDashboardAccess(this);
     return Collections.Dashboards.find();
 });
-
 
 
 function collectWidgetStatuses(subscription, widgets,dashboardCollection,dashboardSensors,dashboardActions,dashboardVariables) {
