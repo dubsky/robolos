@@ -23,7 +23,7 @@ Template.widgetIconSelector.getURLPathForImage=function(image) {
         path='/uploads/'
     }
     if(image.icon) image.custom ? path+='icons/' : path+='sensors/';
-    if(image.floorPlan) path+='floorPlans/';
+    if(image.floorPlan) path+='floorPlan/';
     path+=image.name;
     return path;
 }

@@ -405,9 +405,10 @@ UploadHandler.prototype.post = function () {
         var currentFolder = options.uploadDir;
         for (var i = 0; i < subFolders.length; i++) {
             currentFolder += '/' + subFolders[i];
-
-            if (!fs.existsSync(currentFolder)) {
-                fs.mkdirSync(currentFolder);
+            if(options.uploadToFileSystem) {
+                if (!fs.existsSync(currentFolder)) {
+                    fs.mkdirSync(currentFolder);
+                }
             }
         }
 

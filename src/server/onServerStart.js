@@ -28,4 +28,7 @@ Meteor.startup(function () {
     KeywordsUI.start();
     log.info('Initialization Done.');
 
+    process.on('uncaughtException', function (err) {
+        log.error('Uncaught exception', err);
+    })
 });

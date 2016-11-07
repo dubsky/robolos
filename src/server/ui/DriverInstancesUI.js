@@ -2,7 +2,7 @@ class DriverInstancesUIClass extends Observable {
 
     upsertDriverInstance(id,driverInstance) {
         var insertedId=Collections.DriverInstances.upsert(id,driverInstance).insertedId;
-        var updatedDriverInstance=Collections.DriverInstances.findOne(id);
+        var updatedDriverInstance=Collections.DriverInstances.findOne(insertedId===undefined ? id : insertedId);
         if(insertedId===undefined) {
             Drivers.stopDriverInstance(id);
             Drivers.startDriverInstance(updatedDriverInstance);
@@ -12,7 +12,7 @@ class DriverInstancesUIClass extends Observable {
             Drivers.startDriverInstance(updatedDriverInstance);
             DriverInstancesUI.fireCreateEvent(updatedDriverInstance);
         }
-        return insertedId;
+        return updatedDriverInstance._id;
     }
 }
 

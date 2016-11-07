@@ -10,8 +10,9 @@ DefineScheduleField =function () {
      * @extends {Blockly.Field}
      * @constructor
      */
-    Blockly.FieldSchedule = function(text, opt_changeHandler) {
+    Blockly.FieldSchedule = function(text,filter, opt_changeHandler) {
         Blockly.FieldSchedule.superClass_.constructor.call(this, text, opt_changeHandler);
+        this.filter=filter;
         //this.setChangeHandler(opt_changeHandler);
     };
     goog.inherits(Blockly.FieldSchedule, Blockly.Field);
@@ -67,7 +68,8 @@ DefineScheduleField =function () {
      * @private
      */
     Blockly.FieldSchedule.prototype.showEditor_ = function(opt_quietInput) {
-        SemanticUI.modal('#selectScheduleBlock');
+        //SemanticUI.modal('#selectScheduleBlock');
+        Template.modal.current.set({template: 'selectScheduleForAction',data:{renderBox:true, filter:this.filter}});
         Blockly.FieldSchedule.activeBlock=this;
     };
 

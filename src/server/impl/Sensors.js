@@ -164,6 +164,7 @@ class SensorsClass {
 
             if (action === SENSOR_ACTIONS.SWITCH_OVER) {
                 var status = this.getSensorStatus(driverInstanceId, deviceId, sensorId);
+                console.log('switch over',status);
                 if ((typeof status) === 'undefined') {
                     log.error('sensor ' + SHARED.getSensorID(driverInstanceId, deviceId, sensorId) + ' is not available to the runtime right now');
                     return;

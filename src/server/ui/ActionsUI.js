@@ -34,7 +34,7 @@ class ActionsUIClass extends Observable {
 
     upsertAction(id,action) {
         let insertedId=Collections.Actions.upsert(id,action).insertedId;
-        let updatedAction=Collections.Actions.findOne(id);
+        let updatedAction=Collections.Actions.findOne(insertedId===undefined ? id : insertedId);
         ActionsInstance.upsertAction(updatedAction);
         if(insertedId===undefined) {
             ActionsUI.fireUpdateEvent(updatedAction);
@@ -42,7 +42,7 @@ class ActionsUIClass extends Observable {
         else {
             ActionsUI.fireCreateEvent(updatedAction);
         }
-        return insertedId;
+        return updatedAction._id;
     }
 }
 
@@ -107,6 +107,7 @@ function performOperationOnAction(actionId,f) {
 Meteor.methods({
     startAction: function(actionId) {
         Accounts.checkDashboardAccess(this);
+        console.log('start action',actionId);
         performOperationOnAction(actionId,(action)=> {ActionsInstance.startAction(action)});
     },
     stopAction: function(actionId) {

@@ -126,12 +126,77 @@ MyBlocks=function() {
     };
 
 
+    Blockly.Blocks['schedule'] = {
+        init: function() {
+            this.appendValueInput("schedule")
+                .setCheck(null)
+                .appendField("Set Schedule")
+                .appendField(new Blockly.FieldSchedule('...',{type:'one-time'}),'selectedSchedule')
+                .appendField("in");
+            this.appendDummyInput()
+                .appendField(new Blockly.FieldDropdown([["second(s)", "SECOND"], ["minute(s)", "MINUTE"], ["hour(s)", "HOUR"]]), "unit")
+                .appendField("from")
+                .appendField(new Blockly.FieldDropdown([["now", "NOW"], ["it's original date", "ORIGIN"]]), "base");
+
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(65);
+            this.setTooltip('Plan execution of selected schedule in after spevified ammount in time');
+            //this.setHelpUrl('http://www.example.com/');
+        }
+    };
+
+    Blockly.JavaScript['schedule'] = function(block) {
+        var value_schedule = Blockly.JavaScript.valueToCode(block, 'schedule', Blockly.JavaScript.ORDER_ATOMIC);
+        var dropdown_unit = block.getFieldValue('unit');
+        var dropdown_base = block.getFieldValue('base');
+
+        var multiplier;
+        switch(dropdown_unit) {
+            case 'HOUR':
+                multiplier=60000*24;
+                break;
+            case 'MINUTE':
+                multiplier=60000;
+                break;
+            case 'SECOND':
+                multiplier=1000;
+                break;
+            default:
+                multiplier=1;
+        }
+
+        var schedule=getScheduleValue(block);
+        var code = 'context.schedule('+getParam(schedule.id)+','+getParam(schedule.name)+', '+multiplier+'*('+value_schedule+'),"'+dropdown_base+'");\n';
+        return code;
+    };
+
+
+    Blockly.Blocks['cancel_schedule'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField("Cancel Schedule")
+                .appendField(new Blockly.FieldSchedule('...',{type:'one-time'}),'selectedSchedule');
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(65);
+            this.setTooltip('The specified schedule will not get executed as planned and will be disabled');
+            //this.setHelpUrl('http://www.example.com/');
+        }
+    };
+
+    Blockly.JavaScript['cancel_schedule'] = function(block) {
+        var schedule=getScheduleValue(block);
+        var code = 'context.cancelSchedule('+getParam(schedule.id)+','+getParam(schedule.name)+');\n';
+        return code;
+    };
+
     Blockly.Blocks['follow_schedule'] = {
         init: function() {
 
             this.appendDummyInput()
                 .appendField("Follow schedule")
-                .appendField(new Blockly.FieldSchedule('...'),'selectedSchedule')
+                .appendField(new Blockly.FieldSchedule('...',{type:'value'}),'selectedSchedule');
 
             this.appendDummyInput()
                 .appendField("on")
@@ -147,7 +212,6 @@ MyBlocks=function() {
     Blockly.JavaScript['follow_schedule'] = function(block) {
         var value=getSensorValue(block);
         var schedule=getScheduleValue(block);
-        // TODO: Assemble JavaScript into code variable.
         var code = 'context.followSchedule('+getParam(schedule.id)+','+getParam(schedule.name)+','+getParam(value.id)+','+getParam(value.name)+');\n';
         return code;
     };

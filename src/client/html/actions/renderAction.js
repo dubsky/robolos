@@ -44,6 +44,20 @@ Template.renderAction.events({
     'click .goBack' : Template.renderAction.actionEditationFinished
 });
 
+Template.renderAction.save=function(workspace) {
+    var action=getAction();
+    var xml = Blockly.Xml.workspaceToDom(workspace);
+    var xml_text = Blockly.Xml.domToText(xml);
+
+    var code = Blockly.JavaScript.workspaceToCode(workspace);
+    console.log(code);
+
+    if(xml_text!==action.xml)
+    {
+        Meteor.call('updateAction',{$set :{ xml: xml_text, code:code } },action._id);
+    }
+};
+
 
 Template.renderAction.onRendered(function() {
     var blocklyArea = document.getElementById('blocklyArea');
@@ -100,24 +114,15 @@ Template.renderAction.onRendered(function() {
         console.log(e);
     }
 
-    var self=this;
-    this.workspace.addChangeListener(function() {
-        var action=getAction();
-        var xml = Blockly.Xml.workspaceToDom(self.workspace);
-        var xml_text = Blockly.Xml.domToText(xml);
-
-        var code = Blockly.JavaScript.workspaceToCode(self.workspace);
-        console.log(code);
-
-        if(xml_text!==action.xml)
-        {
-            Meteor.call('updateAction',{$set :{ xml: xml_text, code:code } },action._id);
-        }
+    this.workspace.addChangeListener(() => {
+        Template.renderAction.save(this.workspace);
     });
 
 });
 
+
 Template.renderAction.onDestroyed(function () {
+    Template.renderAction.save(this.workspace);
     this.workspace.dispose();
 });
 

@@ -9,7 +9,7 @@ let uploadToFilesystem=Collections.Uploads.uploadToFilesystem;
 
 let CFOX_FOLDER='cfox/';
 let ICON_FOLDER='icons/';
-let FLOOR_PLAN_FOLDER='floorPlans/';
+let FLOOR_PLAN_FOLDER='floorPlan/';
 let UPLOAD_FOLDER='/uploads/';
 
 
@@ -23,7 +23,7 @@ function getApplicationRoot() {
 }
 
 LOCAL_ICON_DIRECTORY=getApplicationRoot()+'/uploads/icons';
-LOCAL_FLOORPLAN_DIRECTORY=getApplicationRoot()+'/uploads/floorPlans';
+LOCAL_FLOORPLAN_DIRECTORY=getApplicationRoot()+'/uploads/floorPlan';
 
 BUILT_IN_PREFIX="built-in-";
 
@@ -71,7 +71,7 @@ class Uploads extends Observable {
             }
 
             processDirectory(getResourceBase()+'/sensors',BUILT_IN_PREFIX+'icon',function(o) { o.icon=true; });
-            processDirectory(getResourceBase()+'/floorPlans',BUILT_IN_PREFIX+'plan',function(o) { o.floorPlan=true; });
+            processDirectory(getResourceBase()+'/floorPlan',BUILT_IN_PREFIX+'plan',function(o) { o.floorPlan=true; });
 
             if(uploadToFilesystem) {
                 try {
@@ -110,7 +110,7 @@ class Uploads extends Observable {
                         let id='icon-'+name;
                         self.added(collection,id, { _id : id, name: name, custom : true, icon:true });
                     }
-                    if(path.startsWith('floorPlans')) {
+                    if(path.startsWith('floorPlan')) {
                         let name=path.substring(FLOOR_PLAN_FOLDER.length+1);
                         let id='floor-plan-'+name;
                         self.added(collection,id, { _id : id, name: name,custom : true, floorPlan:true });
@@ -184,6 +184,7 @@ Router.map(function() {
                     if(size!==undefined) headers['Content-Length']=size;
                     response.writeHead(200, headers);
                 }
+                //log.debug('requested file id:'+uploadToFilesystem+' '+pathParam+' '+path);
 
                 if(uploadToFilesystem)
                 {
@@ -201,6 +202,7 @@ Router.map(function() {
                 else {
                     let fileId=pathParam.substring(UPLOAD_FOLDER.length-1)+path;
                     var gridStore = new GridStore(Collections.Uploads.rawDatabase(), fileId, 'r');
+                    //log.debug('requested file id:'+fileId);
                     GridStore.exist(Collections.Uploads.rawDatabase(), fileId, (err, result) => {
                         if(!result) {
                             return fail(this.response);

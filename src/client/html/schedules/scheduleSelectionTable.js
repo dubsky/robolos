@@ -6,7 +6,7 @@ Template.scheduleSelectionTable.helpers({
     settings: function() {
         var s={
             fields: [
-                { key: 'title', label:'Name',tmpl: Template.scheduleLink,sortOrder: 0, sortDirection: 'ascending'},
+                { key: 'title', label:'Name', sortOrder: 0, sortDirection: 'ascending'},
                 {key: 'keywords', label:'Keywords', tmpl: Template.keywordTableField }
             ],
             filters: ['table-text-search']

@@ -116,6 +116,7 @@ Meteor.methods({
     createDashboard: function(dashboard) {
         Accounts.checkAdminAccess(this);
         var id=Collections.Dashboards.upsert('',dashboard).insertedId;
+        return id;
     },
 
     deleteDashboard: function(dashboardId) {

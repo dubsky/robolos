@@ -2,8 +2,7 @@ Template.selectScheduleForAction.helpers({
     emptySelection : function() {
         var selection=Session.get('selectedSchedule');
         return (typeof selection==='undefined') || selection===null;
-    },
-    filter: { type:'value'}
+    }
 });
 
 Template.selectScheduleForAction.events({
@@ -20,4 +19,6 @@ Template.selectScheduleForAction.events({
 
 Template.selectScheduleForAction.rendered=function() {
     Session.set('selectedSchedule',null);
+    SemanticUI.modal('#selectScheduleBlock');
+
 }

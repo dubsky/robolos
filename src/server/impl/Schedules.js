@@ -64,6 +64,7 @@ class Schedules {
                         if (typeof action!==undefined) {
                             ActionsInstance.startAction(action);
                         }
+                        SyncedCron.remove(schedule._id+'_0'); // this is a workaroud for SyncedCron defect - only every second job with the same id gets executed
                     }
                 });
                 this.runningTasks[schedule._id]=[];
@@ -106,7 +107,7 @@ class Schedules {
                 }
                 else {
                     log.error('Assertion failed, obsolete task still in the list');
-                    delete self.runningTasks[scheduleId];
+                    delete this.runningTasks[scheduleId];
                 }
             }
             return min;

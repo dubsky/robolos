@@ -141,7 +141,7 @@ class ActionContext {
     set status(message) {
         this.actionStatus.message=message;
         log.debug(message);
-    }
+    }   
 
     switchOutput(operation, sensorId, sensorName) {
         //log.debug('switchOutput '+operation);
@@ -158,6 +158,26 @@ class ActionContext {
     followSchedule(scheduleId, scheduleName, sensorId, sensorName) {
         //console.log('bind '+scheduleId+' : '+sensorId);
         ValueSchedules.bindSensorToSchedule(scheduleId,sensorId);
+    }
+
+    schedule(scheduleId, scheduleName, delayMsec,base) {
+        let schedule=Collections.Schedules.findOne(scheduleId);
+        schedule.disabled=false;
+        let startDate=schedule.executeOn;
+        if(startDate===undefined || base==='NOW') startDate=new Date();
+        let newDate=moment(startDate).add(delayMsec,'ms').toDate();
+        schedule.executeOn=newDate;
+        SchedulesInstance.stopSchedule(scheduleId);
+        Collections.Schedules.update(scheduleId,{ $set: { executeOn: newDate, disabled: false }});
+        SchedulesInstance.startSchedule(schedule);
+        SchedulesUI.fireUpdateEvent(schedule);
+    }
+
+    cancelSchedule(scheduleId, scheduleName) {
+        Collections.Schedules.update(scheduleId,{ $set: { disabled: true }});
+        let updatedSchedule=Collections.Schedules.findOne(scheduleId);
+        SchedulesInstance.stopSchedule(scheduleId);
+        SchedulesUI.fireUpdateEvent(updatedSchedule);
     }
 
     getValue(sensorId, sensorName) {
