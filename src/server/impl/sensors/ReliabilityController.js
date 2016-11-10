@@ -36,7 +36,7 @@ class ReliabilityControllerClass {
                 desiredValue=0;
                 break;
             default:
-                throw 'Assertion failed; unknown action';
+                throw new Exception('Assertion failed; unknown action');
         }
 
         let key=driverInstance.getId()+deviceId+sensorId+chosenVariable.name;

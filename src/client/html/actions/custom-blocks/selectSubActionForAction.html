@@ -1,0 +1,16 @@
+<template name="selectSubActionForAction">
+
+    <div class="ui modal" id="selectActionBlock">
+        <i class="close icon"></i>
+        <div class="header">
+            Select SubAction
+        </div>
+        <div class="content" style="padding-bottom:5px">
+            {{> actionSelectionTable renderBox=false}}
+        </div>
+        <div class="actions">
+            <button type="button" class="ok btn btn-default selectAction" data-dismiss="modal" disabled={{emptySelection}}>Ok</button>
+            <button type="button" class="cancel btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+</template>

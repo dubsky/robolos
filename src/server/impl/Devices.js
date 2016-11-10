@@ -42,7 +42,7 @@ class DevicesClass {
 
     getDriverByInstanceID(driverInstanceId) {
         var instance=Drivers.getDriverInstance(driverInstanceId);
-        if(instance===undefined) throw 'Unknown driver:'+driverInstanceId;
+        if(instance===undefined) throw new Exception('Unknown driver:'+driverInstanceId);
         return instance.getDriver();
     }
 

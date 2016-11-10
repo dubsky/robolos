@@ -27,9 +27,9 @@ class Notifications {
     sendTestEmail() {
         try {
             let user=Meteor.user();
-            if(user===undefined) throw 'Not logged-in';
+            if(user===undefined) throw new Exception('Not logged-in');
             let address=this.getEmailAddress(user);
-            if(address===undefined) throw 'User doesn\'t have an email address';
+            if(address===undefined) throw new Exception('User doesn\'t have an email address');
             Email.send({
                 to: address,
                 from: "do-not-reply@robolos.org",

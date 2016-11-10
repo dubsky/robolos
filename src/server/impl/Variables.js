@@ -36,7 +36,7 @@ class Variables  extends Observable {
 
     getValue(variableId) {
         var v=this.getVariable(variableId);
-        if(v===undefined) throw 'variable no longer exists';
+        if(v===undefined) throw new Exception('variable no longer exists');
         var s;
         switch(v.type) {
             case 'number':
@@ -52,7 +52,7 @@ class Variables  extends Observable {
 
     setValue(variableId,value,automation) {
         var v=this.getVariable(variableId);
-        if(v===undefined) throw 'variable no longer exists';
+        if(v===undefined) throw new Exception('variable no longer exists');
         var uiChange=automation===undefined || !automation;
         if(uiChange || ((v.modifiedBy==='auto' || v.modifiedBy==='both') && v.allowAutomaticControl))
         {

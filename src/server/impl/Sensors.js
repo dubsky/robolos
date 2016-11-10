@@ -85,11 +85,11 @@ class SensorsClass {
                 return id;
             }
             else {
-                throw 'Invalid sensor id:' + sensorId;
+                throw new Exception('Invalid sensor id:' + sensorId);
             }
         }
         else {
-            throw 'Invalid sensor id :'+sensorId;
+            throw new Exception('Invalid sensor id :'+sensorId);
         }
     }
 
@@ -146,7 +146,7 @@ class SensorsClass {
     getMainVariable(driverInstanceId, deviceId, sensorId) {
         let status = this.getSensorStatus(driverInstanceId, deviceId, sensorId);
         let type=SensorTypes[status.type];
-        if(type===undefined) throw 'Unknown sensor type:'+status.type;
+        if(type===undefined) throw new Exception('Unknown sensor type:'+status.type);
         return type.mainVariable;
     }
 

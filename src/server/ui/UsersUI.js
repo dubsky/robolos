@@ -47,7 +47,7 @@ Meteor.methods({
         Accounts.checkAdminAccess(this);
         try {
             let selector={ 'emails.address': doc.email};
-            if (Meteor.users.findOne(selector)!=null) throw 'User with the given email address already exists';
+            if (Meteor.users.findOne(selector)!=null) throw new Exception('User with the given email address already exists');
             Accounts.createUser({
                 username: doc.email,
                 email : doc.email,

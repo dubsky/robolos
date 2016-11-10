@@ -3,11 +3,11 @@ class AbstractDriverClass {
 
 
     getSensors() {
-        throw 'This method must be implemented by all drivers';
+        throw new Exception('This method must be implemented by all drivers');
     }
 
     getDevices() {
-        throw 'This method must be implemented by all drivers';
+        throw new Exception('This method must be implemented by all drivers');
     }
 
     /**

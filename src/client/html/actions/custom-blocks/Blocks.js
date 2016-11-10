@@ -3,6 +3,7 @@ MyBlocks=function() {
     DefineSensorField();
     DefineVariableField();
     DefineScheduleField();
+    DefineActionField();
 
     function getValue(v) {
         let value={id: null, name:null};
@@ -27,6 +28,11 @@ MyBlocks=function() {
 
     function getVariableValue(block) {
         var v=block.getFieldValue('selectedVariable');
+        return getValue(v);
+    }
+
+    function getActionValue(block) {
+        var v=block.getFieldValue('selectedAction');
         return getValue(v);
     }
 
@@ -141,7 +147,7 @@ MyBlocks=function() {
             this.setPreviousStatement(true, null);
             this.setNextStatement(true, null);
             this.setColour(65);
-            this.setTooltip('Plan execution of selected schedule in after spevified ammount in time');
+            this.setTooltip('Plan execution of selected schedule in after specified ammount in time.');
             //this.setHelpUrl('http://www.example.com/');
         }
     };
@@ -195,7 +201,7 @@ MyBlocks=function() {
         init: function() {
 
             this.appendDummyInput()
-                .appendField("Follow schedule")
+                .appendField("Follow value schedule")
                 .appendField(new Blockly.FieldSchedule('...',{type:'value'}),'selectedSchedule');
 
             this.appendDummyInput()
@@ -258,7 +264,7 @@ MyBlocks=function() {
             this.setPreviousStatement(true);
             this.setNextStatement(false);
             this.setColour(65);
-            this.setTooltip('Execute included blocks after a condition is met');
+            this.setTooltip('Execute included blocks after a condition is met. To make it possible to pause/cancel the action you need to reconfigure the block to contain corresponding statements.');
             this.setMutator(new Blockly.Mutator(['onCancelMutator','onPauseMutator','onContinueMutator']));
         },
 
@@ -369,23 +375,168 @@ MyBlocks=function() {
         var cancel_statements = Blockly.JavaScript.statementToCode(block, 'cancel_statement');
         var pause_statements = Blockly.JavaScript.statementToCode(block, 'pause_statement');
         var continue_statements = Blockly.JavaScript.statementToCode(block, 'continue_statement');
+
+        var pause_statements_exist=block.getInput('pause_statement')!==null;
+        var cancel_statements_exist=block.getInput('cancel_statement')!==null;
+        var continue_statements_exist=block.getInput('continue_statement')!==null;
+
         var timeout = parseInt(block.getFieldValue('timeout'));
         if(isNaN(timeout) || timeout<0) timeout=5;
         if(timeout===0) timeout=Infinity;
         timeout*=60000;
-        // TODO: Assemble JavaScript into code variable.
+
         var condition = 'function (context) { return '+Blockly.JavaScript.valueToCode(block, 'condition', Blockly.JavaScript.ORDER_ATOMIC)+'; }';
         if(condition.length===0) condition='false';
 
-        return code;
-
-        let pause=pause_statements==='' ? 'undefined,\n' :
+        let pause=!pause_statements_exist ? 'undefined,\n' :
             ('function(context, whenDone) {\n      var callCompletion=true;\n  '+pause_statements+      '    if (callCompletion) whenDone(context);\n   },\n');
-        let cont=continue_statements==='' ? 'undefined,\n' :
+        let cont=!continue_statements_exist ? 'undefined,\n' :
             ('function(context, whenDone) {\n      var callCompletion=true;\n  '+continue_statements+      '    if (callCompletion) whenDone(context);\n   },\n');
-        let cancel=cancel_statements==='' ? 'undefined, whenDone);\n' :
+        let cancel=!cancel_statements_exist ? 'undefined, whenDone);\n' :
             ('   function(context,whenDone) {\n      var callCompletion=true;\n'+cancel_statements+   '      if (callCompletion) whenDone(context);\n   },\n   whenDone);')
         var code = 'callCompletion=false;\ncontext.waitFor( '+timeout+','+condition+
+            ',function(context, whenDone) {\n      var callCompletion=true;\n  '+statements_statements+'    if (callCompletion) whenDone(context);\n   },\n' +
+            pause +
+            cont +
+            cancel;
+        return code;
+
+    };
+
+    Blockly.Blocks['executeAction'] = {
+        init: function() {
+            this.appendDummyInput()
+                .appendField("Execute Action")
+                .appendField(new Blockly.FieldAction('...'),'selectedAction');
+            this.appendStatementInput("statements")
+                .appendField("when done");
+            this.setPreviousStatement(true);
+            this.setNextStatement(false);
+            this.setColour(65);
+            this.setTooltip('Execute another action as a sub program');
+            this.setMutator(new Blockly.Mutator(['onCancelMutator','onPauseMutator','onContinueMutator']));
+        },
+
+        mutationToDom: function() {
+            var container = document.createElement('mutation');
+            container.setAttribute('hasContinue', this.hasContinue==true);
+            container.setAttribute('hasPause', this.hasPause==true);
+            container.setAttribute('hasCancel', this.hasCancel==true);
+            return container;
+        },
+
+        domToMutation: function(xmlElement) {
+            this.hasPause = xmlElement.getAttribute('haspause')=='true';
+            if(this.hasPause) this.appendStatementInput("pause_statement")
+                .appendField("on pause");
+            this.hasContinue = xmlElement.getAttribute('hascontinue')=='true';
+            if(this.hasContinue) this.appendStatementInput("continue_statement")
+                .appendField("on continue");
+            this.hasCancel = xmlElement.getAttribute('hascancel')=='true';
+            if(this.hasCancel) this.appendStatementInput("cancel_statement").appendField("on cancel");;
+        },
+
+        decompose: function(workspace) {
+            var containerBlock = Blockly.Block.obtain(workspace, 'executeActionMutator');
+            containerBlock.initSvg();
+            var connection = containerBlock.getInput('STACK').connection;
+            if (this.hasPause===true) {
+                var pauseBlock = Blockly.Block.obtain(workspace, 'onPauseMutator');
+                pauseBlock.initSvg();
+                connection.connect(pauseBlock.previousConnection);
+                connection=pauseBlock.nextConnection;
+            }
+            if (this.hasContinue===true) {
+                var continueBlock = Blockly.Block.obtain(workspace, 'onContinueMutator');
+                continueBlock.initSvg();
+                connection.connect(continueBlock.previousConnection);
+                connection=continueBlock.nextConnection;
+            }
+            if (this.hasCancel===true) {
+                var cancelBlock = Blockly.Block.obtain(workspace, 'onCancelMutator');
+                cancelBlock.initSvg();
+                connection.connect(cancelBlock.previousConnection);
+            }
+            return containerBlock;
+        },
+
+        compose: function(containerBlock) {
+
+            // Disconnect the else input blocks and remove the inputs.
+            if (this.hasCancel) this.removeInput('cancel_statement');
+            this.hasCancel = false;
+            if (this.hasPause) this.removeInput('pause_statement');
+            this.hasPause = false;
+            if (this.hasContinue) this.removeInput('continue_statement');
+            this.hasContinue = false;
+
+            // Rebuild the block's optional inputs.
+            var clauseBlock = containerBlock.getInputTargetBlock('STACK');
+            while (clauseBlock) {
+                switch (clauseBlock.type) {
+                    case 'onPauseMutator':
+                        this.hasPause=true;
+                        var elseInput = this.appendStatementInput('pause_statement');
+                        elseInput.appendField("on pause");
+                        if (clauseBlock.statementConnection_) {
+                            elseInput.connection.connect(clauseBlock.statementConnection_);
+                        }
+                        break;
+                    case 'onContinueMutator':
+                        this.hasContinue=true;
+                        var elseInput = this.appendStatementInput('continue_statement');
+                        elseInput.appendField("on continue");
+                        if (clauseBlock.statementConnection_) {
+                            elseInput.connection.connect(clauseBlock.statementConnection_);
+                        }
+                        break;
+                    case 'onCancelMutator':
+                        this.hasCancel=true;
+                        var elseInput = this.appendStatementInput('cancel_statement');
+                        elseInput.appendField("on cancel");
+                        // Reconnect any child blocks.
+                        if (clauseBlock.statementConnection_) {
+                            elseInput.connection.connect(clauseBlock.statementConnection_);
+                        }
+                        break;
+                    default:
+                        throw 'Unknown block type.';
+                }
+                clauseBlock = clauseBlock.nextConnection &&
+                    clauseBlock.nextConnection.targetBlock();
+            }
+        },
+    };
+
+    Blockly.Blocks['executeActionMutator'] = {
+        init: function() {
+            this.setColour(Blockly.Blocks.logic.HUE);
+            this.appendDummyInput()
+                .appendField('Execute Action');
+            this.appendStatementInput('STACK').setCheck(["cancel","init"]);
+            this.contextMenu = false;
+        }
+    };
+
+    Blockly.JavaScript['executeAction'] = function(block) {
+        var statements_statements = Blockly.JavaScript.statementToCode(block, 'statements');
+        var cancel_statements = Blockly.JavaScript.statementToCode(block, 'cancel_statement');
+        var pause_statements = Blockly.JavaScript.statementToCode(block, 'pause_statement');
+        var continue_statements = Blockly.JavaScript.statementToCode(block, 'continue_statement');
+
+        var pause_statements_exist=block.getInput('pause_statement')!==null;
+        var cancel_statements_exist=block.getInput('cancel_statement')!==null;
+        var continue_statements_exist=block.getInput('continue_statement')!==null;
+
+        var actionValue=getActionValue(block);
+
+        let pause=!pause_statements_exist ? 'undefined,\n' :
+            ('function(context, whenDone) {\n      var callCompletion=true;\n  '+pause_statements+      '    if (callCompletion) whenDone(context);\n   },\n');
+        let cont=!continue_statements_exist ? 'undefined,\n' :
+            ('function(context, whenDone) {\n      var callCompletion=true;\n  '+continue_statements+      '    if (callCompletion) whenDone(context);\n   },\n');
+        let cancel=!cancel_statements_exist ? 'undefined, whenDone);\n' :
+            ('   function(context,whenDone) {\n      var callCompletion=true;\n'+cancel_statements+   '      if (callCompletion) whenDone(context);\n   },\n   whenDone);')
+        var code = 'callCompletion=false;\ncontext.executeAction( '+actionValue.id+','+actionValue.name+
             ',function(context, whenDone) {\n      var callCompletion=true;\n  '+statements_statements+'    if (callCompletion) whenDone(context);\n   },\n' +
             pause +
             cont +
@@ -408,7 +559,7 @@ MyBlocks=function() {
             this.setPreviousStatement(true);
             this.setNextStatement(false);
             this.setColour(65);
-            this.setTooltip('Execute included blocks after a specified delay');
+            this.setTooltip('Execute included blocks after a specified delay. To make it possible to pause/cancel the action you need to reconfigure the block to contain corresponding statements.');
             this.setMutator(new Blockly.Mutator(['onCancelMutator','onPauseMutator','onContinueMutator']));
         },
 
@@ -554,7 +705,11 @@ MyBlocks=function() {
         var pause_statements = Blockly.JavaScript.statementToCode(block, 'pause_statement');
         var continue_statements = Blockly.JavaScript.statementToCode(block, 'continue_statement');
         var cancel_statements = Blockly.JavaScript.statementToCode(block, 'cancel_statement');
-        // TODO: Assemble JavaScript into code variable.
+
+        var pause_statements_exist=block.getInput('pause_statement')!==null;
+        var cancel_statements_exist=block.getInput('cancel_statement')!==null;
+        var continue_statements_exist=block.getInput('continue_statement')!==null;
+
         var value_delay = Blockly.JavaScript.valueToCode(block, 'delay', Blockly.JavaScript.ORDER_ATOMIC);
         var multiplier;
         switch(dropdown_unit) {
@@ -568,13 +723,13 @@ MyBlocks=function() {
                 multiplier=1;
         }
 
-        let pause=pause_statements==='' ? 'undefined,\n' :
+        let pause=!pause_statements_exist ? 'undefined,\n' :
             ('function(context, whenDone) {\n      var callCompletion=true;\n  '+pause_statements+      '    if (callCompletion) whenDone(context);\n   },\n');
         console.log(pause);
 
-        let cont=continue_statements==='' ? 'undefined,\n' :
+        let cont=!continue_statements_exist ? 'undefined,\n' :
             ('function(context, whenDone) {\n      var callCompletion=true;\n  '+continue_statements+      '    if (callCompletion) whenDone(context);\n   },\n');
-        let cancel=cancel_statements==='' ? 'undefined, whenDone);\n' :
+        let cancel=!cancel_statements_exist ? 'undefined, whenDone);\n' :
             ('   function(context,whenDone) {\n      var callCompletion=true;\n'+cancel_statements+   '      if (callCompletion) whenDone(context);\n   },\n   whenDone);')
         var code = 'callCompletion=false;\ncontext.setTimeout( ('+value_delay+')*'+multiplier+
             ',function(context, whenDone) {\n      var callCompletion=true;\n  '+statements_statements+'    if (callCompletion) whenDone(context);\n   },\n' +

@@ -44,3 +44,5 @@ Schemas.Action=new SimpleSchema({
 });
 
 Collections.Actions.attachSchema(Schemas.Action);
+
+ActionStatus = { RUNNING : 'RUN', READY:'READY', WAITING_FOR_CONDITION:'CONDITION', PAUSED: 'PAUSED', WAITING:'WAIT', SYNTAX_ERROR:'SYNTAX ERROR'};

@@ -2,6 +2,7 @@
 
     <section id="content-header" class="content-header">
         <div style="float:right" >
+            {{> actionControls action=action}}
             <button class="ui basic button editProperties">Edit Properties</button>
             {{#if editContext}}
                 <button class="ui button goBack labeled icon"><i class="left arrow icon"></i>Back to {{editContext.label}}</button>
@@ -21,6 +22,7 @@
             <block type="waitFor"></block>
             <block type="schedule"></block>
             <block type="cancel_schedule"></block>
+            <block type="executeAction"></block>
             <block type="get_control_variable"></block>
             <block type="set_control_variable"></block>
             <block type="action_status"></block>

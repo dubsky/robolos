@@ -408,8 +408,8 @@ class CFoxInelsDriver extends AbstractDriver {
                     };
                     this.mergeSensorComments(sensor);
                     this.drivenSensors[name] = sensor;
-                    if (typeof this.addresses[address] !== 'undefined') throw 'Unexpected mismatch in input data at address:' + index;
-                    if (this.addresses < 0) throw 'Inconsistent data';
+                    if (typeof this.addresses[address] !== 'undefined') throw new Exception('Unexpected mismatch in input data at address:' + index);
+                    if (this.addresses < 0) throw new Exception('Inconsistent data');
                     this.addresses[address] = sensor;
                     this.addresses[address + 1] = -1;
                     this.addresses[address + 2] = -2;
@@ -429,8 +429,8 @@ class CFoxInelsDriver extends AbstractDriver {
                     };
                     this.mergeSensorComments(sensor);
                     this.drivenSensors[name] = sensor;
-                    if (typeof this.addresses[address] !== 'undefined') throw 'Unexpected mismatch in input data at address:' + index;
-                    if (this.addresses < 0) throw 'Inconsistent data';
+                    if (typeof this.addresses[address] !== 'undefined') throw new Exception('Unexpected mismatch in input data at address:' + index);
+                    if (this.addresses < 0) throw new Exception('Inconsistent data');
                     this.addresses[address] = sensor;
                     this.addresses[address + 1] = -1;
                     this.addresses[address + 2] = -2;
@@ -571,7 +571,7 @@ class CFoxInelsDriver extends AbstractDriver {
 
                     function processObject(indexOfChange) {
                         var sensor = map[indexOfChange];
-                        if (typeof sensor === 'undefined') throw 'Unexpected mismatch in input data at address:' + indexOfChange + ' / ' + sensor + ' / ' + i+' / '+index;
+                        if (typeof sensor === 'undefined') throw new Exception('Unexpected mismatch in input data at address:' + indexOfChange + ' / ' + sensor + ' / ' + i+' / '+index);
 
                         let variable;
                         value = response.readFloatLE(indexOfChange + 6 + 7);

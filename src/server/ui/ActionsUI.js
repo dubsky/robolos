@@ -4,7 +4,7 @@ class ActionsUIClass extends Observable {
     cleanAction(action,withCode) {
         var mergeTarget = {};
         // some things should not be exposed to client
-        for (var attrname in action) { ``
+        for (var attrname in action) {
             switch(attrname) {
                 case 'onCancel':
                 case 'code':
@@ -14,7 +14,7 @@ class ActionsUIClass extends Observable {
                     break;
                 case 'actionStatus':
                     var srcStatus=action[attrname];
-                    var targetStatus=mergeTarget.actionStatus = { status: srcStatus.status,lastRun: srcStatus.lastRun, message:srcStatus.message } ;
+                    var targetStatus=mergeTarget.actionStatus = { status: srcStatus.status,lastRun: srcStatus.lastRun, message:srcStatus.message, errorMessage:srcStatus.errorMessage } ;
                     if(srcStatus.wait!==undefined) {
                         targetStatus.wait={
                             since : srcStatus.wait.since,
@@ -29,6 +29,7 @@ class ActionsUIClass extends Observable {
                     mergeTarget[attrname] = action[attrname];
             }
         }
+        if(mergeTarget.actionStatus===undefined) mergeTarget.actionStatus={};
         return mergeTarget;
     }
 
@@ -44,6 +45,7 @@ class ActionsUIClass extends Observable {
         }
         return updatedAction._id;
     }
+
 }
 
 ActionsUI=new ActionsUIClass();
@@ -76,9 +78,8 @@ Meteor.publish('actions', function(filter,reactive){
             onRemove : function(actionId) {
                 self.removed("actions",actionId);
             },
-
             onUpdate : function(action) {
-                self.changed("actions",action._id, action);
+                self.changed("actions",action._id, ActionsUI.cleanAction(action));
             }
         });
 
@@ -138,6 +139,7 @@ Meteor.methods({
 
     updateAction: function(action,actionId) {
         Accounts.checkAdminAccess(this);
+        action.actionStatus=undefined;
         Collections.Actions.update(actionId,action);
         var updatedAction=Collections.Actions.findOne(actionId);
         ActionsInstance.upsertAction(updatedAction);

@@ -891,7 +891,7 @@ class MySensors extends AbstractDriver {
         }
 
         if(type===undefined) {
-            throw 'Unknown action/variable requested:'+action+'/'+EJSON.stringify(variable);
+            throw new Exception('Unknown action/variable requested:'+action+'/'+EJSON.stringify(variable));
         }
         var destination = deviceId;
 
