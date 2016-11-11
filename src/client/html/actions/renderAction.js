@@ -13,6 +13,10 @@ Template.renderAction.helpers({
 
     editContext : function() {
         return EditContext.getContext();
+    },
+
+    isWide() {
+        return isWide();
     }
 });
 
@@ -60,63 +64,66 @@ Template.renderAction.save=function(workspace) {
 
 
 Template.renderAction.onRendered(function() {
-    var blocklyArea = document.getElementById('blocklyArea');
-    var blocklyDiv = document.getElementById('blocklyDiv');
-    var contentHeader = document.getElementById('content-header');
-    var contentWrapper = document.getElementById('content-wrapper');
-    var onresize = function(e) {
-        // Compute the absolute coordinates and dimensions of blocklyArea.
-        var element = blocklyArea;
-        var x = 0;
-        var y = 0;
-        do {
-            x += element.offsetLeft;
-            y += element.offsetTop;
-            element = element.offsetParent;
-        } while (element);
-        // Position blocklyDiv over blocklyArea.
-        blocklyDiv.style.left = x + 'px';
-        blocklyDiv.style.top = y + 'px';
-        blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+
+    if(isWide()) {
+        var blocklyDiv = document.getElementById('blocklyDiv');
+        var blocklyArea = document.getElementById('blocklyArea');
+        var contentHeader = document.getElementById('content-header');
+        var contentWrapper = document.getElementById('content-wrapper');
+        var onresize = function(e) {
+            // Compute the absolute coordinates and dimensions of blocklyArea.
+            var element = blocklyArea;
+            var x = 0;
+            var y = 0;
+            do {
+                x += element.offsetLeft;
+                y += element.offsetTop;
+                element = element.offsetParent;
+            } while (element);
+            // Position blocklyDiv over blocklyArea.
+            blocklyDiv.style.left = x + 'px';
+            blocklyDiv.style.top = y + 'px';
+            blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+            blocklyDiv.style.height = (contentWrapper.offsetHeight-contentHeader.offsetHeight-30-55+40) + 'px';
+        };
+        window.addEventListener('resize', onresize, false);
+        onresize();
         blocklyDiv.style.height = (contentWrapper.offsetHeight-contentHeader.offsetHeight-30-55+40) + 'px';
-    };
-    window.addEventListener('resize', onresize, false);
-    onresize();
-    blocklyDiv.style.height = (contentWrapper.offsetHeight-contentHeader.offsetHeight-30-55+40) + 'px';
 
-    MyBlocks();
+        MyBlocks();
 
-    this.workspace = Blockly.inject(blocklyDiv,
+        this.workspace = Blockly.inject(blocklyDiv,
+            {
+                toolbox: document.getElementById('toolbox'),
+                comments:true,
+                trashcan:true,
+                scrollbars: false//true
+            });
+
+        var xml=getAction().xml;
+        console.log(xml);
+        if((typeof xml)==='undefined' || xml===null)
         {
-            toolbox: document.getElementById('toolbox'),
-            comments:true,
-            trashcan:true,
-            scrollbars:true
+            xml =
+                '<xml>' +
+                '  <block type="action" deletable="false" x="70" y="70">' +
+                '  </block>' +
+                '</xml>';
+        }
+
+        var xmlDom = Blockly.Xml.textToDom(xml);
+
+        try {
+            Blockly.Xml.domToWorkspace( xmlDom,this.workspace);
+        }
+        catch(e) {
+            console.log(e);
+        }
+
+        this.workspace.addChangeListener(() => {
+            Template.renderAction.save(this.workspace);
         });
-
-    var xml=getAction().xml;
-    console.log(xml);
-    if((typeof xml)==='undefined' || xml===null)
-    {
-        xml =
-            '<xml>' +
-            '  <block type="action" deletable="false" x="70" y="70">' +
-            '  </block>' +
-            '</xml>';
     }
-
-    var xmlDom = Blockly.Xml.textToDom(xml);
-
-    try {
-        Blockly.Xml.domToWorkspace( xmlDom,this.workspace);
-    }
-    catch(e) {
-        console.log(e);
-    }
-
-    this.workspace.addChangeListener(() => {
-        Template.renderAction.save(this.workspace);
-    });
 
 });
 

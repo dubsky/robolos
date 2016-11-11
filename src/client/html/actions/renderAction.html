@@ -1,54 +1,54 @@
 <template name="renderAction">
+    {{#if isWide}}
+        <section id="content-header" class="content-header" style="min-width: 1024px">
+            <div style="float:right" >
+                {{> actionControls action=action}}
+                <button class="ui basic button editProperties">Edit Properties</button>
+                {{#if editContext}}
+                    <button class="ui button goBack labeled icon"><i class="left arrow icon"></i>Back to {{editContext.label}}</button>
+                {{/if}}
+            </div>
+            <h1 class="ui header" style="margin-top: 0px"><span>{{action.title}}</span><small> Automation Action</small>
+            </h1>
+        </section>
 
-    <section id="content-header" class="content-header">
-        <div style="float:right" >
-            {{> actionControls action=action}}
-            <button class="ui basic button editProperties">Edit Properties</button>
-            {{#if editContext}}
-                <button class="ui button goBack labeled icon"><i class="left arrow icon"></i>Back to {{editContext.label}}</button>
-            {{/if}}
-        </div>
-        <h1 class="ui header" style="margin-top: 0px"><span>{{action.title}}</span><small> Automation Action</small>
-        </h1>
-    </section>
+        <section class="content">
+            <xml id="toolbox" style="display: none">
+                <block type="get_value"></block>
+                <block type="set_value"></block>
+                <block type="follow_schedule"></block>
+                <block type="switch"></block>
+                <block type="after"></block>
+                <block type="waitFor"></block>
+                <block type="schedule"></block>
+                <block type="cancel_schedule"></block>
+                <block type="executeAction"></block>
+                <block type="get_control_variable"></block>
+                <block type="set_control_variable"></block>
+                <block type="action_status"></block>
+                <block type="controls_if"></block>
+                <block type="logic_compare"></block>
+                <block type="logic_operation"></block>
+                <block type="logic_negate"></block>
+                <block type="logic_boolean"></block>
+                <block type="math_number"></block>
+                <block type="math_arithmetic"></block>
+                <block type="math_random_int"></block>
+                <block type="notify"></block>
+                <block type="text"></block>
+                <block type="text_join"></block>
+            </xml>
 
-    <section class="content">
-        <xml id="toolbox" style="display: none">
-            <block type="get_value"></block>
-            <block type="set_value"></block>
-            <block type="follow_schedule"></block>
-            <block type="switch"></block>
-            <block type="after"></block>
-            <block type="waitFor"></block>
-            <block type="schedule"></block>
-            <block type="cancel_schedule"></block>
-            <block type="executeAction"></block>
-            <block type="get_control_variable"></block>
-            <block type="set_control_variable"></block>
-            <block type="action_status"></block>
-            <block type="controls_if"></block>
-            <block type="logic_compare"></block>
-            <block type="logic_operation"></block>
-            <block type="logic_negate"></block>
-            <block type="logic_boolean"></block>
-            <block type="math_number"></block>
-            <block type="math_arithmetic"></block>
-            <block type="math_random_int"></block>
-            <block type="notify"></block>
-            <block type="text"></block>
-            <block type="text_join"></block>
-        </xml>
+            <div id="blocklyArea" style="width:100%">
+                <div id="blocklyDiv" style="position: absolute"></div>
+            </div>
+            {{> selectVariableForAction renderBox=true}}
 
-<!--        <table id="blocklyArea" style="width:100%;height:100%">
-            <tr><td><div id="blocklyDiv" style="position: absolute"></div></td></tr>
-
-        </table>-->
-
-        <div id="blocklyArea" style="width:100%">
-            <div id="blocklyDiv" style="position: absolute"></div>
-        </div>
-
-        {{> selectVariableForAction renderBox=true}}
-
-    </section>
+        </section>
+    {{else}}
+        <br/>
+        <br/>
+        <h1>We are sorry</h1>
+        Unfortunately this functionality requires a bigger display. Use a tablet/laptop or a desktop computer to define actions.
+    {{/if}}
 </template>

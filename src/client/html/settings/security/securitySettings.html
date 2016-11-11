@@ -20,11 +20,11 @@
                 </div>
 
                 {{> afQuickField name="privateAddressPattern"}}
-                <button class="ui primary button customSubmit" disabled="{{saveDisabled}}">Save</button>
-                <a href="{{pathFor 'users'}}" class="ui secondary button manage Accounts">
+                <button class="ui primary button customSubmit" disabled="{{saveDisabled}}" style="margin-bottom: 5px">Save</button>
+                <a href="{{pathFor 'users'}}" class="ui secondary button manage Accounts" style="margin-bottom: 5px">
                     Manage Accounts
                 </a>
-                <a href="{{pathFor 'atChangePwd'}}" class="ui {{disableChangePassword}} button">
+                <a href="{{pathFor 'atChangePwd'}}" class="ui {{disableChangePassword}} wrappedButton button">
                     Change Password
                 </a>
             {{/autoForm}}
