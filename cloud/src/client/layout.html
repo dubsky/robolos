@@ -1,0 +1,12 @@
+<template name="layout">
+
+    <div class="pusher wrapper">
+        {{> header}}
+        <div style="height:40px"></div> <!--spacer for header-->
+
+        <div id="content-wrapper" class="ui main fluid container" style="overflow-y:auto">
+            {{>yield}}
+        </div>
+    </div>
+
+</template>
