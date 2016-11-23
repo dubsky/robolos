@@ -82,6 +82,9 @@ class DevicesClass {
                     catch(e) {
                         log.error('Error when processing newly discovered devices '+EJSON.stringify(devices),e);
                     }
+                },
+                onCommand:function() {
+
                 }
             });
     }

@@ -116,8 +116,22 @@ Schemas.SensorsMetadata=new SimpleSchema({
         autoform: {
             icon: 'fa-random'
         }
+    },
+    canBeControlledRemotely : {
+        label: "Allow Remote Control",
+        type: Boolean,
+        optional: true
+    },
+    remoteControlLabel: {
+        label: "Call name",
+        type: String,
+        optional: true
+    },
+    uuid: {
+        label: "UUID (for external integrations)",
+        type: String,
+        optional: true
     }
-
 });
 
 Collections.SensorsMetadata.attachSchema(Schemas.SensorsMetadata);

@@ -45,7 +45,7 @@ MyBlocks=function() {
         init: function() {
             let filter={class: {$in :[SensorClasses.ANALOG_INPUT,SensorClasses.ANALOG_INPUT_0_100,SensorClasses.BINARY_INPUT,SensorClasses.STRING]}};
             this.appendDummyInput()
-                .appendField("Get Value")
+                .appendField("Get Sensor Value")
                 .appendField(new Blockly.FieldSensor('...',filter),'selectedSensor');
             this.setOutput(true, null);
             this.setColour(330);
@@ -107,7 +107,7 @@ MyBlocks=function() {
             let filter={class: {$in :[SensorClasses.ANALOG_OUTPUT,SensorClasses.ANALOG_OUTPUT_0_100,SensorClasses.BINARY_OUTPUT,SensorClasses.RGB,SensorClasses.RGBW,SensorClasses.STRING]}};
             this.appendValueInput("value")
                 .setCheck("Number")
-                .appendField("Set Value");
+                .appendField("Set Actor Value");
 
             this.appendDummyInput()
 

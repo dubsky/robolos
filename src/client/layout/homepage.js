@@ -42,7 +42,7 @@ var loadStats=function () {
 };
 
 var wait=function() {
-        return Meteor.subscribe('systemStatistics');
+        return App.subscribeNoCaching('systemStatistics');
 };
 
 Template.homepage.onCreated(function() {

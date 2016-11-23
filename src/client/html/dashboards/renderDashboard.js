@@ -181,7 +181,7 @@ SensorStatusCollection = new Mongo.Collection('sensorStatusCollection');
 
 Template.renderDashboard.onCreated(function(){
         var dashboardId=Session.get(CURRENT_DASHBOARD_ID);
-        this.subscription=Meteor.subscribe('sensorStatusCollection',{id: dashboardId });
+        this.subscription=App.subscribeNoCaching('sensorStatusCollection',{id: dashboardId });
         console.log('created subscription id:'+this.subscription.subscriptionId);
 });
 

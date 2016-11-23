@@ -108,7 +108,7 @@ Template.widgetIconSelector.events({
 });
 
 BuiltinWidgetIconsCollection = new Mongo.Collection('builtinWidgetIcons');
-Meteor.subscribe('builtinWidgetIcons');
+App.subscribeNoCaching('builtinWidgetIcons');
 
 Template.widgetIconSelector.onCreated(function() {
     var template=Template.instance();

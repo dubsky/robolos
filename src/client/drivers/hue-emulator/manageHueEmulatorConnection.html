@@ -1,0 +1,35 @@
+<template name="manageHueEmulatorConnection">
+
+    <div class="ui container">
+
+        <section class="content-header narrow">
+            <h1 class="ui dividing header">Philips HUE Bridge Emulator
+                <small>Use devices that integrate with Philips HUE to control Robolos</small>
+            </h1>
+            <br/>
+        </section>
+
+        <section class="content">
+            <div class="ui message">
+                <div class="header">
+                    How to use this with Echo
+                </div>
+                <ul class="list">
+                    <li>Go to <a href="{{pathFor 'sensors'}}">sensor management</a> and enable remote control of some sensors (binary outputs only)</li>
+                    <li>Open <a href="http://alexa.amazon.com">Alexa application</a> and search for devices.</li>
+                    <li>After you add them you can ask 'Alexa, turn off [call name]'</li>
+                </ul>
+            </div>
+            <div>
+                {{#autoForm id="addHueEmulatorDriverInstanceForm" type="method-update" meteormethod=getMethod doc=driverInstance collection=collection schema=schema}}
+                    {{> afQuickField name="title"}}
+                    {{> afQuickField name="description" rows=3}}
+                    <br/>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default cancel">Cancel</button>
+                {{/autoForm}}
+            </div>
+        </section>
+    </div>
+
+</template>

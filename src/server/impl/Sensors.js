@@ -130,6 +130,11 @@ class SensorsClass {
         }, 1000);
     }
 
+    getSensorStatusByID(sensorId) {
+        let sensor=Sensors.getSensorIdComponents(sensorId);
+        return Sensors.getSensorStatus(sensor[0],sensor[1],sensor[2]);
+    }
+
     getSensorStatus(driverInstance, device, sensor) {
         let fromCache = this.knownSensors[SHARED.getSensorID(driverInstance, device, sensor)];
         if (fromCache === undefined) return fromCache;
@@ -152,6 +157,18 @@ class SensorsClass {
 
     performAction(driverInstanceId, deviceId, sensorId, variable, action, parameters) {
         try {
+
+            let status = this.getSensorStatus(driverInstanceId, deviceId, sensorId);
+            if (status === undefined) {
+                log.error('sensor ' + SHARED.getSensorID(driverInstanceId, deviceId, sensorId) + ' is not available to the runtime right now');
+                return;
+            }
+            if (status.class === SensorClasses.BINARY_OUTPUT && action === SENSOR_ACTIONS.SET_VALUE) {
+                let a=parameters ? SENSOR_ACTIONS.SWITCH_ON : SENSOR_ACTIONS.SWITCH_OFF;
+                this.performAction(driverInstanceId, deviceId, sensorId, variable,a);
+                return;
+            }
+
             var driver = Devices.getDriverByInstanceID(driverInstanceId);
             var driverInstance=Drivers.getDriverInstance(driverInstanceId);
 
@@ -163,12 +180,7 @@ class SensorsClass {
             }
 
             if (action === SENSOR_ACTIONS.SWITCH_OVER) {
-                var status = this.getSensorStatus(driverInstanceId, deviceId, sensorId);
-                console.log('switch over',status);
-                if ((typeof status) === 'undefined') {
-                    log.error('sensor ' + SHARED.getSensorID(driverInstanceId, deviceId, sensorId) + ' is not available to the runtime right now');
-                    return;
-                }
+                //console.log('switch over',status);
                 if (status.value === 0) {
                     this.performAction(driverInstanceId, deviceId, sensorId, chosenVariable, SENSOR_ACTIONS.SWITCH_ON);
                 }
@@ -177,13 +189,6 @@ class SensorsClass {
                 }
             }
             else {
-
-                var status = this.getSensorStatus(driverInstanceId, deviceId, sensorId);
-                if (status === undefined) {
-                    log.error('sensor ' + SHARED.getSensorID(driverInstanceId, deviceId, sensorId) + ' is not available to the runtime right now');
-                    return;
-                }
-                
                 if (action === SENSOR_ACTIONS.SWITCH_ON || action === SENSOR_ACTIONS.SWITCH_OFF) {
 
                     log.event(

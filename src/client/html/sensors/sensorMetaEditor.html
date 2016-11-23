@@ -34,6 +34,20 @@
                 <div class="ui segment">
                     {{> afQuickField name="delayTurnOnAction" checkboxType="toggle"}}
                 </div>
+            {{else}}
+                {{#if isBinary}}
+                    <div class="ui segment">
+                        <div class="fields">
+                            <div class="ten wide field">
+                                {{> afQuickField name="canBeControlledRemotely" checkboxType="toggle"}}
+                            </div>
+                            <div class="six wide field labelField">
+                                <span class="help-block" style="font-style: italic">Allow direct control by remote devices like <a href="https://www.amazon.com/Amazon-Echo-Bluetooth-Speaker-with-WiFi-Alexa/dp/B00X4WHP5E">Amazon Echo</a> or <a href="https://madeby.google.com/home/">Google Home.</a></span>
+                            </div>
+                        </div>
+                        {{> afQuickField name="remoteControlLabel"}}
+                    </div>
+                {{/if}}
             {{/if}}
             {{#if isBinary}}
                 <div class="ui segment">

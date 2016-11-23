@@ -36,9 +36,18 @@ SHARED={
 
 App = {
 
+    subscribeNoCaching:function(topic) {
+        return Meteor.subscribe.apply(undefined,arguments);
+    },
+
     subscribe:function(topic) {
         return Meteor.subscribe.apply(undefined,arguments);
     },
+
+    call:function(topic) {
+        return Meteor.call.apply(undefined,arguments);
+    },
+
 
     routeCollection: function(collection,additionalWaitList) {
         Router.route(collection,

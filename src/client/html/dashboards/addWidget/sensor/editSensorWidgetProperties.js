@@ -54,7 +54,7 @@ Template.editSensorWidgetProperties.onRendered(function() {
         document.forms['editProperties'].elements['icon'].value=this.data.widget.icon;
         let sensorId=SHARED.getSensorID(this.data.widget.driver,this.data.widget.device,this.data.widget.sensor);
         let sensor=SensorsCollection.findOne(sensorId);
-        Template.editSensorWidgetProperties.handle=Meteor.subscribe('sensors',
+        Template.editSensorWidgetProperties.handle=App.subscribeNoCaching('sensors',
                {_id:sensorId },
                false,
                {

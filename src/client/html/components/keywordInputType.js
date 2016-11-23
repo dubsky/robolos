@@ -1,4 +1,4 @@
-Meteor.subscribe('keywords');
+App.subscribeNoCaching('keywords');
 
 Template.keywordInputType.helpers({
     keywords: function() {

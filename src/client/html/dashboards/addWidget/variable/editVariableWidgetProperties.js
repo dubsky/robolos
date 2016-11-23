@@ -44,7 +44,7 @@ Template.editVariableWidgetProperties.onRendered(function() {
         document.forms['editProperties'].elements['title'].value = this.data.widget.title;
         document.forms['editProperties'].elements['icon'].value = this.data.widget.icon;
 
-        Template.editVariableWidgetProperties.handle=Meteor.subscribe('variables',{_id:this.data.widget.variable},() => {
+        Template.editVariableWidgetProperties.handle=App.subscribeNoCaching('variables',{_id:this.data.widget.variable},() => {
             let variable=Collections.Variables.findOne(this.data.widget.variable);
             let name='';
             if(variable!==undefined) name=variable.title;

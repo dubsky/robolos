@@ -27,14 +27,14 @@ Template.log.events({
     'click .stopLogUpdate' : function() {
         if (Template.log.subscribed.get()) {
             Template.log.handle.stop();
-            Template.log.handle=Meteor.subscribe('log',{update:false});
+            Template.log.handle=App.subscribeNoCaching('log',{update:false});
             Template.log.subscribed.set(false);
         }
     },
     'click .startLogUpdate' : function() {
         if (!Template.log.subscribed.get()) {
             Template.log.handle.stop();
-            Template.log.handle=Meteor.subscribe('log',{update:true});
+            Template.log.handle=App.subscribeNoCaching('log',{update:true});
             Template.log.subscribed.set(true);
         }
     }
@@ -52,7 +52,7 @@ Template.log.onDestroyed(function() {
 Router.route('log',{
     name: 'log',
     subscriptions: function() {
-        var handle=Meteor.subscribe('log',{update:false});
+        var handle=App.subscribeNoCaching('log',{update:false});
         Template.log.subscribed=new ReactiveVar(false);
         Template.log.handle=handle;
         return handle;

@@ -1,7 +1,8 @@
+import uuid from 'uuid';
+
 /*
 SensorMetadata are merged into sensor object for the client
  */
-
 SensorMetadata={
 
     cache: {},
@@ -31,6 +32,11 @@ SensorMetadata={
     updateSensorMeta: function(docId,meta) {
         var oldMetaFromDb=Collections.SensorsMetadata.findOne(docId);
         if(oldMetaFromDb===undefined) oldMetaFromDb={};
+        // auto assigne uuid for sensor for remote integrations that require it
+        if(oldMetaFromDb.uuid===undefined) {
+            if(meta.$set ===undefined) meta.$set={};
+            meta.$set.uuid=uuid.v1()
+        }
         Collections.SensorsMetadata.upsert(docId,meta);
         var metaFromDb=Collections.SensorsMetadata.findOne(docId);
         // when we change reversed logic we have to change the interpretation of the current value as well
