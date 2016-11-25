@@ -536,8 +536,8 @@ MyBlocks=function() {
             ('function(context, whenDone) {\n      var callCompletion=true;\n  '+continue_statements+      '    if (callCompletion) whenDone(context);\n   },\n');
         let cancel=!cancel_statements_exist ? 'undefined, whenDone);\n' :
             ('   function(context,whenDone) {\n      var callCompletion=true;\n'+cancel_statements+   '      if (callCompletion) whenDone(context);\n   },\n   whenDone);')
-        var code = 'callCompletion=false;\ncontext.executeAction( '+actionValue.id+','+actionValue.name+
-            ',function(context, whenDone) {\n      var callCompletion=true;\n  '+statements_statements+'    if (callCompletion) whenDone(context);\n   },\n' +
+        var code = 'callCompletion=false;\ncontext.executeAction( "'+actionValue.id+'","'+actionValue.name+
+            '",function(context, whenDone) {\n      var callCompletion=true;\n  '+statements_statements+'    if (callCompletion) whenDone(context);\n   },\n' +
             pause +
             cont +
             cancel;

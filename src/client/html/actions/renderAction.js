@@ -1,6 +1,7 @@
 CURRENT_ACTION="currentAction";
 CURRENT_ACTION_ID="currentActionID";
 
+
 function getAction() {
     var action=Session.get(CURRENT_ACTION);
     return action;
@@ -45,7 +46,11 @@ Template.renderAction.events({
         return false;
     },
 
-    'click .goBack' : Template.renderAction.actionEditationFinished
+    'click .goBack' : Template.renderAction.actionEditationFinished,
+    'click .cancel' : function () {
+        Router.go('actions');
+    }
+
 });
 
 Template.renderAction.save=function(workspace) {
@@ -55,16 +60,18 @@ Template.renderAction.save=function(workspace) {
 
     var code = Blockly.JavaScript.workspaceToCode(workspace);
     console.log(code);
+    console.log(xml_text);
 
     if(xml_text!==action.xml)
     {
+        console.log('saving');
         Meteor.call('updateAction',{$set :{ xml: xml_text, code:code } },action._id);
     }
 };
 
 
 Template.renderAction.onRendered(function() {
-
+    INITIAL_ACTION_RENDERING_MODE=ACTION_RENDERING_MODE.CODE;
     if(isWide()) {
         var blocklyDiv = document.getElementById('blocklyDiv');
         var blocklyArea = document.getElementById('blocklyArea');
@@ -119,8 +126,9 @@ Template.renderAction.onRendered(function() {
         catch(e) {
             console.log(e);
         }
-
+console.log('hooking l.');
         this.workspace.addChangeListener(() => {
+            console.log('on chg?!');
             Template.renderAction.save(this.workspace);
         });
     }

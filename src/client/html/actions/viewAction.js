@@ -12,7 +12,10 @@ Template.viewAction.helpers({
         return EditContext.getContext();
     }
 
+});
 
+Template.viewAction.onCreated(function() {
+    INITIAL_ACTION_RENDERING_MODE=ACTION_RENDERING_MODE.PROPERTIES;
 });
 
 
@@ -36,13 +39,17 @@ Router.route('action-properties/:_id',
     }
 );
 
-function backToActionFlow() {
+
+backToActionFlow=function() {
     var context=EditContext.getContext();
     if(context!=null) {
         context.keepEditContextOnNextRoute();
+        Router.go('render.action', { _id: Session.get(CURRENT_ACTION)._id });
     }
-    Router.go('render.action', { _id: Session.get(CURRENT_ACTION)._id });
-}
+    else {
+        Router.go('actions');
+    }
+};
 
 Template.viewAction.events({
 
@@ -52,12 +59,15 @@ Template.viewAction.events({
     },
 
     'click .viewContent' :function(event) {
-        backToActionFlow();
+        var context=EditContext.getContext();
+        if(context!=null) {
+            context.keepEditContextOnNextRoute();
+        }
+        Router.go('render.action', { _id: Session.get(CURRENT_ACTION)._id });
         return false;
     },
 
     'click .goBack' : Template.renderAction.actionEditationFinished
-
 });
 
 AutoForm.hooks({

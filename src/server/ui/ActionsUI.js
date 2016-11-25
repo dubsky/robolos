@@ -79,7 +79,7 @@ Meteor.publish('actions', function(filter,reactive){
                 self.removed("actions",actionId);
             },
             onUpdate : function(action) {
-                self.changed("actions",action._id, ActionsUI.cleanAction(action));
+                self.changed("actions",action._id, ActionsUI.cleanAction(action,true));
             }
         });
 

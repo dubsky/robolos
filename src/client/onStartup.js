@@ -56,10 +56,17 @@ let ApplicationController = RouteController.extend({
     }
 });
 
-
-Meteor.disconnect();
-Meteor.reconnect({url:'http://localhost:3000', force:true});
+if(Meteor.isCordova)
+{
+    Meteor.disconnect();
+    Meteor.reconnect({url:'http://localhost:3000', force:true});
 //if(Meteor.connection!==undefined) Meteor.connection.onReconnect=()=> { Router.go('homepage'); };
+    setInterval(()=> {
+        if (!Meteor.status().connected) {
+            Router.go('setConnection');
+        }
+    }, 3000);
+}
 
 Router.configure({
     loadingTemplate: 'loading',
@@ -68,13 +75,6 @@ Router.configure({
     controller: ApplicationController
 });
 
-
-
-setInterval(()=> {
-    if(!Meteor.status().connected) {
-        Router.go('setConnection');
-    }
-},3000);
 
 /*setTimeout(()=> {
     Meteor.disconnect();

@@ -170,7 +170,7 @@ class ActionContext {
         let subAction=ActionsInstance.getAction(actionId);
         if(subAction!==undefined) {
             let subActionStatus=subAction.actionStatus;
-            if(subActionStatus.completionListeners!==undefined) subActionStatus.completionListeners.push(whenDone);
+            if(subActionStatus!==undefined && subActionStatus.completionListeners!==undefined) subActionStatus.completionListeners.push(whenDone);
                else subActionStatus.completionListeners=[ whenDone ];
             switch(subActionStatus.status) {
                 case undefined:

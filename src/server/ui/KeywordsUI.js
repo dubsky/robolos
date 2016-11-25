@@ -62,7 +62,7 @@ Meteor.publish("keywords", function() {
     var self = this;
     // insert a record for the first time
 
-    self.added("keywords",Collections.Keywords.KEYWORD_DOCUMENT_ID, this.keywordsDocument);
+    self.added("keywords",Collections.Keywords.KEYWORD_DOCUMENT_ID, KeywordsUI.keywordsDocument);
     self.ready();
 
     var id=KeywordsUI.addEventListener({

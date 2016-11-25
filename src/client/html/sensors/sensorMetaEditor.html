@@ -42,10 +42,16 @@
                                 {{> afQuickField name="canBeControlledRemotely" checkboxType="toggle"}}
                             </div>
                             <div class="six wide field labelField">
-                                <span class="help-block" style="font-style: italic">Allow direct control by remote devices like <a href="https://www.amazon.com/Amazon-Echo-Bluetooth-Speaker-with-WiFi-Alexa/dp/B00X4WHP5E">Amazon Echo</a> or <a href="https://madeby.google.com/home/">Google Home.</a></span>
+                                <a style="float:right" class="ui mini button helpOnRemote">Learn more...</a>
                             </div>
                         </div>
-                        {{> afQuickField name="remoteControlLabel"}}
+                        {{#if remoteControlDisabled}}
+                            {{> afQuickField name="remoteControlLabel"}}
+                        {{else}}
+                            <div class="field disabled">
+                                {{> afQuickField name="remoteControlLabel"}}
+                            </div>
+                        {{/if}}
                     </div>
                 {{/if}}
             {{/if}}

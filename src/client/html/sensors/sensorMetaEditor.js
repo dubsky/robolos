@@ -74,6 +74,10 @@ Template.sensorMetaEditor.helpers({
 
     schema: function() {
         return Schemas.SensorsMetadata;
+    },
+
+    remoteControlDisabled() {
+        return AutoForm.getFieldValue('canBeControlledRemotely','sensorMetaForm');
     }
 });
 
@@ -84,6 +88,11 @@ Template.sensorMetaEditor.events({
 
     'click .cancel': function() {
         EditContext.setContext(undefined);
+    },
+
+    'click .helpOnRemote': function() {
+        $('#sensorMetaEditor').modal('hide');
+        Router.go('manageHueEmulatorConnection/create');
     }
 });
 

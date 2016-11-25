@@ -1,5 +1,5 @@
 <template name="actionLink">
-    <a href="/actions/{{_id}}">
+    <a href="{{route}}{{_id}}">
         {{#if disabled}}
             <span title="This schedule has been disabled" style="text-decoration:line-through">{{title}}</span>
         {{else}}

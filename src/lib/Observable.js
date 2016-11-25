@@ -20,21 +20,21 @@ Observable=class Observable {
     fireRemoveEvent(id) {
         for(var i in this.listeners.listenerObjects) {
             var f=this.listeners.listenerObjects[i];
-            if((typeof f.onRemove)!=='undefined') f.onRemove(id);
+            if(f.onRemove!==undefined) f.onRemove(id);
         }
     }
 
     fireUpdateEvent(o) {
         for(var i in this.listeners.listenerObjects) {
             var f=this.listeners.listenerObjects[i];
-            if((typeof f.onUpdate)!=='undefined') f.onUpdate(o);
+            if(f.onUpdate!==undefined) f.onUpdate(o);
         }
     }
 
     fireCreateEvent(o) {
         for(var i in this.listeners.listenerObjects) {
             var f=this.listeners.listenerObjects[i];
-            if((typeof f.onCreate)!=='undefined') f.onCreate(o);
+            if(f.onCreate!==undefined) f.onCreate(o);
         }
     }
 
