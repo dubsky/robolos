@@ -35,7 +35,6 @@ Meteor.publish('variables', function(filter,reactive){
     );
 
     self.ready();
-
     if(reactive!==false) {
         var id=VariablesInstance.addEventListener({
             onRemove : function(variableId) {
@@ -43,6 +42,7 @@ Meteor.publish('variables', function(filter,reactive){
             },
 
             onUpdate : function(variable) {
+                console.log('sending value update');
                 self.changed("variables",variable._id, variable);
             },
 

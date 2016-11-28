@@ -47,7 +47,7 @@ Router.route('variables/:_id',
     {
         name: 'render.variable',
         waitOn: function() {
-            return [App.subscribe('variables',{_id : this.params._id},false),App.subscribe('actions')];
+            return [App.subscribe('variables',{_id : this.params._id},true),App.subscribe('actions')];
         }
     }
 );

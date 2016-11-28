@@ -1,7 +1,10 @@
 <template name="sensorNameField">
-    {{#if name}}
-        <a class="startEditor">{{name}}</a>
-    {{else}}
-        <a class="startEditor">Click to define...</a>
+    <a class="startEditor">
+    {{#if name}}{{name}}{{else}}Click to define...{{/if}}
+    {{#if canBeControlledRemotely}}
+    <span style="float: right">
+        <i class="comments icon" title="Remote control enabled"></i>
+     </span>
     {{/if}}
+    </a>
 </template>

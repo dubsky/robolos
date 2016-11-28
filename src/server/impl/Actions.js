@@ -169,9 +169,14 @@ class ActionContext {
     executeAction(actionId,actionName,statements,onPause,onContinue,onCancel,whenDone) {
         let subAction=ActionsInstance.getAction(actionId);
         if(subAction!==undefined) {
+            ActionsInstance.makeSureActionIsCompiled(subAction);
             let subActionStatus=subAction.actionStatus;
-            if(subActionStatus!==undefined && subActionStatus.completionListeners!==undefined) subActionStatus.completionListeners.push(whenDone);
-               else subActionStatus.completionListeners=[ whenDone ];
+            if(subActionStatus.completionListeners!==undefined) {
+                subActionStatus.completionListeners.push(whenDone);
+            }
+            else {
+                subActionStatus.completionListeners=[ whenDone ];
+            }
             switch(subActionStatus.status) {
                 case undefined:
                 case ActionStatus.READY:
@@ -362,6 +367,30 @@ class Actions {
         ActionsUI.fireUpdateEvent(action);
     }
 
+
+    makeSureActionIsCompiled(action) {
+        let actionStatus=action.actionStatus;
+        let originalStatus=actionStatus;
+        if(actionStatus===undefined || actionStatus.status===ActionStatus.SYNTAX_ERROR) {
+            try {
+                actionStatus={
+                    actionId: action._id,
+                    status: ActionStatus.READY,
+                    code: eval('('+action.code+')')
+                };
+            }
+            catch(e) {
+                log.error('Unable to evaluate an action.',e);
+                log.error(action.code);
+                actionStatus={ actionId: action._id, lastRun: new Date().getTime(), status : ActionStatus.SYNTAX_ERROR };
+                if(originalStatus===undefined) {
+                    ActionsUI.fireUpdateEvent(action);
+                }
+            }
+            this.cache[action._id].actionStatus=actionStatus;
+        }
+    }
+
     /**
      * Start the given action
      * @param action action to execute
@@ -385,27 +414,9 @@ class Actions {
             action
         );
 
-        let actionStatus=action.actionStatus;
-        let originalStatus=actionStatus;
-        if(actionStatus===undefined || actionStatus.status===ActionStatus.SYNTAX_ERROR) {
-            try {
-                actionStatus={
-                    actionId: action._id,
-                    status: ActionStatus.READY,
-                    code: eval('('+action.code+')')
-                };
-            }
-            catch(e) {
-                log.error('Unable to evaluate an action.',e);
-                log.error(action.code);
-                actionStatus={ actionId: action._id, lastRun: new Date().getTime(), status : ActionStatus.SYNTAX_ERROR };
-                if(originalStatus===undefined) {
-                    ActionsUI.fireUpdateEvent(action);
-                }
-            }
-            this.cache[action._id].actionStatus=actionStatus;
-        }
+        this.makeSureActionIsCompiled(action);
 
+        let actionStatus=action.actionStatus;
         if (actionStatus.status!==ActionStatus.READY) return;
         actionStatus.lastRun=new Date().getTime();
         actionStatus.status=ActionStatus.RUNNING;

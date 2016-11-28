@@ -43,7 +43,7 @@ Router.route('schedules/:_id',
     {
         name: 'render.schedule',
         waitOn: function() {
-            return [App.subscribe('schedules',{_id : this.params._id},false),App.subscribe('actions')];
+            return [App.subscribe('schedules',{_id : this.params._id},true),App.subscribe('actions')];
         }
     }
 );

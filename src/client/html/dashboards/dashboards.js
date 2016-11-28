@@ -71,6 +71,6 @@ Template.dashboards.onDestroyed(function() {
 App.routeCollection('dashboards');
 
 // we want them to be loaded all the time
-App.subscribe('dashboards');
+App.subscribeNoCaching('dashboards');
 
 
