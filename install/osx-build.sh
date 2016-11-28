@@ -6,7 +6,7 @@ export PATH=$PATH:/usr/local/bin
 echo Electrify
 cd ../install
 cd electrify
-#sh <electrify.sh
+sh < electrify.sh
 cd ../../src
 echo Adding ios
 cd /Users/vlada/jenkins/workspace/robolos-osx/src
