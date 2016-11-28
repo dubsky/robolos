@@ -1,10 +1,10 @@
 cd ..\src
 rem serialport previously installed using -g
-call npm install serialport@1.7.4
+rem call meteor npm install -g serialport@1.7.4
 echo METEOR NPM INSTALL
 call meteor npm install
-echo METEOR BUILD
-call meteor build ../out --server localhost:3000
+rem echo METEOR BUILD
+rem call meteor build ../out --server localhost:3000
 cd ..
 cd install
 cd electrify
