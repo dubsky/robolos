@@ -280,7 +280,22 @@
       "keywords": [
         "Irrigation",
         "Demo"
-      ]
+      ],
+      "allowAutomaticControl": false
+    }
+  },
+  "schedules": {
+    "ZbTo5rRdfxwZDr8qS": {
+      "_id": "ZbTo5rRdfxwZDr8qS",
+      "title": "Irrigation Schedule",
+      "keywords": [
+        "Demo"
+      ],
+      "type": "cron",
+      "cron": [
+        "0 5 * * 2;Every week on Tuesday at 5:00"
+      ],
+      "action": "4ckfxvMvQgBycXJkH"
     }
   }
 }

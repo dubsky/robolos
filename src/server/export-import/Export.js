@@ -25,6 +25,10 @@ class ExportClass {
                     info=JSON.parse(dom._);
                     this.exportSchedule(context,info.id);
                     return;
+                case 'selectedAction':
+                    info=JSON.parse(dom._);
+                    this.exportAction(context,info.id);
+                    return;
             }
         }
 
@@ -35,12 +39,21 @@ class ExportClass {
         }
     }
 
+    exportActionSchedules(context,id) {
+        Collections.Schedules.find({action: id}).forEach(
+            (schedule) => {
+                this.exportSchedule(context,schedule._id);
+            }
+        )
+    }
+
     exportAction(context,id) {
         if (context.actions===undefined) context.actions={};
         if(context.actions[id]===undefined) {
             let action = Collections.Actions.findOne(id);
             if (action === undefined) return;
             context.actions[id]=action;
+            this.exportActionSchedules(context,id);
             let xml = action.xml;
             if (xml !== undefined) {
                 let parse = Meteor.wrapAsync(xml2js.parseString);
