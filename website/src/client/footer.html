@@ -6,9 +6,9 @@
                 <div class="three wide column">
                     <h4 class="ui inverted header">Server</h4>
                     <div class="ui inverted link list">
-                        <a href="#" class="item">Windows</a>
-                        <a href="https://bitbucket.org/dubsky/robolos-builds/downloads/robolos-linux-intel-1.0.tar.gz" class="item">Linux/Intel</a>
-                        <a href="https://bitbucket.org/dubsky/robolos-builds/downloads/robolos-linux-arm-1.0.tar.gz" class="item">Linux/ARM</a>
+                        <a href="{{pathFor 'downloadWindowsDesktop'}}" class="item">Windows</a>
+                        <a href="{{pathFor 'downloadIntelLinuxServer'}}" class="item">Linux/Intel</a>
+                        <a href="{{pathFor 'downloadArmLinuxServer'}}" class="item">Linux/ARM</a>
                         <a href="#" class="item">OS X</a>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
             <div class="ui inverted section divider"></div>
             <img src="/img/logo.png" class="ui centered mini image">
             <div class="ui horizontal inverted small divided link list">
-                <a class="item" href="#">Contact Us</a>
+                <a class="item" href="{{pathFor contact}}">Contact Us</a>
                 <a class="item" href="#">Terms and Conditions</a>
             </div>
         </div>

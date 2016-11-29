@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 echo Performing Electrify
 cd ../../src
+meteor add arboleya:electrify
 electrify package -- --icon=public\favicon\favicon-96x96.icns
 cd ../install/electrify
 DIR=../../src/.electrify/.dist/robolos-darwin-x64

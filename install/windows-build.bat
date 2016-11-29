@@ -1,4 +1,5 @@
 cd ..\src
+call meteor add arboleya:electrify
 call meteor npm install
 rem call meteor build ../out --server localhost:3000
 cd ..

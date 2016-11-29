@@ -1,61 +1,270 @@
 {
   "dashboards": {
-    "bidjjX9JCBqfe2cF9": {
-      "_id": "bidjjX9JCBqfe2cF9",
-      "title": "Test",
+    "eFwETJJMTbuv2D86Q": {
+      "_id": "eFwETJJMTbuv2D86Q",
+      "title": "Demo",
+      "description": "Sample dashbord to give you something to start with",
+      "menuPositionNumber": 1,
+      "keywords": [
+        "Demo"
+      ],
       "widgets": [
         {
-          "id": "3467c9ecd51aabb131bc9964",
-          "title": "Irrigation Full Cycle",
-          "icon": "built-in-icon-iri2.jpg",
-          "type": "action",
-          "action": "4ckfxvMvQgBycXJkH"
+          "id": "94cc652de9caf78303c4228d",
+          "title": "Outside Temperature",
+          "icon": "built-in-icon-S_TEMP.high.png",
+          "type": "sensor",
+          "driver": "Demo Driver",
+          "device": "77",
+          "sensor": "1"
         },
         {
-          "id": "55a7aeb1e07fd5e6df50fb4c",
-          "title": "Auto Irrigation",
+          "id": "ceb42797f211ef6a5c03a839",
+          "title": "Garden",
+          "icon": "built-in-plan-PLAN3.jpg",
+          "type": "floorPlan",
+          "widgets": [
+            {
+              "id": "9a164acca90bfe9989c96a72",
+              "title": "",
+              "icon": "built-in-icon-Sprinkler.png",
+              "type": "sensor",
+              "driver": "Demo Driver",
+              "device": "77",
+              "sensor": "2",
+              "geometry": {
+                "x": 62,
+                "y": 17.666666666666668
+              }
+            },
+            {
+              "id": "2b42758a114964b21f30cb88",
+              "title": "",
+              "icon": "built-in-icon-S_TEMP.low.png",
+              "type": "sensor",
+              "driver": "Demo Driver",
+              "device": "77",
+              "sensor": "1",
+              "geometry": {
+                "x": 192.33333333333334,
+                "y": 202.66666666666666
+              }
+            },
+            {
+              "id": "bc326ec32f05359779385b7d",
+              "title": "",
+              "icon": "built-in-icon-Sprinkler.png",
+              "type": "sensor",
+              "driver": "Demo Driver",
+              "device": "77",
+              "sensor": "2",
+              "geometry": {
+                "x": 105.66666666666667,
+                "y": 17.333333333333332
+              }
+            },
+            {
+              "id": "4a2001a198608c4da95d6632",
+              "title": "",
+              "icon": "built-in-icon-Sprinkler.png",
+              "type": "sensor",
+              "driver": "Demo Driver",
+              "device": "77",
+              "sensor": "2",
+              "geometry": {
+                "x": 161.33333333333334,
+                "y": 17
+              }
+            },
+            {
+              "id": "6160daf4a5ed35d807963cd9",
+              "title": "",
+              "icon": "built-in-icon-Sprinkler.png",
+              "type": "sensor",
+              "driver": "Demo Driver",
+              "device": "77",
+              "sensor": "2",
+              "geometry": {
+                "x": 21,
+                "y": 95.33333333333333
+              }
+            },
+            {
+              "id": "01a3c765930107a384986a3c",
+              "title": "",
+              "icon": "built-in-icon-Sprinkler.png",
+              "type": "sensor",
+              "driver": "Demo Driver",
+              "device": "77",
+              "sensor": "2",
+              "geometry": {
+                "x": 180.33333333333334,
+                "y": 67.33333333333333
+              }
+            },
+            {
+              "id": "08a3cd189ee9b0253b3dba93",
+              "title": "",
+              "icon": "built-in-icon-Sprinkler.png",
+              "type": "sensor",
+              "driver": "Demo Driver",
+              "device": "77",
+              "sensor": "2",
+              "geometry": {
+                "x": 27,
+                "y": 201
+              }
+            },
+            {
+              "id": "e570d1207c8632e50e529539",
+              "title": "",
+              "icon": "built-in-icon-Sprinkler.png",
+              "type": "sensor",
+              "driver": "Demo Driver",
+              "device": "77",
+              "sensor": "2",
+              "geometry": {
+                "x": 117.33333333333333,
+                "y": 207.33333333333334
+              }
+            },
+            {
+              "id": "8414b070f7038ad21226d4e0",
+              "title": "",
+              "icon": "built-in-icon-Sprinkler.png",
+              "type": "sensor",
+              "driver": "Demo Driver",
+              "device": "77",
+              "sensor": "2",
+              "geometry": {
+                "x": 73,
+                "y": 146.33333333333334
+              }
+            },
+            {
+              "id": "da627beb590c30a71f1a1dea",
+              "title": "",
+              "icon": "built-in-icon-Sprinkler.png",
+              "type": "sensor",
+              "driver": "Demo Driver",
+              "device": "77",
+              "sensor": "2",
+              "geometry": {
+                "x": 181,
+                "y": 111
+              }
+            }
+          ]
+        },
+        {
+          "id": "65326408e32fccb17153f519",
+          "title": "Irrigation Mode",
           "icon": "built-in-icon-iri2.jpg",
           "type": "variable",
           "variable": "4X6hoD3HwhPGa4sC3"
         },
         {
-          "id": "10d573134624eeeddd3b0a66",
-          "title": "Temp",
-          "icon": "built-in-icon-S_TEMP.low.png",
-          "type": "sensor",
-          "driver": "Demo Driver",
-          "device": "77",
-          "sensor": "2"
+          "id": "c912a7f5f787b1a96b974c48",
+          "title": "Irrigate Now",
+          "icon": "built-in-icon-iri2.jpg",
+          "type": "action",
+          "action": "4ckfxvMvQgBycXJkH"
         }
       ],
       "geometry": [
         {
-          "id": "3467c9ecd51aabb131bc9964",
-          "col": 1,
-          "row": 1,
+          "id": "94cc652de9caf78303c4228d",
+          "col": 4,
+          "row": 2,
           "size_x": 1,
           "size_y": 1
         },
         {
-          "id": "55a7aeb1e07fd5e6df50fb4c",
+          "id": "ceb42797f211ef6a5c03a839",
           "col": 1,
-          "row": 2,
+          "row": 1,
+          "size_x": 3,
+          "size_y": 3
+        },
+        {
+          "id": "65326408e32fccb17153f519",
+          "col": 4,
+          "row": 3,
+          "size_x": 1,
+          "size_y": 1
+        },
+        {
+          "id": "c912a7f5f787b1a96b974c48",
+          "col": 4,
+          "row": 1,
           "size_x": 1,
           "size_y": 1
         }
       ]
     }
   },
+  "sensors": {
+    "Demo Driver;77;1": {
+      "meta": {
+        "_id": "Demo Driver;77;1",
+        "name": "Demo Temperature  Sensor",
+        "keywords": [
+          "Demo"
+        ],
+        "resolution": 0.1,
+        "onChangeAction": "sWjvzFsS54BBnhXs2",
+        "sensitivity": 0.1
+      },
+      "_id": "Demo Driver;77;1",
+      "class": "ANALOG_INPUT",
+      "type": "S_TEMP"
+    },
+    "Demo Driver;77;2": {
+      "meta": {
+        "_id": "Demo Driver;77;2",
+        "name": "Demo Relay",
+        "keywords": [
+          "Demo"
+        ],
+        "canBeControlledRemotely": true,
+        "remoteControlLabel": "Demo Relay",
+        "reversedLogic": false,
+        "description": "Echo Test",
+        "uuid": "1956abb0-b0d2-11e6-9c0f-87e8096f5a00"
+      },
+      "_id": "Demo Driver;77;2",
+      "class": "BINARY_OUTPUT",
+      "type": "S_LIGHT"
+    }
+  },
+  "driverInstances": {
+    "Demo Driver": {
+      "_id": "Demo Driver",
+      "title": "Driver 1",
+      "driver": "Demo Driver",
+      "description": "Used to test Robolos system"
+    }
+  },
   "actions": {
+    "sWjvzFsS54BBnhXs2": {
+      "_id": "sWjvzFsS54BBnhXs2",
+      "title": "T2",
+      "calendarDroppable": false,
+      "xml": "<xml xmlns=\"http://www.w3.org/1999/xhtml\"><block type=\"action\" id=\"135\" deletable=\"false\" x=\"70\" y=\"70\"><statement name=\"NAME\"><block type=\"controls_if\" id=\"136\"><mutation else=\"1\"></mutation><value name=\"IF0\"><block type=\"logic_compare\" id=\"137\"><field name=\"OP\">GT</field><value name=\"A\"><block type=\"get_value\" id=\"138\"><field name=\"selectedSensor\">{\"id\":\"Demo Driver;77;1\",\"name\":\"Demo Temperature  Sensor\"}</field></block></value><value name=\"B\"><block type=\"math_number\" id=\"139\"><field name=\"NUM\">23.5</field></block></value></block></value><statement name=\"DO0\"><block type=\"action_status\" id=\"140\"><field name=\"status\">A</field></block></statement><statement name=\"ELSE\"><block type=\"action_status\" id=\"141\"><field name=\"status\">B</field></block></statement></block></statement></block></xml>",
+      "code": "function(context,whenDone) {\n  var callCompletion=true;\n  if ((context.getValue(\"Demo Driver;77;1\",\"Demo Temperature  Sensor\")) > 23.5) {\n    context.status=\"A\";\n  } else {\n    context.status=\"B\";\n  }\n\n  if (callCompletion) whenDone(context);\n}"
+    },
     "4ckfxvMvQgBycXJkH": {
       "_id": "4ckfxvMvQgBycXJkH",
       "title": "Full Irrigation Cycle",
       "description": "Regular watring cycle for the whole garden",
       "calendarDroppable": true,
-      "xml": "<xml xmlns=\"http://www.w3.org/1999/xhtml\"><block type=\"action\" id=\"17\" deletable=\"false\" x=\"160\" y=\"50\"><statement name=\"NAME\"><block type=\"controls_if\" id=\"18\"><value name=\"IF0\"><block type=\"get_control_variable\" id=\"19\"><field name=\"selectedVariable\">{\"id\":\"4X6hoD3HwhPGa4sC3\",\"name\":\"Automatic Irrigation\"}</field></block></value><statement name=\"DO0\"><block type=\"switch\" id=\"20\"><field name=\"operation\">switchOn</field><field name=\"selectedSensor\">{\"id\":\"INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_1_1np_bin_\",\"name\":\"Irrigation - Valve 1\"}</field><next><block type=\"action_status\" id=\"21\"><field name=\"status\">Frontal Area...</field><next><block type=\"after\" id=\"22\"><mutation haspause=\"false\" hascontinue=\"false\" hascancel=\"true\"></mutation><field name=\"unit\">MINUTES</field><value name=\"delay\"><block type=\"math_number\" id=\"23\"><field name=\"NUM\">20</field></block></value><statement name=\"statements\"><block type=\"switch\" id=\"24\"><field name=\"operation\">switchOff</field><field name=\"selectedSensor\">{\"id\":\"INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_1_1np_bin_\",\"name\":\"Irrigation - Valve 1\"}</field><next><block type=\"switch\" id=\"25\"><field name=\"operation\">switchOn</field><field name=\"selectedSensor\">{\"id\":\"INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_2_1np_bin_\",\"name\":\"Irrigation - Valve 2\"}</field><next><block type=\"action_status\" id=\"26\"><field name=\"status\">Backyard...</field><next><block type=\"after\" id=\"27\"><mutation haspause=\"false\" hascontinue=\"false\" hascancel=\"false\"></mutation><field name=\"unit\">MINUTES</field><value name=\"delay\"><block type=\"math_number\" id=\"28\"><field name=\"NUM\">15</field></block></value><statement name=\"statements\"><block type=\"switch\" id=\"29\"><field name=\"operation\">switchOff</field><field name=\"selectedSensor\">{\"id\":\"INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_2_1np_bin_\",\"name\":\"Irrigation - Valve 2\"}</field></block></statement></block></next></block></next></block></next></block></statement><statement name=\"cancel_statement\"><block type=\"switch\" id=\"30\"><field name=\"operation\">switchOff</field><field name=\"selectedSensor\">{\"id\":\"INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_2_1np_bin_\",\"name\":\"Irrigation - Valve 2\"}</field></block></statement></block></next></block></next></block></statement></block></statement></block></xml>",
-      "code": "function(context,whenDone) {\n  var callCompletion=true;\n  if (context.getVariableValue(\"4X6hoD3HwhPGa4sC3\",\"Automatic Irrigation\")) {\n    context.switchOutput(SENSOR_ACTIONS.SWITCH_ON,\"INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_1_1np_bin_\",\"Irrigation - Valve 1\");\n    context.status=\"Frontal Area...\";\n    callCompletion=false;\n    context.setTimeout( (20)*60000,function(context, whenDone) {\n          var callCompletion=true;\n        context.switchOutput(SENSOR_ACTIONS.SWITCH_OFF,\"INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_1_1np_bin_\",\"Irrigation - Valve 1\");\n      context.switchOutput(SENSOR_ACTIONS.SWITCH_ON,\"INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_2_1np_bin_\",\"Irrigation - Valve 2\");\n      context.status=\"Backyard...\";\n      callCompletion=false;\n      context.setTimeout( (15)*60000,function(context, whenDone) {\n            var callCompletion=true;\n          context.switchOutput(SENSOR_ACTIONS.SWITCH_OFF,\"INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_2_1np_bin_\",\"Irrigation - Valve 2\");\n          if (callCompletion) whenDone(context);\n         },\n      undefined,\n      undefined,\n      undefined, whenDone);\n        if (callCompletion) whenDone(context);\n       },\n    undefined,\n    undefined,\n       function(context,whenDone) {\n          var callCompletion=true;\n      context.switchOutput(SENSOR_ACTIONS.SWITCH_OFF,\"INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_2_1np_bin_\",\"Irrigation - Valve 2\");\n          if (callCompletion) whenDone(context);\n       },\n       whenDone);}\n\n  if (callCompletion) whenDone(context);\n}",
+      "xml": "<xml xmlns=\"http://www.w3.org/1999/xhtml\"><block type=\"action\" id=\"17\" deletable=\"false\" x=\"160\" y=\"50\"><statement name=\"NAME\"><block type=\"controls_if\" id=\"18\"><value name=\"IF0\"><block type=\"get_control_variable\" id=\"19\"><field name=\"selectedVariable\">{\"id\":\"4X6hoD3HwhPGa4sC3\",\"name\":\"Automatic Irrigation\"}</field></block></value><statement name=\"DO0\"><block type=\"switch\" id=\"20\"><field name=\"operation\">switchOn</field><field name=\"selectedSensor\">{\"id\":\"Demo Driver;77;2\",\"name\":\"Demo Relay\"}</field><next><block type=\"action_status\" id=\"21\"><field name=\"status\">Wait...</field><next><block type=\"after\" id=\"22\"><mutation haspause=\"true\" hascontinue=\"true\" hascancel=\"true\"></mutation><field name=\"unit\">SECONDS</field><value name=\"delay\"><block type=\"math_number\" id=\"23\"><field name=\"NUM\">15</field></block></value><statement name=\"statements\"><block type=\"switch\" id=\"Lguu{%qg(/Rq~]]X`-]?\"><field name=\"operation\">switchOff</field><field name=\"selectedSensor\">{\"id\":\"Demo Driver;77;2\",\"name\":\"Demo Relay\"}</field></block></statement><statement name=\"pause_statement\"><block type=\"switch\" id=\"Ab*Yt%rS+NxDsQph]R{]\"><field name=\"operation\">switchOff</field><field name=\"selectedSensor\">{\"id\":\"Demo Driver;77;2\",\"name\":\"Demo Relay\"}</field></block></statement><statement name=\"continue_statement\"><block type=\"switch\" id=\"gh^4IeuMphpj.)|KuKC2\"><field name=\"operation\">switchOn</field><field name=\"selectedSensor\">{\"id\":\"Demo Driver;77;2\",\"name\":\"Demo Relay\"}</field></block></statement><statement name=\"cancel_statement\"><block type=\"switch\" id=\"fS~J{Sz1/UFv!Wtzn~At\"><field name=\"operation\">switchOff</field><field name=\"selectedSensor\">{\"id\":\"Demo Driver;77;2\",\"name\":\"Demo Relay\"}</field></block></statement></block></next></block></next></block></statement></block></statement></block></xml>",
+      "code": "function(context,whenDone) {\n  var callCompletion=true;\n  if (context.getVariableValue(\"4X6hoD3HwhPGa4sC3\",\"Automatic Irrigation\")) {\n    context.switchOutput(SENSOR_ACTIONS.SWITCH_ON,\"Demo Driver;77;2\",\"Demo Relay\");\n    context.status=\"Wait...\";\n    callCompletion=false;\n    context.setTimeout( (15)*1000,function(context, whenDone) {\n          var callCompletion=true;\n        context.switchOutput(SENSOR_ACTIONS.SWITCH_OFF,\"Demo Driver;77;2\",\"Demo Relay\");\n        if (callCompletion) whenDone(context);\n       },\n    function(context, whenDone) {\n          var callCompletion=true;\n        context.switchOutput(SENSOR_ACTIONS.SWITCH_OFF,\"Demo Driver;77;2\",\"Demo Relay\");\n        if (callCompletion) whenDone(context);\n       },\n    function(context, whenDone) {\n          var callCompletion=true;\n        context.switchOutput(SENSOR_ACTIONS.SWITCH_ON,\"Demo Driver;77;2\",\"Demo Relay\");\n        if (callCompletion) whenDone(context);\n       },\n       function(context,whenDone) {\n          var callCompletion=true;\n      context.switchOutput(SENSOR_ACTIONS.SWITCH_OFF,\"Demo Driver;77;2\",\"Demo Relay\");\n          if (callCompletion) whenDone(context);\n       },\n       whenDone);}\n\n  if (callCompletion) whenDone(context);\n}",
       "executeOnStartup": false,
-      "disabled": true
+      "disabled": false,
+      "keywords": [
+        "Demo"
+      ]
     }
   },
   "variables": {
@@ -65,64 +274,13 @@
       "modifiedBy": "both",
       "type": "boolean",
       "booleanValue": true,
-      "trueValueLabel": "Enabled",
+      "trueValueLabel": "Auto",
       "falseValueLabel": "Disabled",
       "description": "Allow the user to switch off automatic watering",
       "keywords": [
-        "Irrigation"
+        "Irrigation",
+        "Demo"
       ]
-    }
-  },
-  "sensors": {
-    "INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_1_1np_bin_": {
-      "meta": {
-        "_id": "INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_1_1np_bin_",
-        "name": "Irrigation - Valve 1",
-        "keywords": [
-          "1np",
-          "binary",
-          "c-hm-1113m",
-          "garaz"
-        ],
-        "reversedLogic": false
-      },
-      "_id": "INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_1_1np_bin_",
-      "class": "BINARY_OUTPUT",
-      "type": "BINARY_OUTPUT"
-    },
-    "INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_2_1np_bin_": {
-      "meta": {
-        "_id": "INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_2_1np_bin_",
-        "name": "Irrigation - Valve 2",
-        "keywords": [
-          "1np",
-          "binary",
-          "c-hm-1113m",
-          "garaz"
-        ],
-        "reversedLogic": false
-      },
-      "_id": "INELS2-CFox;C_HM-1113M_Podvojna_Rozvodnice Garaz;C_HM_1113M_Podvojna_Rozvodnice_Garaz_Zavlaha_Z_Ventil_2_1np_bin_",
-      "class": "BINARY_OUTPUT",
-      "type": "BINARY_OUTPUT"
-    }
-  },
-  "driverInstances": {
-    "INELS2-CFox": {
-      "_id": "INELS2-CFox",
-      "title": "CFox",
-      "description": "My Home Network",
-      "properties": {
-        "address": "192.168.1.1",
-        "port": 61682
-      },
-      "driver": "INELS2/CFox"
-    },
-    "Demo Driver": {
-      "_id": "Demo Driver",
-      "title": "Driver 1",
-      "driver": "Demo Driver",
-      "description": "Used to test Robolos system"
     }
   }
 }

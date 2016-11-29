@@ -1,4 +1,9 @@
 Meteor.startup(function () {
+
+    process.on('uncaughtException', function (err) {
+        log.error('Uncaught exception', err);
+    });
+
     log.info("System is going to be initialized");
     log.info("Loading settings");
     Settings.start();
@@ -27,8 +32,4 @@ Meteor.startup(function () {
     log.info('Prepare keyword cache');
     KeywordsUI.start();
     log.info('Initialization Done.');
-
-    process.on('uncaughtException', function (err) {
-        log.error('Uncaught exception', err);
-    })
 });

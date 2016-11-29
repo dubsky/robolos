@@ -1,6 +1,6 @@
 Template.actionStatus.helpers({
     status: function() {
-        if ((typeof this.actionStatus)!=='undefined') return this.actionStatus.status; else return "READY";
+        if (this.actionStatus!==undefined) return this.actionStatus.status===undefined ? "NOT INITIALIZED" : this.actionStatus.status; else return "NOT INITIALIZED";
     }
 });
 

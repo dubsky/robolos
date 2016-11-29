@@ -58,7 +58,7 @@ Schemas.Settings=new SimpleSchema({
     privateAddressPattern: {
         label:'Trusted IP address space allowing anonymous access (regular expression)',
         optional:true,
-        defaultValue:'^(127.0.0.1|192.168.*)',
+        defaultValue: global.Electrify===undefined ? '^(127.0.0.1|192.168.*)' : '.*',
         type: String
     },
     /* security */
@@ -108,3 +108,5 @@ Schemas.Settings=new SimpleSchema({
 });
 
 Collections.Settings.attachSchema(Schemas.Settings);
+
+console.log('ELEC:',global.Electrify);

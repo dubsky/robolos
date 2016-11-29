@@ -50,5 +50,5 @@ standard-minifier-css
 standard-minifier-js
 email
 meteorhacks:ssr
-arboleya:electrify
+#arboleya:electrify
 meteorhacks:subs-manager
