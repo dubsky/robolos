@@ -77,3 +77,9 @@ ConnectionManager.subscribeNoCaching('userSettings', { onReady: settingsReady })
 AutoForm.setDefaultTemplate("semanticUI");
 Uploader.uploadUrl = Meteor.absoluteUrl("upload"); // Cordova needs absolute URL
 
+/*
+window.onload = function() {
+    console.log('onload');
+    document.body.innerHtml='Connecting...';
+}*/
+

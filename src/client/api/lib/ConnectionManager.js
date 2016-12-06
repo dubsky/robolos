@@ -2,8 +2,10 @@
 
 let connection;
 if(Meteor.isCordova) {
+    let url=ClientConfiguration.getServerBaseUrl();
+    if(url===undefined) Router.go('no-connection');
     Meteor.disconnect();
-    connection=DDP.connect('http://localhost:3080/');
+    connection=DDP.connect(url);
     connection.onReconnect=(()=>{
         console.log('reconnect:',connection.status());
     });
@@ -29,10 +31,16 @@ else {
 
 setInterval(()=> {
     if (!connection.status().connected) {
-        console.log('not connected; redirecting to set connection');
-        Router.go('no-connection');
+        try { Router.start(); } catch(e) {console.log(e);}
+        let settings=Router.current()!==undefined && Router.current().route.getName()==='settings' && !Session.get(NO_CONNECTION_RECHECK);
+        let connection=Router.current()!==undefined && Router.current().route.getName()==='no-connection';
+        let changeServerURL=Router.current()!==undefined && Router.current().route.getName()==='changeServerURL';
+        if( !connection && !settings & !changeServerURL) {
+            console.log('not connected; redirecting to set connection');
+            Router.go('no-connection');
+        }
     }
-}, 10000);
+}, 5000);
 
 let subscriptionManager = new SubscriptionManager({
     connection: connection,

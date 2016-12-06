@@ -11,7 +11,9 @@
 
         <section class="content">
 
-            {{>connectionSettings}}
+            {{#if allowServerChange}}
+                {{>connectionSettings}}
+            {{/if}}
             {{>securitySettings}}
             {{>import}}
             {{>emailSettings}}

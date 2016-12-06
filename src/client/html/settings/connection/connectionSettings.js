@@ -1,27 +1,28 @@
-var SESSION_KEY='Template.connectionSettings.saved';
+let CONNECTION_SAVED_SESSION_KEY='Template.connectionSettings.saved';
 
 Template.connectionSettings.helpers({
 
 
     settings: function() {
-        let doc=Collections.Settings.findOne(Collections.Settings.SETTINGS_DOCUMENT_ID,{reactive:false});
-        Schemas.Settings.clean(doc);
-        return doc;
+        return ClientConfiguration.get();
     },
 
     saveDisabled: function() {
-        return Session.get(SESSION_KEY);
+        return Session.get(CONNECTION_SAVED_SESSION_KEY);
     },
 
+    baseURL() {
+        return ClientConfiguration.getServerBaseUrl();
+    }
 });
 
 Template.connectionSettings.onCreated(function() {
-    Session.set(SESSION_KEY,true);
+    Session.set(CONNECTION_SAVED_SESSION_KEY,true);
 });
 
 Template.connectionSettings.onRendered(function() {
     let enable=function() {
-        Session.set(SESSION_KEY,false);
+        Session.set(CONNECTION_SAVED_SESSION_KEY,false);
     };
     let selector=$("#connectionSettingsForm :input");
     selector.keyup(enable);
@@ -31,6 +32,13 @@ Template.connectionSettings.onRendered(function() {
 
 Template.connectionSettings.events({
     'click .customSubmit': function() {
+        console.log($('#serverBaseURL').val());
+        let c=ClientConfiguration.get();
+        c.baseURL=$('#serverBaseURL').val();
+        ClientConfiguration.set(c);
+        Session.set(NO_CONNECTION_RECHECK,false);
+        window.location.href='/';
+        return false;
     }
 });
 

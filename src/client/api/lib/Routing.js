@@ -20,8 +20,10 @@ class RoutingClass  {
                     console.log('subscribing');
                     if(self.nonLoginPages[Router.current().route.getName()] || Meteor.userId()!=null || self.anonymousAccess)
                     {
-                        return [ConnectionManager.subscribe(collection, { onReady: function() {
-                            console.log("ready:"+collection);},onStop: function(e) {console.log("stop:"+collection,e);} })].concat(additionalWaitList());
+                        let subscriptions=[ConnectionManager.subscribe(collection, { onReady: function() {
+                            console.log("ready:"+collection);},onStop: function(e) {console.log("stop:"+collection,e);} })];
+                        if(additionalWaitList!==undefined) subscriptions.concat(additionalWaitList());
+                        return subscriptions;
                     }
                     else
                     {
