@@ -43,7 +43,9 @@ Router.route('schedules/:_id',
     {
         name: 'render.schedule',
         waitOn: function() {
-            return [App.subscribe('schedules',{_id : this.params._id},true),App.subscribe('actions')];
+            return Routing.filterUnauthorizedSubscriptions(()=>{
+                return [ConnectionManager.subscribe('schedules',{_id : this.params._id},true),ConnectionManager.subscribe('actions')];
+            });
         }
     }
 );
@@ -65,7 +67,7 @@ Template.viewSchedule.events({
 
     'click .delete' :function(event) {
         console.log(this);
-        Meteor.call('deleteSchedule',this.schedule._id,function() {
+        ConnectionManager.call('deleteSchedule',this.schedule._id,function() {
             Session.set(CURRENT_GRAPH_SESSION_KEY,undefined);
             EditContext.setContext(undefined);
             calculateReturnRoute();

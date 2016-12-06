@@ -61,7 +61,9 @@ Router.route('user/:_id', function () {
     {
         name: 'render.user',
         waitOn: function() {
-            return [App.subscribe("userAccounts")];
+            return Routing.filterUnauthorizedSubscriptions(()=>{
+                return [ConnectionManager.subscribe("userAccounts")];
+            });
         }
     }
 );

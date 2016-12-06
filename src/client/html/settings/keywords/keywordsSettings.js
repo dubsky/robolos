@@ -19,7 +19,7 @@ Template.keywordSettings.onCreated(function() {
 Template.keywordSettings.events({
 
     'click .resetKeywords' :function(event) {
-        Meteor.call('resetKeywords',function() {
+        ConnectionManager.call('resetKeywords',function() {
             Session.set('Template.settings.keywordsReset',true);
         });
     }

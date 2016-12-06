@@ -16,7 +16,7 @@ Template.import.onCreated(function() {
 Template.import.events({
     'click .importDemoData' : function() {
         Session.set(DEMO_IMPORTED, true);
-        Meteor.call('importDemoData',function(e) {
+        ConnectionManager.call('importDemoData',function(e) {
             console.log(e);
         });
         return false;

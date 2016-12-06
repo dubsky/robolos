@@ -36,7 +36,7 @@ Template.logSettings.onDestroyed(function() {
 Template.logSettings.events({
     'click .customSubmit': function() {
         if (AutoForm.validateForm('logSettingsForm')) {
-            Meteor.call('updateSettings',Template.logSettings.modifier,function() { Session.set(SESSION_KEY,true); });
+            ConnectionManager.call('updateSettings',Template.logSettings.modifier,function() { Session.set(SESSION_KEY,true); });
         }
         return false;
     }

@@ -7,7 +7,7 @@ let CreateUserSchema=new SimpleSchema({
 
         custom: function() {
             if (this.isSet) {
-                Meteor.call("isEmailUsed", this.value, function(error, result) {
+                ConnectionManager.call("isEmailUsed", this.value, function(error, result) {
                     if (result) {
                         CreateUserSchema.namedContext('addUserForm').addInvalidKeys([{
                             name: "email",

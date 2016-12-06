@@ -1,4 +1,4 @@
-Collections.Keywords = new Mongo.Collection("keywords");
+Collections.Keywords = CollectionManager.Collection("keywords");
 Collections.Keywords.KEYWORD_DOCUMENT_ID='keywords';
 
 Schemas.Keywords=new SimpleSchema({

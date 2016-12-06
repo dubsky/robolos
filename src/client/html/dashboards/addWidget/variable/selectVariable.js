@@ -36,7 +36,9 @@ Router.route('dashboard-selectVariable/:_id',
     {
         name: 'dashboard-selectVariable',
         waitOn: function() {
-            return App.subscribe('variables');
+            return Routing.filterUnauthorizedSubscriptions(()=>{
+                return ConnectionManager.subscribe('variables');
+            });
         }
     }
 );

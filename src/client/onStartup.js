@@ -1,11 +1,12 @@
+// global session variables
 USER_ROLE="CURRENT_USER_ROLE";
 
+let routesConfigured=false;
 
-var routesConfigured=false;
-
-var settingsReady=function() {
+let settingsReady=function() {
     let settings=Collections.Settings.findOne(Collections.Settings.USER_SETTINGS_DOCUMENT_ID,{reactive:false});
     if(settings==undefined) { console.log('No settigs received so far !'); return; }
+    console.log('settings received',settings);
     Session.set(USER_ROLE,settings.role);
 
     AccountsTemplates._initialized = false;
@@ -19,12 +20,11 @@ var settingsReady=function() {
             Router.go('homepage');
         },
         onSubmitHook: function() {
-            App.subscribeNoCaching('userSettings',false,{ onReady: function() {
+            ConnectionManager.subscribe('userSettings',false,{ onReady: function() {
                 let settings=Collections.Settings.findOne(Collections.Settings.USER_SETTINGS_DOCUMENT_ID,{reactive:false});
                 Session.set(USER_ROLE,settings.role === undefined ? Collections.Users.RoleKeys.administrator : settings.role);
             } } );
         }
-
     });
 
     if(!routesConfigured)
@@ -36,18 +36,26 @@ var settingsReady=function() {
 
     if(settings.requireUserLogin)
     {
-        let softPages=settings.anonymousAccessToDashboards ? ['/','homepage', 'render.dashboard.redirect', 'render.dashboard','calendar','render.schedule']: [];
+        let softPages=settings.anonymousAccessToDashboards ? ['/','homepage', 'render.dashboard.redirect', 'render.dashboard','calendar','render.schedule','no-connection']: ['no-connection'];
         let allSoftPages=_.pluck(AccountsTemplates.routes, 'name').concat(softPages);
+        Routing.registerNonLoginPages(allSoftPages);
+        console.log('allSoftPages',allSoftPages);
         Router.plugin('ensureSignedIn', {
             except: allSoftPages
         });
+
     }
+    else
+    {
+        Routing.setAnonymousAccess(true);
+    }
+    Router.start();
 };
 
 let ApplicationController = RouteController.extend({
     layoutTemplate: 'layout',
     waitOn: function () {
-        if(this.url!=='/setConnection') return Meteor.subscribe('userSettings', { onReady: settingsReady } );
+        //if(this.url!=='/no-connection') return ConnectionManager.subscribeNoCaching('userSettings', { onReady: settingsReady } );
     },
     onBeforeAction : function () {
         var context=EditContext.getContext();
@@ -56,29 +64,15 @@ let ApplicationController = RouteController.extend({
     }
 });
 
-if(Meteor.isCordova)
-{
-    Meteor.disconnect();
-    Meteor.reconnect({url:'http://localhost:3000', force:true});
-//if(Meteor.connection!==undefined) Meteor.connection.onReconnect=()=> { Router.go('homepage'); };
-    setInterval(()=> {
-        if (!Meteor.status().connected) {
-            Router.go('setConnection');
-        }
-    }, 3000);
-}
-
 Router.configure({
     loadingTemplate: 'loading',
     /* notFoundTemplate: 'notFound',*/
     layoutTemplate: 'layout',
-    controller: ApplicationController
+    controller: ApplicationController,
+    autoStart:false
 });
 
-
-/*setTimeout(()=> {
-    Meteor.disconnect();
-},10000);*/
+ConnectionManager.subscribeNoCaching('userSettings', { onReady: settingsReady });
 
 AutoForm.setDefaultTemplate("semanticUI");
 Uploader.uploadUrl = Meteor.absoluteUrl("upload"); // Cordova needs absolute URL

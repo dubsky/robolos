@@ -46,7 +46,7 @@ Template.securitySettings.events({
 
     'click .customSubmit': function() {
         if (AutoForm.validateForm('securitySettingsForm')) {
-            Meteor.call('updateSettings',Template.securitySettings.modifier,function() { Session.set(SESSION_KEY,true); });
+            ConnectionManager.call('updateSettings',Template.securitySettings.modifier,function() { Session.set(SESSION_KEY,true); });
         }
         return false;
     }

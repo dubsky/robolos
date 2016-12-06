@@ -1,4 +1,4 @@
-Collections.SystemStatistics = new Mongo.Collection("systemStatistics");
+Collections.SystemStatistics = CollectionManager.Collection("systemStatistics");
 Collections.SystemStatistics.SYSTEM_STATISTICS_ID='system.statistics';
 
 Schemas.SystemStatistics=new SimpleSchema({

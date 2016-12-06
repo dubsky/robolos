@@ -59,9 +59,9 @@ Template.actionsOverlay.events({
 });
 
 Template.actionsOverlay.startAction=function(id) {
-    Meteor.call('startAction', id);
+    ConnectionManager.call('startAction', id);
 };
 
 Template.actionsOverlay.switchOver=function(driver, device, sensor) {
-    Meteor.call('actionSwitchOver', driver, device, sensor);
+    ConnectionManager.call('actionSwitchOver', driver, device, sensor);
 };

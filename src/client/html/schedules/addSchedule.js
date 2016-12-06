@@ -66,7 +66,9 @@ Router.route('schedule-create', function () {
     {
         name: 'addSchedule',
         waitOn: function() {
-            return [App.subscribe('actions')];
+            return Routing.filterUnauthorizedSubscriptions(()=>{
+                return [ConnectionManager.subscribe('actions')];
+            });
         }
     }
 );

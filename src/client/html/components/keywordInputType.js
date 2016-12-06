@@ -47,7 +47,7 @@ AutoForm.addInputType('keywords',{
                 if(!found) newKeywords[newKeywords.length]=originalKeyword;
             }
             //console.log(newKeywords);
-            if(newKeywords.length!==0) Meteor.call("addKeywords", newKeywords);
+            if(newKeywords.length!==0) ConnectionManager.call("addKeywords", newKeywords);
             return keywords;
         }
         catch(e)

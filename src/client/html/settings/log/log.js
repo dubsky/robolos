@@ -27,14 +27,14 @@ Template.log.events({
     'click .stopLogUpdate' : function() {
         if (Template.log.subscribed.get()) {
             Template.log.handle.stop();
-            Template.log.handle=App.subscribeNoCaching('log',{update:false});
+            Template.log.handle=ConnectionManager.subscribeNoCaching('log',{update:false});
             Template.log.subscribed.set(false);
         }
     },
     'click .startLogUpdate' : function() {
         if (!Template.log.subscribed.get()) {
             Template.log.handle.stop();
-            Template.log.handle=App.subscribeNoCaching('log',{update:true});
+            Template.log.handle=ConnectionManager.subscribeNoCaching('log',{update:true});
             Template.log.subscribed.set(true);
         }
     }
@@ -52,7 +52,7 @@ Template.log.onDestroyed(function() {
 Router.route('log',{
     name: 'log',
     subscriptions: function() {
-        var handle=App.subscribeNoCaching('log',{update:false});
+        var handle=ConnectionManager.subscribeNoCaching('log',{update:false});
         Template.log.subscribed=new ReactiveVar(false);
         Template.log.handle=handle;
         return handle;

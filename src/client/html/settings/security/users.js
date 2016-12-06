@@ -36,7 +36,7 @@ Template.users.events({
     'click .removeUsers': function(event, instance) {
         var selection=Session.get('selectedUsers');
         if((typeof selection)!=='undefined') {
-            Meteor.call('deleteUsers',selection);
+            ConnectionManager.call('deleteUsers',selection);
         }
     }
 
@@ -60,7 +60,9 @@ Router.route('users',
     {
         name: 'users',
         waitOn: function() {
-            return [App.subscribe("userAccounts")];
+            return Routing.filterUnauthorizedSubscriptions(()=>{
+                return [ConnectionManager.subscribe("userAccounts")];
+            });
         }
     }
 );

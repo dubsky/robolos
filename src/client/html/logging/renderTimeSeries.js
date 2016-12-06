@@ -80,7 +80,7 @@ Template.renderTimeSeries.onRendered(function() {
         picker.on('apply.daterangepicker', function(ev, picker) {
             //console.log('apply.daterangepicker '+picker.startDate.format('MM/DD/YYYY h:mm A'));
             self.since=picker.startDate;
-            Meteor.call('DataLoggingUI_getSensorData',self.data.sensor,picker.startDate.valueOf(),function (error, result) {
+            ConnectionManager.call('DataLoggingUI_getSensorData',self.data.sensor,picker.startDate.valueOf(),function (error, result) {
                 processedData=convertData(result);
                 let conf = {
                     "xScale": "time",
@@ -131,7 +131,7 @@ Template.renderTimeSeries.onRendered(function() {
     });
 
     let since=this.since.valueOf();
-    Meteor.call('DataLoggingUI_getSensorData',this.data.sensor,since,function (error, result) {
+    ConnectionManager.call('DataLoggingUI_getSensorData',this.data.sensor,since,function (error, result) {
         processedData=convertData(result);
         if(chart!=null) {
             chart.setData(processedData.data);

@@ -60,7 +60,7 @@ EditWidgetProperties={
         //console.log('update dashboard',dashboard);
         //console.log(Template.renderDashboardRedirect.subscriptionHandle);
         //Template.renderDashboardRedirect.subscriptionHandle.stop();
-        Meteor.call('updateDashboard',{$set : { widgets : dashboard.widgets}},dashboard._id,function() {
+        ConnectionManager.call('updateDashboard',{$set : { widgets : dashboard.widgets}},dashboard._id,function() {
             Router.go('render.dashboard',{_id: dashboard._id});
         });
         Session.set(Template.floorPlanWidget.ADD_TO,undefined);

@@ -18,7 +18,9 @@ Router.route('sensors',
     {
         name: 'sensors',
         waitOn: function() {
-            return [App.subscribe("allSensorMetadata"),App.subscribe("sensors"),App.subscribe("actions")];
+            return Routing.filterUnauthorizedSubscriptions(()=>{
+                return [ConnectionManager.subscribe("allSensorMetadata"),ConnectionManager.subscribe("sensors"),ConnectionManager.subscribe("actions")];
+            });
         }
     }
 );

@@ -49,6 +49,10 @@ Template.header.helpers({
     },
     dashboards: function () {
         return Collections.Dashboards.find({},{sort: ["menuPositionNumber","asc"]});
+    },
+
+    loggedIn() {
+        return Meteor.userId()!==null;
     }
 
 });

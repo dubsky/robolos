@@ -27,7 +27,9 @@ Router.route('dashboard-properties/:_id',
     {
         name: 'render.dashboard.properties',
         waitOn: function() {
-            return App.subscribe('dashboards');
+            return Routing.filterUnauthorizedSubscriptions(()=>{
+                return ConnectionManager.subscribe('dashboards');
+            });
         }
     }
 );

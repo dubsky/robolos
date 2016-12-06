@@ -33,7 +33,7 @@ Template.variables.events({
         var selection=Session.get('selectedVariables');
         if((typeof selection)!=='undefined') {
             for(var i=0;i<selection.length;i++) {
-                Meteor.call('deleteVariable',selection[i]);
+                ConnectionManager.call('deleteVariable',selection[i]);
                 //Collections.Variables.remove(selection[i]);
             }
             Session.set('selectedVariables',[]);
@@ -51,6 +51,6 @@ Template.variables.onDestroyed(function() {
     HeightController.onAreaDestroyed();
 });
 
-App.routeCollection('variables');
+Routing.routeCollection('variables');
 
 

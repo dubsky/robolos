@@ -30,7 +30,7 @@ Template.driverInstances.events({
         var selection=Session.get('selectedDriverInstances');
         if((typeof selection)!=='undefined') {
             for(var i=0;i<selection.length;i++) {
-                Meteor.call('deleteDriverInstance',selection[i]);
+                ConnectionManager.call('deleteDriverInstance',selection[i]);
                 //Collections.DriverInstances.remove(selection[i]);
             }
             Session.set('selectedDriverInstances',[]);
@@ -48,4 +48,5 @@ Template.driverInstances.onDestroyed(function() {
     HeightController.onAreaDestroyed();
 });
 
-App.routeCollection('driverInstances',[App.subscribe('drivers')]);
+Routing.routeCollection('driverInstances',()=>{[ConnectionManager.subscribe('drivers',{ onReady: function() {
+    console.log("ready: drivers");},onStop: function(e) {console.log("stop drivers:",e);} })]});

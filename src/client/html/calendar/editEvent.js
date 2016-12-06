@@ -45,7 +45,7 @@ Template.editEvent.events({
     },
     'click .deleteEvent': function() {
         $('#calendar').fullCalendar('removeEvents', this.event.id);
-        Meteor.call('deleteSchedule',this.event.id,function() { $('#eventEditor').modal('hide'); });
+        ConnectionManager.call('deleteSchedule',this.event.id,function() { $('#eventEditor').modal('hide'); });
     },
     'click .close':function() {
         $('#eventEditor').modal('hide');

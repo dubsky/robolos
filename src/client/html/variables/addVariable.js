@@ -63,7 +63,9 @@ Router.route('variable-create', function () {
     {
         name: 'addVariable',
         waitOn: function() {
-            return [App.subscribe('actions')];
+            return Routing.filterUnauthorizedSubscriptions(()=>{
+                return [ConnectionManager.subscribe('actions')];
+            });
         }
     }
 );

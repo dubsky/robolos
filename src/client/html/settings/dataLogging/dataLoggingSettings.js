@@ -42,7 +42,7 @@ Template.dataLoggingSettings.onDestroyed(function() {
 
 Template.dataLoggingSettings.events({
     'click .clearLogData' : function() {
-        Meteor.call('DataLoggingUI_clearData',function() {
+        ConnectionManager.call('DataLoggingUI_clearData',function() {
             Session.set(LOG_DATA_CLEARED, true);
         });
         return false;
@@ -50,7 +50,7 @@ Template.dataLoggingSettings.events({
 
     'click .customSubmit': function() {
         if (AutoForm.validateForm('dataLoggingSettingsForm')) {
-            Meteor.call('updateSettings',Template.dataLoggingSettings.modifier,function() { Session.set(SESSION_KEY,true); });
+            ConnectionManager.call('updateSettings',Template.dataLoggingSettings.modifier,function() { Session.set(SESSION_KEY,true); });
         }
         return false;
     }

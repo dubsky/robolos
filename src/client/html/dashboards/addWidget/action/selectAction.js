@@ -35,7 +35,9 @@ Router.route('dashboard-selectAction/:_id',
     {
         name: 'dashboard-selectAction',
         waitOn: function() {
-            return App.subscribe('actions');
+            return Routing.filterUnauthorizedSubscriptions(()=>{
+                return ConnectionManager.subscribe('actions');
+            });
         }
     }
 );

@@ -1,4 +1,4 @@
-Collections.LoggedData=new Mongo.Collection('datalog');
+Collections.LoggedData=CollectionManager.Collection('datalog');
 Schemas.LoggedData=new SimpleSchema({
     sensor: {
         type: String,

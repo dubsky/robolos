@@ -1,4 +1,4 @@
-Collections.Settings = new Mongo.Collection("settings");
+Collections.Settings = CollectionManager.Collection("settings");
 Collections.Settings.SETTINGS_DOCUMENT_ID='settings';
 Collections.Settings.USER_SETTINGS_DOCUMENT_ID='userSettings';
 
@@ -58,7 +58,7 @@ Schemas.Settings=new SimpleSchema({
     privateAddressPattern: {
         label:'Trusted IP address space allowing anonymous access (regular expression)',
         optional:true,
-        defaultValue: global.Electrify===undefined ? '^(127.0.0.1|192.168.*)' : '.*',
+        defaultValue: Meteor.isElectron ? '^(127.0.0.1|192.168.*)' : '.*',
         type: String
     },
     /* security */
@@ -108,5 +108,3 @@ Schemas.Settings=new SimpleSchema({
 });
 
 Collections.Settings.attachSchema(Schemas.Settings);
-
-console.log('ELEC:',global.Electrify);

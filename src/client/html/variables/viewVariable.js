@@ -47,7 +47,9 @@ Router.route('variables/:_id',
     {
         name: 'render.variable',
         waitOn: function() {
-            return [App.subscribe('variables',{_id : this.params._id},true),App.subscribe('actions')];
+            return Routing.filterUnauthorizedSubscriptions(()=>{
+                return [ConnectionManager.subscribe('variables',{_id : this.params._id},true),ConnectionManager.subscribe('actions')];
+            });
         }
     }
 );

@@ -45,7 +45,7 @@ Template.renderSensorValue.helpers({
 Template.renderSensorValue.IdGenerator=0;
 
 Template.renderSensorValue.switchOver=function(id,driver,deviceId,sensorId) {
-    Meteor.call('actionSwitchOver',driver,deviceId,sensorId);
+    ConnectionManager.call('actionSwitchOver',driver,deviceId,sensorId);
     console.log($('#'+id));
     $('#'+id).popup('destroy');
 };
@@ -80,7 +80,7 @@ Template.renderSensorValue.events({
                             hide_min_max:true,
                             force_edges:true,
                             onChange: function (data) {
-                                Meteor.call('actionSetValue',self.driver,self.deviceId,self.sensorId,data.from); //console.log("onChange");
+                                ConnectionManager.call('actionSetValue',self.driver,self.deviceId,self.sensorId,data.from); //console.log("onChange");
                             }
                         });
                     }
@@ -90,7 +90,7 @@ Template.renderSensorValue.events({
     },
 
     'click .binarySwitch' : function() {
-        Meteor.call('actionSwitchOver',this.driver,this.deviceId,this.sensorId);
+        ConnectionManager.call('actionSwitchOver',this.driver,this.deviceId,this.sensorId);
     }
 
 });

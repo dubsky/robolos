@@ -4,11 +4,11 @@ Template.dateDashboardVariableEditor.onSave=function(formId,variableId) {
 
     var auto=$('#'+formId+' .autoCheckbox');
     if(auto.length>0) {
-        Meteor.call('updateVariable', {$set: { dateValue: dateValue, allowAutomaticControl: auto.checkbox('is checked') } },variableId);
+        ConnectionManager.call('updateVariable', {$set: { dateValue: dateValue, allowAutomaticControl: auto.checkbox('is checked') } },variableId);
     }
     else
     {
-        Meteor.call('updateVariable', {$set: { dateValue: dateValue } },variableId);
+        ConnectionManager.call('updateVariable', {$set: { dateValue: dateValue } },variableId);
     }
     $('.popupEditor').popup('hide');
 }

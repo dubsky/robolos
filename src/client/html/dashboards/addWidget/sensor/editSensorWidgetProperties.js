@@ -54,7 +54,7 @@ Template.editSensorWidgetProperties.onRendered(function() {
         document.forms['editProperties'].elements['icon'].value=this.data.widget.icon;
         let sensorId=SHARED.getSensorID(this.data.widget.driver,this.data.widget.device,this.data.widget.sensor);
         let sensor=SensorsCollection.findOne(sensorId);
-        Template.editSensorWidgetProperties.handle=App.subscribeNoCaching('sensors',
+        Template.editSensorWidgetProperties.handle=ConnectionManager.subscribeNoCaching('sensors',
                {_id:sensorId },
                false,
                {
@@ -67,7 +67,7 @@ Template.editSensorWidgetProperties.onRendered(function() {
                }
         );
 
-        Template.editSensorWidgetProperties.actionsHandle=App.subscribe('actions');
+        Template.editSensorWidgetProperties.actionsHandle=ConnectionManager.subscribe('actions');
     }
 });
 

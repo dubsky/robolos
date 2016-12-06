@@ -1,4 +1,4 @@
-Collections.SensorsMetadata=new Mongo.Collection('sensorsMetadata');
+Collections.SensorsMetadata=CollectionManager.Collection('sensorsMetadata');
 Schemas.SensorsMetadata=new SimpleSchema({
     name: {
         type: String,

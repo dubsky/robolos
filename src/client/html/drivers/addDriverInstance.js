@@ -1,4 +1,5 @@
-DriversCollection = new Mongo.Collection("drivers");
+DriversCollection = CollectionManager.Collection("drivers");
+
 
 Template.addDriverInstance.helpers({
     drivers: function() {

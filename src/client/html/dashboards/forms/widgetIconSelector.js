@@ -100,7 +100,7 @@ Template.widgetIconSelector.events({
         var selected=template.selectedImage.get();
         if(selected==null) return false;
         var query=BuiltinWidgetIconsCollection.findOne({_id:selected, custom:true});
-        Meteor.call('deleteFile', query,function() {
+        ConnectionManager.call('deleteFile', query,function() {
             //$("#icon").data('picker').sync_picker_with_select(); does not work :-(
             setTimeout(function() { Template.widgetIconSelector.rebuildPicker(template) },300);
         });
@@ -108,7 +108,8 @@ Template.widgetIconSelector.events({
 });
 
 BuiltinWidgetIconsCollection = new Mongo.Collection('builtinWidgetIcons');
-App.subscribeNoCaching('builtinWidgetIcons');
+
+ConnectionManager.subscribeNoCaching('builtinWidgetIcons');
 
 Template.widgetIconSelector.onCreated(function() {
     var template=Template.instance();

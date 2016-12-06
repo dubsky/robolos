@@ -5,11 +5,11 @@ Template.stringDashboardVariableEditor.onSave=function(formId,variableId) {
     {
         var auto=$('#'+formId+' .autoCheckbox');
         if(auto.length>0) {
-            Meteor.call('updateVariable', {$set: { stringValue: newValue, allowAutomaticControl: auto.checkbox('is checked') } },variableId);
+            ConnectionManager.call('updateVariable', {$set: { stringValue: newValue, allowAutomaticControl: auto.checkbox('is checked') } },variableId);
         }
         else
         {
-            Meteor.call('updateVariable', {$set: { stringValue: newValue } },variableId);
+            ConnectionManager.call('updateVariable', {$set: { stringValue: newValue } },variableId);
         }
         $('.popupEditor').popup('hide');
 

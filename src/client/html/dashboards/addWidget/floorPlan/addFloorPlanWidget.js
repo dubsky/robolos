@@ -18,7 +18,7 @@ Template.addFloorPlanWidget.events({
             type: 'floorPlan'
         });
 
-        Meteor.call('updateDashboard',{$set : { widgets : widgets}},dashboard._id);
+        ConnectionManager.call('updateDashboard',{$set : { widgets : widgets}},dashboard._id);
         Router.go('render.dashboard',{_id: dashboard._id});
     },
 

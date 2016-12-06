@@ -1,4 +1,4 @@
-Collections.Schedules=new Mongo.Collection('schedules');
+Collections.Schedules=CollectionManager.Collection('schedules');
 Schemas.Schedule=new SimpleSchema({
     title: {
         type: String,

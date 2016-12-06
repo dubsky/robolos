@@ -32,7 +32,7 @@ Template.dashboards.events({
         var selection=Session.get('selectedDashboards');
         if(selection!==undefined) {
             for(var i=0;i<selection.length;i++) {
-                Meteor.call('deleteDashboard',selection[i]);
+                ConnectionManager.call('deleteDashboard',selection[i]);
             }
         }
         Session.set('selectedDashboards',[]);
@@ -41,7 +41,7 @@ Template.dashboards.events({
     'click .export': function(event, instance) {
         var selection=Session.get('selectedDashboards');
         if(selection!=='undefined') {
-            Meteor.call('exportDashboards',selection,function(err,result) {
+            ConnectionManager.call('exportDashboards',selection,function(err,result) {
                 let blob = new Blob([result], {type: "octet/stream"});
                 let a = document.createElement("a");
                 a.style.display = 'none';
@@ -68,9 +68,9 @@ Template.dashboards.onDestroyed(function() {
     HeightController.onAreaDestroyed();
 });
 
-App.routeCollection('dashboards');
+Routing.routeCollection('dashboards');
 
 // we want them to be loaded all the time
-App.subscribeNoCaching('dashboards');
+ConnectionManager.subscribeNoCaching('dashboards');
 
 

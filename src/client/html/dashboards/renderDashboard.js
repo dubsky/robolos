@@ -122,7 +122,7 @@ Template.renderDashboard.events({
         }
 
         GRIDSTER.remove_widget($('#'+this.id));
-        Meteor.call('updateDashboard',{$set : {widgets: result,geometry: geometryResult }},dashboard._id,function() {
+        ConnectionManager.call('updateDashboard',{$set : {widgets: result,geometry: geometryResult }},dashboard._id,function() {
             Router.go('render.dashboard.redirect',{_id: dashboard._id});
         });
         return false;
@@ -142,13 +142,13 @@ Template.renderDashboard.onRendered(function() {
             enabled: true,
             stop: function(e, ui, $widget) {
                 var dashboard=Session.get(CURRENT_DASHBOARD);
-                Meteor.call('updateDashboard',{$set : {geometry: GRIDSTER.serialize()}},dashboard._id);
+                ConnectionManager.call('updateDashboard',{$set : {geometry: GRIDSTER.serialize()}},dashboard._id);
             }
         },
         draggable : {
             stop: function(event, ui) {
                 var dashboard=Session.get(CURRENT_DASHBOARD);
-                Meteor.call('updateDashboard',{$set : {geometry: GRIDSTER.serialize()}},dashboard._id);
+                ConnectionManager.call('updateDashboard',{$set : {geometry: GRIDSTER.serialize()}},dashboard._id);
             }
         },
         serialize_params:  function(widget, wgd) {
@@ -181,7 +181,7 @@ SensorStatusCollection = new Mongo.Collection('sensorStatusCollection');
 
 Template.renderDashboard.onCreated(function(){
         var dashboardId=Session.get(CURRENT_DASHBOARD_ID);
-        this.subscription=App.subscribeNoCaching('sensorStatusCollection',{id: dashboardId });
+        this.subscription=ConnectionManager.subscribeNoCaching('sensorStatusCollection',{id: dashboardId });
         console.log('created subscription id:'+this.subscription.subscriptionId);
 });
 
@@ -206,7 +206,9 @@ Router.route('dashboards/:_id',
     {
         name: 'render.dashboard',
         waitOn: function() {
-            return App.subscribe('dashboards');
+            return Routing.filterUnauthorizedSubscriptions(()=>{
+                return ConnectionManager.subscribe('dashboards');
+            });
         }
     }
 );

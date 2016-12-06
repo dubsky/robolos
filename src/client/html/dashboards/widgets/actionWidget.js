@@ -54,7 +54,7 @@ Template.actionWidget.stop=function(action) {
     // the above is an ugly workaround
     //$('.actionControl').hide();
     if (!Session.get(DASHBOARD_EDIT_MODE)) {
-        Meteor.call('stopAction',action);
+        ConnectionManager.call('stopAction',action);
     }
 };
 
@@ -64,7 +64,7 @@ Template.actionWidget.continue=function(action) {
     // the above is an ugly workaround
     //$('.actionControl').hide();
     if (!Session.get(DASHBOARD_EDIT_MODE)) {
-        Meteor.call('continueAction',action);
+        ConnectionManager.call('continueAction',action);
     }
 };
 
@@ -92,14 +92,14 @@ Template.actionWidget.events({
     'click .button' : function(e) {
         if (!Session.get(DASHBOARD_EDIT_MODE)) {
             $(e.toElement).transition('pulse');
-            Meteor.call('startAction', this.widget.widget.action);
+            ConnectionManager.call('startAction', this.widget.widget.action);
         }
     },
 
     'click .pauseAction' : function(e) {
         if(this.wait.pauseAvailable) {
             if (!Session.get(DASHBOARD_EDIT_MODE)) {
-                Meteor.call('pauseAction',this.widget.widget.action);
+                ConnectionManager.call('pauseAction',this.widget.widget.action);
             }
         }
         else if (this.wait.cancelAvailable) {

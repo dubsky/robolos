@@ -31,7 +31,7 @@ Template.schedules.events({
         var selection=Session.get('selectedSchedules');
         if((typeof selection)!=='undefined') {
             for(var i=0;i<selection.length;i++) {
-                Meteor.call('deleteSchedule',selection[i]);
+                ConnectionManager.call('deleteSchedule',selection[i]);
                 //Collections.Schedules.remove(selection[i]);
             }
             Session.set('selectedSchedules',[]);
@@ -52,6 +52,6 @@ Template.schedules.onDestroyed(function() {
     HeightController.onAreaDestroyed();
 });
 
-App.routeCollection('schedules');
+Routing.routeCollection('schedules');
 
 

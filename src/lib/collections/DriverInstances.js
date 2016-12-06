@@ -1,4 +1,5 @@
-Collections.DriverInstances=new Mongo.Collection('driverInstances');
+Collections.DriverInstances=CollectionManager.Collection('driverInstances');
+
 Schemas.DriverInstance=new SimpleSchema({
     title: {
         type: String,

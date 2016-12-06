@@ -126,7 +126,9 @@ Router.route('manageInelsCFoxConnection/update/:_id',
     {
         name: 'manageInelsCFoxConnection/update',
         waitOn: function() {
-            return [App.subscribe('driverInstances')];
+            return Routing.filterUnauthorizedSubscriptions(()=>{
+                return [ConnectionManager.subscribe('driverInstances')];
+            });
         }
     }
 );

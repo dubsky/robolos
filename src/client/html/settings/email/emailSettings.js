@@ -43,7 +43,7 @@ Template.emailSettings.onDestroyed(function() {
 Template.emailSettings.events({
     'click .sendTestMessage' : function() {
         Session.set(TEST_MESSAGE_STATUS,'Waiting...');
-        Meteor.call('EmailUI_testMessage',function(error,result) { console.log(result); Session.set(TEST_MESSAGE_STATUS,result)});
+        ConnectionManager.call('EmailUI_testMessage',function(error,result) { console.log(result); Session.set(TEST_MESSAGE_STATUS,result)});
         return false;
     },
 
@@ -53,7 +53,7 @@ Template.emailSettings.events({
 
     'click .customSubmit': function() {
         if (AutoForm.validateForm('emailSettingsForm')) {
-            Meteor.call('updateSettings',Template.emailSettings.modifier,function() { Session.set(SESSION_KEY,true); });
+            ConnectionManager.call('updateSettings',Template.emailSettings.modifier,function() { Session.set(SESSION_KEY,true); });
         }
         return false;
     }

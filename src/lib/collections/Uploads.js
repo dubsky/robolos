@@ -1,4 +1,4 @@
-Collections.Uploads=new Mongo.Collection('uploads');
+Collections.Uploads=CollectionManager.Collection('uploads');
 Schemas.Uploads=new SimpleSchema({
     name: {
         type: String,

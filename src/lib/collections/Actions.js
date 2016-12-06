@@ -1,4 +1,4 @@
-Collections.Actions = new Mongo.Collection("actions");
+Collections.Actions = CollectionManager.Collection("actions");
 
 Schemas.Action=new SimpleSchema({
     title: {

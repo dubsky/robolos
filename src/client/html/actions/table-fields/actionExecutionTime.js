@@ -6,6 +6,6 @@ Template.actionExecutionTime.helpers({
 
 Template.actionExecutionTime.events({
     'click .button' : function() {
-        Meteor.call('startAction',this.action._id);
+        ConnectionManager.call('startAction',this.action._id);
     }
 });

@@ -34,7 +34,9 @@ Router.route('action-properties/:_id',
     {
         name: 'render.action.properties',
         waitOn: function() {
-            return App.subscribe('actions');
+            return Routing.filterUnauthorizedSubscriptions(()=>{
+                return ConnectionManager.subscribe('actions');
+            });
         }
     }
 );

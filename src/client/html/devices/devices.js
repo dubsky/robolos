@@ -35,7 +35,7 @@ Template.devices.events({
     'click .remove': function(event, instance) {
         var selection=Session.get('selectedDevices');
         if((typeof selection)!=='undefined') {
-            Meteor.call('deleteDevices',selection);
+            ConnectionManager.call('deleteDevices',selection);
         }
     },
 
@@ -56,5 +56,5 @@ Template.devices.onDestroyed(function() {
 });
 
 
-App.routeCollection('devices');
+Routing.routeCollection('devices');
 

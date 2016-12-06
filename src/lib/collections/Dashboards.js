@@ -1,4 +1,4 @@
-Collections.Dashboards=new Mongo.Collection('dashboards');
+Collections.Dashboards=CollectionManager.Collection('dashboards');
 Schemas.Dashboard=new SimpleSchema({
     title: {
         type: String,

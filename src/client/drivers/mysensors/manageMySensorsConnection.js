@@ -73,7 +73,7 @@ Template.manageMySensorsConnection.helpers({
 });
 
 Template.manageMySensorsConnection.loadPorts=function(template) {
-    Meteor.call('mysensors-listSerialPorts',function(err,f) {
+    ConnectionManager.call('mysensors-listSerialPorts',function(err,f) {
         if(err) console.log('Error listing serial ports',err);
         template.ports.set(f);
     });
@@ -138,7 +138,9 @@ Router.route('manageMySensorsConnection/update/:_id',
     {
         name: 'manageMySensorsConnection/update',
         waitOn: function() {
-            return [App.subscribe('driverInstances')];
+            return Routing.filterUnauthorizedSubscriptions(()=>{
+                return [ConnectionManager.subscribe('driverInstances')];
+            });
         }
     }
 );

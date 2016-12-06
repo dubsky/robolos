@@ -1,4 +1,4 @@
-Collections.Notifications=new Mongo.Collection('notifications');
+Collections.Notifications=CollectionManager.Collection('notifications');
 
 Schemas.Notifications=new SimpleSchema({
     pendingNotifications: {

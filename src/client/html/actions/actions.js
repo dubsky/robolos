@@ -31,7 +31,7 @@ Template.actions.events({
         var selection=Session.get('selectedActions');
         if((typeof selection)!=='undefined') {
             for(var i in selection) {
-                Meteor.call('deleteAction',selection[i]);
+                ConnectionManager.call('deleteAction',selection[i]);
             }
         }
         Session.set('selectedActions',[]);
@@ -49,4 +49,4 @@ Template.actions.onDestroyed(function() {
     HeightController.onAreaDestroyed();
 });
 
-App.routeCollection('actions');
+Routing.routeCollection('actions');

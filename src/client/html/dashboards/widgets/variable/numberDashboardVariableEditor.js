@@ -7,11 +7,11 @@ Template.numberDashboardVariableEditor.onSave=function(formId,variableId) {
     {
         var auto=$('#'+formId+' .autoCheckbox');
         if(auto.length>0) {
-            Meteor.call('updateVariable', {$set: { numberValue: newValue, allowAutomaticControl: auto.checkbox('is checked') } },variableId);
+            ConnectionManager.call('updateVariable', {$set: { numberValue: newValue, allowAutomaticControl: auto.checkbox('is checked') } },variableId);
         }
         else
         {
-            Meteor.call('updateVariable', {$set: { numberValue: newValue } },variableId);
+            ConnectionManager.call('updateVariable', {$set: { numberValue: newValue } },variableId);
         }
         $('.popupEditor').popup('hide');
 

@@ -1,4 +1,4 @@
-Collections.Variables=new Mongo.Collection('variables');
+Collections.Variables=CollectionManager.Collection('variables');
 Schemas.Variable=new SimpleSchema({
     title: {
         type: String,

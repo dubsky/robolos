@@ -5,7 +5,9 @@ Router.route('settings',
     {
         name: 'settings',
         waitOn: function() {
-            return [App.subscribe("settings")];
+            return Routing.filterUnauthorizedSubscriptions(()=>{
+                return [ConnectionManager.subscribe("settings")];
+            });
         }
     }
 );

@@ -34,7 +34,7 @@ Template.floorPlanWidgetWrapper.onRendered(function() {
                 var geometry=EditWidgetProperties.getGeometry(dashboard,floorPlanID);
                 widget.geometry.x=ui.position.left/geometry.size_x;
                 widget.geometry.y=ui.position.top/geometry.size_y;
-                Meteor.call('updateDashboard',{$set : {widgets: dashboard.widgets }},dashboard._id,function() {});
+                ConnectionManager.call('updateDashboard',{$set : {widgets: dashboard.widgets }},dashboard._id,function() {});
             },
             drag: function( event, ui ) { // avoid dashboard tile movements
                 event.originalEvent.stopImmediatePropagation();
@@ -75,7 +75,7 @@ Template.floorPlanWidgetWrapper.onRendered(function() {
                 widget.geometry.height=ui.size.height/geometry.size_y;
                 widget.geometry.x=ui.position.left/geometry.size_x;
                 widget.geometry.y=ui.position.top/geometry.size_y;
-                Meteor.call('updateDashboard',{$set : {widgets: dashboard.widgets }},dashboard._id,function() {});
+                ConnectionManager.call('updateDashboard',{$set : {widgets: dashboard.widgets }},dashboard._id,function() {});
             }
         });
         if(disabled) $('div.ui-resizable-handle').hide();

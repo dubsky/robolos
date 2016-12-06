@@ -43,7 +43,7 @@ Template.calendar.onRendered(function() {
                 $('#calendar').fullCalendar('refetchEvents');
             }
             else {
-                Meteor.call("updateSchedule",{ $set : {executeOn: event.start.toDate()} },event.id,function() {
+                ConnectionManager.call("updateSchedule",{ $set : {executeOn: event.start.toDate()} },event.id,function() {
                     $('#calendar').fullCalendar('refetchEvents');
                 });
             }
@@ -135,7 +135,9 @@ Router.route('calendar',
     {
         name: 'calendar',
         waitOn: function() {
-            return [App.subscribe('schedules'),App.subscribe('calendarActions') ];
+            return Routing.filterUnauthorizedSubscriptions(()=>{
+                return [ConnectionManager.subscribe('schedules'),ConnectionManager.subscribe('calendarActions') ];
+            });
         }
     }
 );

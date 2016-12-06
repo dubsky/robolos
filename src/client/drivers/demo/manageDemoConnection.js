@@ -54,7 +54,9 @@ Router.route('manageDemoConnection/update/:_id',
     {
         name: 'manageDemoConnection/update',
         waitOn: function() {
-            return [App.subscribe('driverInstances')];
+            return Routing.filterUnauthorizedSubscriptions(()=>{
+                return [ConnectionManager.subscribe('driverInstances')];
+            });
         }
     }
 );

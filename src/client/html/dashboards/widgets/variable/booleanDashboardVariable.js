@@ -7,7 +7,7 @@ Template.booleanDashboardVariable.events({
             if (this.variable.modifiedBy === 'user') {
                 var v = this.variable.booleanValue;
                 if (v === undefined) v = false;
-                Meteor.call('setBooleanVariable', this.variable._id, !v);
+                ConnectionManager.call('setBooleanVariable', this.variable._id, !v);
             }
             else if (this.variable.modifiedBy === 'both') {
                 var target = $(e.currentTarget)

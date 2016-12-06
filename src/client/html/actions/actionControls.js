@@ -42,14 +42,14 @@ Template.actionControls.events( {
     'click .startAction': function() {
         let action=this.action;
         let s=action.actionStatus===undefined ? 'READY':action.actionStatus.status;
-        if(s===undefined || s===ActionStatus.READY || s===ActionStatus.SYNTAX_ERROR) Meteor.call('startAction',this.action._id);
-        if(s===ActionStatus.PAUSED) Meteor.call('continueAction',this.action._id);
+        if(s===undefined || s===ActionStatus.READY || s===ActionStatus.SYNTAX_ERROR) ConnectionManager.call('startAction',this.action._id);
+        if(s===ActionStatus.PAUSED) ConnectionManager.call('continueAction',this.action._id);
     },
     'click .pauseAction': function() {
-        Meteor.call('pauseAction',this.action._id);
+        ConnectionManager.call('pauseAction',this.action._id);
     },
     'click .stopAction': function() {
-        Meteor.call('stopAction',this.action._id);
+        ConnectionManager.call('stopAction',this.action._id);
     }
 
 });

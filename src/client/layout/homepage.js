@@ -22,7 +22,7 @@ Template.homepage.helpers({
 Template.homepage.events({
     'click .importDemoData' : function() {
         Session.set(DEMO_IMPORTED, true);
-        Meteor.call('importDemoData',function(e) {
+        ConnectionManager.call('importDemoData',function(e) {
             $('#demo-block').transition({animation: 'horizontal flip', duration:1000});
             setTimeout(() => { $('#demo-dashboard').transition({animation: 'horizontal flip', duration:1000}); },1000);
         });
@@ -42,12 +42,12 @@ var loadStats=function () {
 };
 
 var wait=function() {
-        return App.subscribeNoCaching('systemStatistics');
+        return ConnectionManager.subscribeNoCaching('systemStatistics');
 };
 
 Template.homepage.onCreated(function() {
     Session.set(DEMO_IMPORTED,false);
 });
 
-Router.route('/', loadStats,{name:'/', waitOn:wait});
-Router.route('homepage',loadStats,{name:'homepage', waitOn:wait});
+Router.route('/', loadStats,{name:'/', waitOn:()=>{return Routing.filterUnauthorizedSubscriptions(wait);}});
+Router.route('homepage',loadStats,{name:'homepage', waitOn:()=>{return Routing.filterUnauthorizedSubscriptions(wait);}});

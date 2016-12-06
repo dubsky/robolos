@@ -25,7 +25,7 @@ Template.variableWidget.helpers({
 
 Template.variableWidget.events({
     'click .modeButton' : function() {
-        //Meteor.call('startAction',this.widget.widget.action);
+        //ConnectionManager.call('startAction',this.widget.widget.action);
     }
 });
 

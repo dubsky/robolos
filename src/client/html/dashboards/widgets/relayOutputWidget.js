@@ -12,7 +12,7 @@ Template.relayOutputWidget.events({
    'click .button' : function(e) {
        if (!Session.get(DASHBOARD_EDIT_MODE)) {
            $(e.toElement).transition('pulse');
-           Meteor.call('actionSwitchOver', this.widget.driver, this.widget.device, this.widget.sensor);
+           ConnectionManager.call('actionSwitchOver', this.widget.driver, this.widget.device, this.widget.sensor);
        }
    }
 });

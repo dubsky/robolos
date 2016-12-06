@@ -77,7 +77,9 @@ Router.route('manageMQTTConnection/update/:_id',
     {
         name: 'manageMQTTConnection/update',
         waitOn: function() {
-            return [App.subscribe('driverInstances')];
+            return Routing.filterUnauthorizedSubscriptions(()=>{
+                return [ConnectionManager.subscribe('driverInstances')];
+            });
         }
     }
 );
