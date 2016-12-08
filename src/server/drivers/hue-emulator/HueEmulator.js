@@ -303,7 +303,7 @@ class HueEmulator extends AbstractDriver {
      * @returns {string} path within the 'public' directory to the icon representing the driver. My return 'undefined' for an ugly icon
      */
     static getIconPath() {
-        return undefined;
+        return '/drivers/HueEmulLogo.png';
     }
 
     /**

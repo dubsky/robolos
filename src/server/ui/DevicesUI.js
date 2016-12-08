@@ -41,7 +41,7 @@ DevicesUI=new DevicesUIClass();
 
 
 Meteor.publish('devices', function(){
-console.log('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD');
+
     Accounts.checkAdminAccess(this);
     // safe reference to this session
     var self = this;
