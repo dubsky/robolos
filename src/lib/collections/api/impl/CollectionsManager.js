@@ -7,12 +7,19 @@ class CollectionProxy {
 
     onConnectionChange(connection) {
         this.collection=new Mongo.Collection(this.collectionName,connection);
-        if(this.schema!==undefined) this.collection.attachSchema(this.schema);
+        if(this.schema!==undefined) {
+            this.collection.attachSchema(this.schema);
+            console.log('reattching schema');
+        }
     }
 
     attachSchema(schema) {
+        console.log('attach schema:'+this.collectionName);
         this.schema=schema;
-        if(this.collection!==undefined) this.collection.attachSchema(schema);
+        if(this.collection!==undefined) {
+            console.log('attaching schema');
+            this.collection.attachSchema(schema);
+        }
     }
 
     check() {
@@ -69,6 +76,10 @@ class CollectionProxy {
     rawDatabase() {
         this.check();
         return this.collection.rawDatabase.apply(this.collection,arguments);
+    }
+    // required by autoform - it depends on non-public API
+    simpleSchema() {
+        return this.collection.simpleSchema();
     }
 }
 

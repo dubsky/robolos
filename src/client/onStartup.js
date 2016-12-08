@@ -39,7 +39,6 @@ let settingsReady=function() {
         let softPages=settings.anonymousAccessToDashboards ? ['/','homepage', 'render.dashboard.redirect', 'render.dashboard','calendar','render.schedule','no-connection']: ['no-connection'];
         let allSoftPages=_.pluck(AccountsTemplates.routes, 'name').concat(softPages);
         Routing.registerNonLoginPages(allSoftPages);
-        console.log('allSoftPages',allSoftPages);
         Router.plugin('ensureSignedIn', {
             except: allSoftPages
         });
