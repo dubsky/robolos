@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 RUSER=robolos
-RVERSION=1.0
-apt-get install wget make g++ build-essential libssl-dev libkrb5-dev libzmq-dev mongodb-server libavahi-compat-libdnssd-dev
+VERSION=1.0
+apt-get install --yes wget make g++ build-essential libssl-dev libkrb5-dev libzmq-dev mongodb-server libavahi-compat-libdnssd-dev python
 adduser --disabled-login $RUSER
 DIR=$( getent passwd "$RUSER" | cut -d: -f6 )
 cd $DIR
@@ -22,21 +22,24 @@ echo export MONGO_URL='mongodb://localhost:27017/robolos' >> /etc/robolos.conf
 echo export ROOT_URL="http://`hostname`:3000/" >> /etc/robolos.conf
 service mongodb start
 
-cat > /etc/init/robolos.conf << EndOfUpstart
-description "Robolos"
-author "Vladimir Dubsky"
+cat > /etc/systemd/system/robolos.service << EndOfUpstart
+[Unit]
+Description=Robolos
+Requires=After=mongodb.service       # Requires the mongodb service to run first
 
-# When to start the service
-start on runlevel [2345]
+[Service]
+ExecStart=/bin/bash -c ". /etc/robolos.conf && cd /home/robolos/bundle && /home/robolos/node/bin/node main.js"
+Restart=always
+RestartSec=10                       # Restart service after 10 seconds if node service crashes
+StandardOutput=syslog               # Output to syslog
+StandardError=syslog                # Output to syslog
+SyslogIdentifier=robolos
+User=robolos
+Group=robolos
 
-# When to stop the service
-stop on runlevel [016]
-
-# Automatically restart process if crashed
-respawn
-
-# Start the process
-exec su - robolos -c ". /etc/robolos.conf && cd /home/robolos/bundle && /home/robolos/node/bin/node main.js"
+[Install]
+WantedBy=multi-user.target
 EndOfUpstart
 
-service robolos start
+sudo systemctl enable nodeserver.service
+systemctl start nodeserver.service

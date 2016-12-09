@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 RUSER=robolos
-RVERSION=1.0
-apt-get install wget make g++ build-essential libssl-dev libkrb5-dev libzmq-dev mongodb-server libavahi-compat-libdnssd-dev
+VERSION=1.0
+apt-get install --yes wget make g++ build-essential libssl-dev libkrb5-dev libzmq-dev mongodb-server libavahi-compat-libdnssd-dev python
 adduser --disabled-login $RUSER
 DIR=$( getent passwd "$RUSER" | cut -d: -f6 )
 cd $DIR

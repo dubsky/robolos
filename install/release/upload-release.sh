@@ -2,8 +2,8 @@ export VERSION=1.0
 export USER="v.dubsky@gmail.com"
 export PASSWORD="m68hc11M68HC11"
 
-./bitbucket.sh $USER $PASSWORD /dubsky/robolos-builds/downloads ../setup-linux-intel.sh
-./bitbucket.sh $USER $PASSWORD /dubsky/robolos-builds/downloads ../setup-linux-arm.sh
+./bitbucket.sh $USER $PASSWORD /dubsky/robolos-builds/downloads ../linux/setup-linux-intel.sh
+./bitbucket.sh $USER $PASSWORD /dubsky/robolos-builds/downloads ../linux/setup-linux-arm.sh
 
 mkdir work
 cd work
