@@ -156,8 +156,11 @@ ConnectionManager = {
 
     apply:function(topic) {
         return connection.apply.apply(connection,arguments);
-    }
+    },
 
+    reset() {
+        subscriptionManager.reset();
+    }
 };
 
 

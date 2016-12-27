@@ -11,20 +11,27 @@ let settingsReady=function() {
 
     AccountsTemplates._initialized = false;
 
+    let onUserContextEstablished=function() {
+        ConnectionManager.subscribeNoCaching('userSettings',false,{ onReady: function() {
+            let settings=Collections.Settings.findOne(Collections.Settings.USER_SETTINGS_DOCUMENT_ID,{reactive:false});
+            Session.set(USER_ROLE,settings.role === undefined ? Collections.Users.RoleKeys.administrator : settings.role);
+        } } );
+        // we want them to be loaded all the time
+        ConnectionManager.subscribeNoCaching('dashboards',{ onReady: function() {
+            console.log("dashboards ready");},onStop: function(e) {console.log("can't subscribe dashboards",e);} });
+    };
+
     AccountsTemplates.configure({
         defaultLayout: 'layout',
         forbidClientAccountCreation: !settings.selfRegistration,
         enablePasswordChange:true,
         onLogoutHook: function() {
             Session.set(USER_ROLE,Collections.Users.RoleKeys.observer);
+            ConnectionManager.reset();
             Router.go('homepage');
         },
-        onSubmitHook: function() {
-            ConnectionManager.subscribe('userSettings',false,{ onReady: function() {
-                let settings=Collections.Settings.findOne(Collections.Settings.USER_SETTINGS_DOCUMENT_ID,{reactive:false});
-                Session.set(USER_ROLE,settings.role === undefined ? Collections.Users.RoleKeys.administrator : settings.role);
-            } } );
-        }
+        onSubmitHook: onUserContextEstablished,
+        postSignUpHook: onUserContextEstablished
     });
 
     if(!routesConfigured)

@@ -17,7 +17,7 @@ class RoutingClass  {
             {
                 name: collection,
                 subscriptions: function() {
-                    console.log('subscribing');
+                    //console.log('subscribing');
                     if(self.nonLoginPages[Router.current().route.getName()] || Meteor.userId()!=null || self.anonymousAccess)
                     {
                         let subscriptions=[ConnectionManager.subscribe(collection, { onReady: function() {

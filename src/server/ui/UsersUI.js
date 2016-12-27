@@ -117,12 +117,12 @@ Accounts.checkDashboardAccess=function(context) {
     if(context.userId===null) {
         if(settings.anonymousAccessToDashboards || (settings.requireUserLogin===undefined || !settings.requireUserLogin)) {
             if(!isLocalAccess(settings,context)) {
-                log.debug('access denied');
+                log.error('access denied, anonymous access non local address');
                 throw new Meteor.Error('not-authorized');
             }
         }
         else {
-            log.debug('access denied');
+            log.error('access denied, anonymous user');
             throw new Meteor.Error('not-authorized');
         }
     }
