@@ -98,6 +98,13 @@ Meteor.methods({
 
 
 Accounts.checkAdminAccess=function(context) {
+    /*
+    log.debug('Accounts.checkAdminAccess:'+context.userId);
+    log.debug(' settings:',Settings.get());
+    log.debug(' local:',isLocalAccess(Settings.get(),context));
+    let user=Meteor.users.findOne(context.userId);
+    log.debug(' user:',user);*/
+
     let settings=Settings.get();
     if(context.userId===null) {
         if((settings.requireUserLogin===undefined || !settings.requireUserLogin) && isLocalAccess(settings,context)) return;
@@ -105,7 +112,8 @@ Accounts.checkAdminAccess=function(context) {
 
     if(context.userId===null) throw new Meteor.Error('not-authorized');
     let user=Meteor.users.findOne(context.userId);
-    if (user===null || Collections.Users.RoleKeys.administrator !== user.role) {
+    if (user===null ||
+        (Collections.Users.RoleKeys.administrator !== user.role /** the next additional condition is for backward compatibility */&& user.role!==undefined)) {
         log.debug('access denied');
         throw new Meteor.Error('not-authorized');
     }
