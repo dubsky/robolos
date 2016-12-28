@@ -16,9 +16,8 @@ let settingsReady=function() {
             let settings=Collections.Settings.findOne(Collections.Settings.USER_SETTINGS_DOCUMENT_ID,{reactive:false});
             Session.set(USER_ROLE,settings.role === undefined ? Collections.Users.RoleKeys.administrator : settings.role);
         } } );
-        // we want them to be loaded all the time
-        ConnectionManager.subscribeNoCaching('dashboards',{ onReady: function() {
-            console.log("dashboards ready");},onStop: function(e) {console.log("can't subscribe dashboards",e);} });
+
+        ConnectionManager.renewPermanentSubscriptions();
     };
 
     AccountsTemplates.configure({

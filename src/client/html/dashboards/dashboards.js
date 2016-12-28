@@ -71,6 +71,10 @@ Template.dashboards.onDestroyed(function() {
 Routing.routeCollection('dashboards');
 
 // we want them to be loaded all the time
-ConnectionManager.subscribeNoCaching('dashboards');
+ConnectionManager.subscribePermanently(()=> {
+    ConnectionManager.subscribeNoCaching('dashboards',{ onReady: function() {
+        console.log("dashboards ready");},onStop: function(e) {console.log("can't subscribe dashboards",e);} });
+});
+
 
 

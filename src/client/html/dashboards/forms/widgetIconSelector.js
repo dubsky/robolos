@@ -109,7 +109,11 @@ Template.widgetIconSelector.events({
 
 BuiltinWidgetIconsCollection = new Mongo.Collection('builtinWidgetIcons');
 
-ConnectionManager.subscribeNoCaching('builtinWidgetIcons');
+// we want them to be loaded all the time
+ConnectionManager.subscribePermanently(()=> {
+    ConnectionManager.subscribeNoCaching('builtinWidgetIcons');
+});
+
 
 Template.widgetIconSelector.onCreated(function() {
     var template=Template.instance();

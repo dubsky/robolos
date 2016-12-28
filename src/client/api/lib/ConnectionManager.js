@@ -131,11 +131,11 @@ ConnectionManager = {
         return connection;
     },
 
-    subscribeNoCaching:function(topic) {
+    subscribeNoCaching(topic) {
         return connection.subscribe.apply(connection,arguments);
     },
 
-    subscribe:function(topic) {
+    subscribe(topic) {
         /*
         console.log('subscribe requested:',topic);
         if(Session.get(ROUTER_INITIALIZED)) {
@@ -150,16 +150,29 @@ ConnectionManager = {
         return subscriptionManager.subscribe.apply(subscriptionManager,arguments);
     },
 
-    call:function(topic) {
+    call(topic) {
         return connection.call.apply(connection,arguments);
     },
 
-    apply:function(topic) {
+    apply(topic) {
         return connection.apply.apply(connection,arguments);
     },
 
     reset() {
         subscriptionManager.reset();
+    },
+
+    permanentSubscribtions: [],
+
+    subscribePermanently(f) {
+        this.permanentSubscribtions.push(f);
+        return f();
+    },
+
+    renewPermanentSubscriptions() {
+        for(let f of this.permanentSubscribtions) {
+            f();
+        }
     }
 };
 
