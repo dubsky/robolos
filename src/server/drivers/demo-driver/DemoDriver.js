@@ -106,14 +106,14 @@ class DemoDriver extends AbstractDriver {
         if(action===SENSOR_ACTIONS.SWITCH_OFF)
         {
             this.demoRelayValue=0;
-            // report back the value set (this might be reported later on when the driver can confirm it successfuly switched the desd output)
+            // report back the value set (this might be reported later on when the driver can confirm it successfuly switched the destination output)
             this.onEventListener.onEvent(77,2,this.buildVariableObject(variable,this.demoRelayValue));
             log.debug('DEMO_RELAY_VALUE:',this.demoRelayValue);
         }
         if(action===SENSOR_ACTIONS.SWITCH_ON)
         {
             this.demoRelayValue=1;
-            // report back the value set (this might be reported later on when the driver can confirm it successfuly switched the desd output)
+            // report back the value set (this might be reported later on when the driver can confirm it successfuly switched the destination output)
             this.onEventListener.onEvent(77,2,this.buildVariableObject(variable,this.demoRelayValue));
             log.debug('DEMO_RELAY_VALUE:',this.demoRelayValue);
         }
@@ -132,7 +132,7 @@ class DemoDriver extends AbstractDriver {
     }
 
     /**
-     * @returns {string} path within the 'public' directory to the icon representing the driver. My return 'undefined' for an ugly icon
+     * @returns {string} path within the 'public' directory to the icon representing the driver. May return 'undefined' for a default one.
      */
     static getIconPath() {
         return undefined;
