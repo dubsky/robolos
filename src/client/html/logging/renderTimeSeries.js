@@ -16,7 +16,7 @@ function convertData(result) {
         var d=new Date();
         d.setTime(i);
         if(d<min) min=d;
-        data[data.length]={ x: d,y:result[i]};
+        if(result[i]!==undefined) data[data.length]={ x: d,y:result[i]}; else console.log('assertion failed; invalid data reached the client');
     }
     return { data: data, since:min };
 }
@@ -48,6 +48,23 @@ Template.renderTimeSeries.onRendered(function() {
     let chart=null;
 
     let processedData={since: self.since, data:[]};
+
+
+    let whenModalReady=()=>{};
+
+    function prepareConfiguration(data) {
+        return {
+            "xScale": "time",
+            "yScale": "linear",
+            "type": "line",
+            "main": [
+                {
+                    "className": ".general",
+                    "data": data
+                }
+            ]
+        };
+    }
 
     SemanticUI.modal("#timeSeriesModal",function () {
 
@@ -114,20 +131,11 @@ Template.renderTimeSeries.onRendered(function() {
             interpolation: 'linear'
        };
 
-       let conf = {
-            "xScale": "time",
-            "yScale": "linear",
-            "type": "line",
-            "main": [
-                {
-                    "className": ".general",
-                    "data": processedData.data
-                }
-            ]
-        };
 
-        chart = new xChart('line', conf, '#timeSeries', opts);
-        self.chart=chart;
+       let conf = prepareConfiguration(processedData.data);
+       chart = new xChart('line', conf, '#timeSeries', opts);
+       self.chart=chart;
+       whenModalReady();
     });
 
     let since=this.since.valueOf();
@@ -135,6 +143,9 @@ Template.renderTimeSeries.onRendered(function() {
         processedData=convertData(result);
         if(chart!=null) {
             chart.setData(processedData.data);
+        }
+        else {
+            whenModalReady=()=>{ chart.setData(prepareConfiguration(processedData.data)); };
         }
     });
 
