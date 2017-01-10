@@ -1,9 +1,16 @@
 //ROUTER_INITIALIZED="ROUTER_INITIALIZED";
 
-let connection;
+Meteor.isElectron=Electrify!==undefined;
+
+let connection,url;
+if(Meteor.isCordova || Meteor.isElectron) {
+    url = ClientConfiguration.getServerBaseUrl();
+}
 if(Meteor.isCordova) {
-    let url=ClientConfiguration.getServerBaseUrl();
     if(url===undefined) Router.go('no-connection');
+}
+if(url!==undefined)
+{
     Meteor.disconnect();
     connection=DDP.connect(url);
     connection.onReconnect=(()=>{

@@ -4,7 +4,7 @@ Router.route('no-connection', 'noConnection');
 
 Template.noConnection.helpers({
     allowServerChange() {
-        return Meteor.isCordova;
+        return Meteor.isCordova || Meteor.isElectron;
     }
 });
 

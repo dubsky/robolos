@@ -1,7 +1,7 @@
 Template.settings.helpers({
 
     allowServerChange() {
-        return Meteor.isCordova;
+        return Meteor.isCordova || Meteor.isElectron;
     }
 
 });
