@@ -10,7 +10,7 @@ Template.renderSensorValue.helpers({
             let positions=0;
             let unit=smallestUnit;
             while(unit<1) { unit*=10; positions++; }
-            return (Math.round(this.value/smallestUnit)*smallestUnit).toFixed(unit);
+            return (Math.round(this.value/smallestUnit)*smallestUnit).toFixed(positions);
         }
         return this.value;
     },
