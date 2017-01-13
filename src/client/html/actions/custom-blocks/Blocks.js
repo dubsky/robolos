@@ -107,7 +107,7 @@ MyBlocks=function() {
             let filter={class: {$in :[SensorClasses.ANALOG_OUTPUT,SensorClasses.ANALOG_OUTPUT_0_100,SensorClasses.BINARY_OUTPUT,SensorClasses.RGB,SensorClasses.RGBW,SensorClasses.STRING]}};
             this.appendValueInput("value")
                 .setCheck("Number")
-                .appendField("Set Actor Value");
+                .appendField("Set Actuator Value");
 
             this.appendDummyInput()
 
